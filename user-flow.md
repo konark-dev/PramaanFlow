@@ -376,7 +376,7 @@ Critical path changed
 Estimated processing path changed
 ```
 
-This should update dynamically rather than requiring the user to restart.
+This should update dynamically rather than requiring the user to start a new case.
 
 ---
 
