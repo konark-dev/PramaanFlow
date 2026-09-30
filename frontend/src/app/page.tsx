@@ -11,10 +11,11 @@ import { RegulatoryJourneyView } from "@/components/applicant/RegulatoryJourneyV
 import { DiscoveryApplicationWorkspace } from "@/components/applicant/DiscoveryApplicationWorkspace";
 import { IntelligenceAnalysisEngine } from "@/components/applicant/IntelligenceAnalysisEngine";
 import { LandingDiagram } from "@/components/LandingDiagram";
+import { EvidenceVaultChecklist } from "@/components/applicant/EvidenceVaultChecklist";
 import { SovereignLayout } from "@/components/sovereign/SovereignLayout";
 
 function MainApp() {
-  const { activeRole, activeCase, updateCase, setActiveRole } = useDemoState();
+  const { activeRole, activeCase, updateCase, setActiveRole, activeTab } = useDemoState();
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
 
   const [hasStartedDemo, setHasStartedDemo] = useState(!!activeCase.discoveryResult);
@@ -100,6 +101,8 @@ function MainApp() {
         }}
       />
     );
+  } else if (activeRole === "applicant" && activeTab === "Evidence Vault") {
+    mainContent = <EvidenceVaultChecklist />;
   } else if (activeRole === "applicant" && activeCase.discoveryResult) {
     mainContent = (
       <DiscoveryApplicationWorkspace

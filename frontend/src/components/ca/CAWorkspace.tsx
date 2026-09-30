@@ -67,8 +67,8 @@ export function CAWorkspace() {
                 </div>
               </div>
               <div className="flex gap-2">
-                <button className="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-100">Review</button>
-                <button className="px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold hover:bg-blue-100">Verify</button>
+                <button onClick={() => alert(`Reviewing document: ${doc.name}...`)} className="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-100">Review</button>
+                <button onClick={() => alert(`Document verified: ${doc.name}. The applicant will be notified.`)} className="px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold hover:bg-blue-100">Verify</button>
               </div>
             </div>
           ))}
@@ -123,9 +123,9 @@ export function CAWorkspace() {
         <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
            <h3 className="text-sm font-bold text-slate-800 mb-3">Workspace Navigation</h3>
            <nav className="space-y-1">
-             <button className="w-full text-left px-3 py-2 text-sm font-medium rounded-lg bg-blue-50 text-blue-700">Overview</button>
-             <button className="w-full text-left px-3 py-2 text-sm font-medium rounded-lg text-slate-600 hover:bg-slate-50">Regulatory Roadmap</button>
-             <button className="w-full text-left px-3 py-2 text-sm font-medium rounded-lg text-slate-600 hover:bg-slate-50 flex justify-between">
+             <button onClick={() => alert("Switched to Overview.")} className="w-full text-left px-3 py-2 text-sm font-medium rounded-lg bg-blue-50 text-blue-700">Overview</button>
+             <button onClick={() => alert("Switched to Regulatory Roadmap.")} className="w-full text-left px-3 py-2 text-sm font-medium rounded-lg text-slate-600 hover:bg-slate-50">Regulatory Roadmap</button>
+             <button onClick={() => alert("Switched to Document Vault.")} className="w-full text-left px-3 py-2 text-sm font-medium rounded-lg text-slate-600 hover:bg-slate-50 flex justify-between">
                Documents 
                <span className="bg-amber-100 text-amber-700 px-2 py-0.5 rounded text-[10px] font-bold">2 Missing</span>
              </button>
@@ -169,7 +169,7 @@ export function CAWorkspace() {
                     <p className="text-xs text-slate-500">Uploaded by {doc.owner}</p>
                   </div>
                 </div>
-                <button className="text-xs text-blue-600 font-bold hover:underline">View Evidence</button>
+                <button onClick={() => alert(`Opening secure viewer for ${doc.name}...`)} className="text-xs text-blue-600 font-bold hover:underline">View Evidence</button>
               </div>
             ))
           )}
@@ -215,7 +215,7 @@ export function CAWorkspace() {
             >
               <AlertTriangle className="w-3 h-3" /> Suggest Change
             </button>
-            <button className="flex-1 bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-slate-200 transition-colors">
+            <button onClick={() => alert("Document Request Template opened.\nSelect the required document and it will notify the applicant.")} className="flex-1 bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-slate-200 transition-colors">
               <Paperclip className="w-3 h-3" /> Request Doc
             </button>
           </div>

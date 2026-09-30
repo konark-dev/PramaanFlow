@@ -408,7 +408,7 @@ export function InspectorWorkspace() {
             </div>
 
             {/* Photo / Evidence Upload Simulation */}
-            <div className="p-3 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-center cursor-pointer hover:border-teal-500 transition-colors">
+            <div onClick={() => alert("Launching camera interface for geo-tagged capture...")} className="p-3 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-center cursor-pointer hover:border-teal-500 hover:bg-slate-100 transition-colors">
               <Upload className="h-4 w-4 mx-auto text-slate-400 mb-1" />
               <span className="text-[11px] text-slate-700 block font-medium">
                 Attach Geo-Tagged Site Photographs

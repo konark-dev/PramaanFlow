@@ -150,18 +150,22 @@ export function SovereignNavbar({
           {/* Far right icons and button */}
           <div className="flex items-center gap-2 sm:gap-2.5">
             {/* Bell icon */}
-            <button
-              type="button"
-              aria-label="Notifications"
-              className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors relative"
-            >
-              <Bell className="w-4 h-4" />
-              <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-            </button>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => alert("Notification Center:\n- CA Document Review requested\n- New schemes matched for Food Processing")}
+                aria-label="Notifications"
+                className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors relative"
+              >
+                <Bell className="w-4 h-4" />
+                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+              </button>
+            </div>
 
             {/* Settings icon */}
             <button
               type="button"
+              onClick={() => alert("Settings Panel:\n- Profile details\n- Security & Access\n- Preferences")}
               aria-label="Settings"
               className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors hidden sm:block"
             >
@@ -184,6 +188,7 @@ export function SovereignNavbar({
             {/* 'Verify & Dispatch' green button (bg-emerald-700 text-white rounded-lg) */}
             <button
               type="button"
+              onClick={() => alert(`Dispatch Initiated!\nRole: ${activeRole.toUpperCase()}\nStatus: Pre-checks running via Sovereign Engine.`)}
               className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-700 text-white hover:bg-emerald-800 active:bg-emerald-900 transition-colors shadow-sm shrink-0"
             >
               <CheckCircle2 className="w-3.5 h-3.5" />

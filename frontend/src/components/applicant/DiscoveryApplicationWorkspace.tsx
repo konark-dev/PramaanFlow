@@ -373,7 +373,7 @@ export function DiscoveryApplicationWorkspace({ discoveryResult, initialApproval
                         <div className="flex items-center gap-2 shrink-0">
                           {isAdded ? (
                             <>
-                              <button className="whitespace-nowrap text-[11px] font-bold text-slate-600 bg-white hover:bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg uppercase tracking-wider transition-colors">
+                              <button onClick={() => alert(`Opening document viewer for:\n${doc}`)} className="whitespace-nowrap text-[11px] font-bold text-slate-600 bg-white hover:bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg uppercase tracking-wider transition-colors">
                                 View
                               </button>
                               {!isVerified && (

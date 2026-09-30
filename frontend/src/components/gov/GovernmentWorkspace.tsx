@@ -236,7 +236,7 @@ export function GovernmentWorkspace() {
                     <p className="text-[10px] uppercase font-bold tracking-wider text-slate-500">Status: {doc.status}</p>
                   </div>
                 </div>
-                <button className="text-[11px] font-bold text-slate-600 bg-white border border-slate-200 px-3 py-1.5 rounded-lg uppercase transition-colors">
+                <button onClick={() => alert(`Opening official document viewer for verification: ${doc.name}`)} className="text-[11px] font-bold text-slate-600 bg-white hover:bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg uppercase transition-colors">
                   View
                 </button>
               </div>
