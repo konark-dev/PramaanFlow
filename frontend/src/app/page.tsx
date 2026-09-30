@@ -1,127 +1,155 @@
 "use client";
 
-import React, { useState } from "react";
-import { Navbar } from "@/components/Navbar";
-import { ApplicantWorkspace } from "@/components/ApplicantWorkspace";
-import { GovernmentCommand } from "@/components/GovernmentCommand";
+import React, { useState, useMemo } from "react";
+import { DemoStateProvider, useDemoState } from "@/lib/context/DemoStateContext";
+import { GovernmentWorkspace } from "@/components/gov/GovernmentWorkspace";
 import { InspectorWorkspace } from "@/components/InspectorWorkspace";
+import { CAWorkspace } from "@/components/ca/CAWorkspace";
 import { AICopilotModal } from "@/components/AICopilotModal";
-import { JudgeDemoStepper, JUDGE_DEMO_STEPS, JudgeStep } from "@/components/JudgeDemoStepper";
-import { MaharashtraJurisdictionMap } from "@/components/MaharashtraJurisdictionMap";
+import { ApplicantDiscoveryFlow, DiscoveryResult } from "@/components/applicant/ApplicantDiscoveryFlow";
+import { RegulatoryJourneyView } from "@/components/applicant/RegulatoryJourneyView";
+import { DiscoveryApplicationWorkspace } from "@/components/applicant/DiscoveryApplicationWorkspace";
+import { IntelligenceAnalysisEngine } from "@/components/applicant/IntelligenceAnalysisEngine";
+import { LandingDiagram } from "@/components/LandingDiagram";
+import { SovereignLayout } from "@/components/sovereign/SovereignLayout";
 
-export default function Home() {
-  const [activeTab, setActiveTab] = useState<"applicant" | "government" | "inspector" | "gis-map">(
-    "applicant"
-  );
-
+function MainApp() {
+  const { activeRole, activeCase, updateCase, setActiveRole } = useDemoState();
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
-  const [copilotInitialQuery, setCopilotInitialQuery] = useState<string>("");
 
-  // Sub-tab orchestration for Applicant & Government
-  const [applicantSubTab, setApplicantSubTab] = useState<string>("home");
-  const [governmentSubTab, setGovernmentSubTab] = useState<string>("overview");
+  const [hasStartedDemo, setHasStartedDemo] = useState(!!activeCase.discoveryResult);
+  const [hasCompletedDiscovery, setHasCompletedDiscovery] = useState(!!activeCase.discoveryResult);
+  const [hasCompletedAnalysis, setHasCompletedAnalysis] = useState(!!activeCase.roadmap);
+  const [hasViewedJourney, setHasViewedJourney] = useState(false);
+  const [targetApprovalId, setTargetApprovalId] = useState<string | undefined>();
+  const [draftAnswers, setDraftAnswers] = useState<Record<string, any>>({});
+  const [discoveryStepIndex, setDiscoveryStepIndex] = useState(0);
 
-  // Judge Demo Stepper state
-  const [judgeStepIndex, setJudgeStepIndex] = useState<number>(0);
-  const [isJudgeStepperOpen, setIsJudgeStepperOpen] = useState<boolean>(true);
+  const handleDiscoveryComplete = (result: DiscoveryResult) => {
+    updateCase({ discoveryResult: result });
+    setHasCompletedDiscovery(true);
+  };
 
-  const handleJudgeStepChange = (step: JudgeStep) => {
-    setJudgeStepIndex(step.id - 1);
-    setActiveTab(step.persona);
+  const handleJourneyProceed = (approvalId?: string) => {
+    if (approvalId) setTargetApprovalId(approvalId);
+    setHasViewedJourney(true);
+  };
 
-    if (step.persona === "applicant") {
-      setApplicantSubTab(step.subTab);
-    } else if (step.persona === "government") {
-      setGovernmentSubTab(step.subTab);
+  // Derive which step of the 10-step journey we're on
+  const currentStep = useMemo(() => {
+    if (!hasCompletedDiscovery) return discoveryStepIndex; // 0, 1, 2, 3 mapped from wizard
+    if (!hasCompletedAnalysis) return 4;  // Step 05 Environment
+    if (!hasViewedJourney) return 5;      // Step 06 Labor
+    return 6;                              // Step 07+
+  }, [hasCompletedDiscovery, discoveryStepIndex, hasCompletedAnalysis, hasViewedJourney]);
+
+  const completedSteps = useMemo(() => {
+    const completed: number[] = [];
+    if (!hasCompletedDiscovery) {
+      for (let i = 0; i < discoveryStepIndex; i++) completed.push(i);
+      return completed;
     }
-  };
+    completed.push(0, 1, 2, 3); // All wizard steps complete
+    if (hasCompletedAnalysis) { completed.push(4); }  // Environment
+    if (hasViewedJourney) { completed.push(5); }      // Labor
+    return completed;
+  }, [hasCompletedDiscovery, discoveryStepIndex, hasCompletedAnalysis, hasViewedJourney]);
 
-  const handleOpenCopilotWithQuery = (query: string) => {
-    setCopilotInitialQuery(query);
-    setIsCopilotOpen(true);
-  };
+  // Build case data for the left sidebar from discovery answers (or live draft answers)
+  const caseData = useMemo(() => {
+    const dr = activeCase.discoveryResult || draftAnswers;
+    const subType = dr?.subType || dr?.subType_food || dr?.subType_mining;
+    return {
+      intent: dr?.intent || "Pending Input...",
+      activity: subType || dr?.businessType || "Pending Input...",
+      scale: dr?.capacity || dr?.scale || "Pending Input...",
+      location: dr?.location || "Pending Input...",
+      district: dr?.district || "Pending Input...",
+      pollutionCategory: dr?.category === "Green" ? "Green (CPCB)" : (subType ? "Orange (CPCB 2016)" : "Pending..."),
+      nicCode: dr?.businessType === "Mining & Quarrying" ? "0810 (Quarrying of stone)" : (subType ? "10402 (Vegetable Oils)" : "Pending..."),
+    };
+  }, [activeCase.discoveryResult, draftAnswers]);
 
-  return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-teal-500 selection:text-white">
-      {/* Top Navigation */}
-      <Navbar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onOpenCopilot={() => {
-          setCopilotInitialQuery("Analyze current regulatory clearances, critical path dependencies, and SLA status for our facility.");
-          setIsCopilotOpen(true);
+  // LANDING PAGE REMOVED: Go straight into Applicant flow
+
+  // Determine the main content area based on current flow state
+  let mainContent: React.ReactNode = null;
+
+  if (activeRole === "applicant" && !hasCompletedDiscovery) {
+    mainContent = <ApplicantDiscoveryFlow onComplete={handleDiscoveryComplete} onChange={setDraftAnswers} onStepChange={setDiscoveryStepIndex} />;
+  } else if (activeRole === "applicant" && hasCompletedDiscovery && !hasCompletedAnalysis && activeCase.discoveryResult) {
+    mainContent = (
+      <IntelligenceAnalysisEngine
+        discoveryResult={activeCase.discoveryResult}
+        onAnalysisComplete={(roadmap, geo, governmentSupport) => {
+          updateCase({ roadmap, geoContext: geo, governmentSupport });
+          setHasCompletedAnalysis(true);
         }}
       />
+    );
+  } else if (activeRole === "applicant" && hasCompletedDiscovery && hasCompletedAnalysis && !hasViewedJourney && activeCase.discoveryResult) {
+    mainContent = (
+      <RegulatoryJourneyView
+        discoveryResult={activeCase.discoveryResult}
+        precomputedRoadmap={activeCase.roadmap}
+        geoContext={activeCase.geoContext}
+        onProceedToWorkspace={handleJourneyProceed}
+        onEditAnswers={() => {
+          setHasCompletedDiscovery(false);
+          setHasCompletedAnalysis(false);
+        }}
+      />
+    );
+  } else if (activeRole === "applicant" && activeCase.discoveryResult) {
+    mainContent = (
+      <DiscoveryApplicationWorkspace
+        discoveryResult={activeCase.discoveryResult}
+        initialApprovalId={targetApprovalId}
+        onBackToJourney={() => {
+          setHasViewedJourney(false);
+          setTargetApprovalId(undefined);
+        }}
+      />
+    );
+  } else if (activeRole === "ca") {
+    mainContent = <CAWorkspace />;
+  } else if (activeRole === "government") {
+    mainContent = <GovernmentWorkspace />;
+  } else if (activeRole === "inspector") {
+    mainContent = <InspectorWorkspace />;
+  }
 
-      {/* Main Workspace Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {activeTab === "applicant" && (
-          <ApplicantWorkspace
-            externalSubTab={applicantSubTab}
-            onOpenCopilotWithContext={handleOpenCopilotWithQuery}
-          />
-        )}
-        {activeTab === "government" && (
-          <GovernmentCommand
-            externalSubTab={governmentSubTab}
-            onNavigateToImpactMap={() => {
-              setActiveTab("applicant");
-              setApplicantSubTab("gis-impact");
-            }}
-          />
-        )}
-        {activeTab === "inspector" && <InspectorWorkspace />}
-        {activeTab === "gis-map" && (
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Location Intelligence Engine</span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200 font-mono">Maharashtra Geospatial Platform</span>
-            </div>
-            <MaharashtraJurisdictionMap />
-          </div>
-        )}
-      </main>
+  return (
+    <>
+      <SovereignLayout
+        activeRole={activeRole}
+        onRoleChange={(role) => setActiveRole(role as any)}
+        caseId={activeCase.id || "PF-2026-001"}
+        currentStep={currentStep}
+        completedSteps={completedSteps}
+        caseData={caseData}
+        onOpenCopilot={() => setIsCopilotOpen(true)}
+        onViewRoadmap={() => {
+          if (hasCompletedAnalysis) {
+            setHasViewedJourney(false);
+          }
+        }}
+      >
+        {mainContent}
+      </SovereignLayout>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-200 bg-white/80 py-4 text-center text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-slate-700">
-              Regulatory OS • National Single Window System (NSWS) &amp; Raj Nivesh Architecture
-            </span>
-            <span className="text-[10px] px-2 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200 font-mono">
-              SYNTHETIC OPERATIONAL DATA
-            </span>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1.5 text-slate-600">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-              Gemini AI &amp; Google OR-Tools CP-SAT Connected
-            </span>
-            <button
-              onClick={() => setIsJudgeStepperOpen(true)}
-              className="text-teal-600 hover:text-teal-700 font-semibold underline"
-            >
-              Open Judge Guide
-            </button>
-          </div>
-        </div>
-      </footer>
-
-      {/* Floating AI Copilot Modal */}
       <AICopilotModal
         isOpen={isCopilotOpen}
         onClose={() => setIsCopilotOpen(false)}
       />
+    </>
+  );
+}
 
-      {/* Floating Judge Demo Stepper */}
-      <JudgeDemoStepper
-        currentStepIndex={judgeStepIndex}
-        onStepChange={handleJudgeStepChange}
-        isOpen={isJudgeStepperOpen}
-        onToggleOpen={() => setIsJudgeStepperOpen(!isJudgeStepperOpen)}
-      />
-    </div>
+export default function Home() {
+  return (
+    <DemoStateProvider>
+      <MainApp />
+    </DemoStateProvider>
   );
 }

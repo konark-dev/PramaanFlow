@@ -19,10 +19,40 @@ import {
   FileText,
   Upload
 } from "lucide-react";
+import { CaseTimelineView } from "@/components/CaseTimelineView";
+import { useDemoState } from "@/lib/context/DemoStateContext";
 
 export function InspectorWorkspace() {
-  const [inspections, setInspections] = useState<InspectionJob[]>(INITIAL_INSPECTIONS);
-  const [selectedInspection, setSelectedInspection] = useState<InspectionJob>(inspections[0]);
+  const { activeCase, updateCase, addMessage, activeTab } = useDemoState();
+  
+  // Inject the live demo case into the inspection list if assigned
+  const liveInspections = [...INITIAL_INSPECTIONS];
+  if (activeCase.inspectorAssigned) {
+    liveInspections.unshift({ 
+      id: "INSP-LIVE-1",
+      caseId: activeCase.id,
+      projectName: activeCase.discoveryResult?.subType || "Demo Business",
+      enterpriseName: activeCase.discoveryResult?.subType || "Demo Business",
+      status: "SCHEDULED",
+      location: activeCase.discoveryResult?.location || "Unknown",
+      address: activeCase.discoveryResult?.location || "Unknown",
+      coordinates: { lat: 18.75, lng: 73.8 }, // Rough Pune coords
+      priority: "HIGH",
+      type: "Physical Verification",
+      inspectionType: "Physical Verification",
+      timeWindow: ["09:00 AM", "11:00 AM"],
+      deadline: "Today",
+      requiredDocs: ["Site Plan", "ID Proof"],
+      checklistItems: [
+        { id: "chk1", label: "Verify site boundaries match DPR" },
+        { id: "chk2", label: "Check environmental control setups" },
+        { id: "chk3", label: "Verify operational capacity equipment" }
+      ]
+    } as any);
+  }
+
+  const [inspections, setInspections] = useState<InspectionJob[]>(liveInspections);
+  const [selectedInspection, setSelectedInspection] = useState<InspectionJob>(liveInspections[0]);
   const [optimizing, setOptimizing] = useState(false);
   const [routeResult, setRouteResult] = useState<OptimizedRouteResult | null>(null);
 
@@ -68,7 +98,21 @@ export function InspectorWorkspace() {
         i.id === selectedInspection.id ? { ...i, status: "COMPLETED" } : i
       )
     );
+    if ((selectedInspection as any).caseId === activeCase.id) {
+       updateCase({ govStatus: 'Cleared' });
+       addMessage({ sender: 'inspector', text: 'Inspection completed and cleared without issues.' });
+    }
   };
+
+  if (activeTab === "Site Evidence" || activeTab === "Reports") {
+    return (
+      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[80vh] flex flex-col items-center justify-center">
+        <FileText className="w-16 h-16 text-slate-300 mb-4" />
+        <h2 className="text-xl font-bold text-slate-800">{activeTab}</h2>
+        <p className="text-slate-500 mt-2">No {activeTab.toLowerCase()} are currently pending your review.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -337,7 +381,7 @@ export function InspectorWorkspace() {
                 Mandatory Inspection Checklist:
               </span>
               <div className="space-y-2">
-                {selectedInspection.checklistItems.map((item) => {
+                {(selectedInspection.checklistItems || []).map((item) => {
                   const isChecked = checklist[item.id] || false;
                   return (
                     <div
@@ -390,6 +434,9 @@ export function InspectorWorkspace() {
           </div>
         </div>
       </div>
+
+      {/* CASE TIMELINE (AUDIT TRAIL) */}
+      <CaseTimelineView />
     </div>
   );
 }

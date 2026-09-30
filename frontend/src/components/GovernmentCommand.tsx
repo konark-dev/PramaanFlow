@@ -23,6 +23,7 @@ import { ProcessXRay } from "@/components/ProcessXRay";
 import { BottleneckBlastRadius } from "@/components/BottleneckBlastRadius";
 import { RegulatoryChangeCenter } from "@/components/RegulatoryChangeCenter";
 import { Organization360View } from "@/components/Organization360View";
+import { CaseTimelineView } from "@/components/CaseTimelineView";
 
 interface GovernmentCommandProps {
   externalSubTab?: string;
@@ -317,6 +318,9 @@ export function GovernmentCommand({
 
       {/* VIEW 5: ORGANIZATION 360 */}
       {activeSubTab === "org-360" && <Organization360View />}
+
+      {/* CASE TIMELINE (AUDIT TRAIL) */}
+      <CaseTimelineView />
     </div>
   );
 }

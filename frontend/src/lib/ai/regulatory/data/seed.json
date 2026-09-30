@@ -1,0 +1,122 @@
+{
+  "sources": [
+    {
+      "id": "src_mpcb_water_1974",
+      "name": "Water (Prevention & Control of Pollution) Act, 1974",
+      "url": "https://mpcb.gov.in/node/water-act-1974",
+      "authority": "Maharashtra Pollution Control Board (MPCB)",
+      "source_type": "ACT",
+      "retrieved_at": "2026-09-30T00:00:00Z",
+      "effective_date": "1974-03-23",
+      "version": "1.0",
+      "hash": "hash1"
+    },
+    {
+      "id": "src_dish_factories_1948",
+      "name": "Factories Act, 1948",
+      "url": "https://dish.maharashtra.gov.in/factories-act-1948",
+      "authority": "Directorate of Industrial Safety and Health (DISH)",
+      "source_type": "ACT",
+      "retrieved_at": "2026-09-30T00:00:00Z",
+      "effective_date": "1948-09-23",
+      "version": "1.0",
+      "hash": "hash2"
+    }
+  ],
+  "departments": [
+    {
+      "id": "dept_mpcb",
+      "name": "Maharashtra Pollution Control Board",
+      "level": "STATE",
+      "state": "Maharashtra",
+      "portal": "https://mpcb.gov.in"
+    },
+    {
+      "id": "dept_dish",
+      "name": "Directorate of Industrial Safety and Health",
+      "level": "STATE",
+      "state": "Maharashtra",
+      "portal": "https://dish.maharashtra.gov.in"
+    }
+  ],
+  "approvals": [
+    {
+      "id": "app_cte",
+      "name": "Consent to Establish (CTE)",
+      "description": "Required before establishing any industrial plant that is likely to discharge sewage or trade effluent.",
+      "authority": "MPCB",
+      "department": "dept_mpcb",
+      "jurisdiction": "Maharashtra",
+      "sector": ["Pharmaceuticals", "Chemicals", "Manufacturing"],
+      "stage": "Pre-Establishment",
+      "applicability_conditions": ["project.sector == 'Pharmaceuticals'"],
+      "required_documents": ["doc_site_plan", "doc_process_flow"],
+      "depends_on": [],
+      "source_id": "src_mpcb_water_1974",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "app_cto",
+      "name": "Consent to Operate (CTO)",
+      "description": "Required before commencing commercial operations.",
+      "authority": "MPCB",
+      "department": "dept_mpcb",
+      "jurisdiction": "Maharashtra",
+      "sector": ["Pharmaceuticals", "Chemicals", "Manufacturing"],
+      "stage": "Pre-Operation",
+      "applicability_conditions": ["project.sector == 'Pharmaceuticals'"],
+      "required_documents": ["doc_compliance_report"],
+      "depends_on": ["app_cte"],
+      "source_id": "src_mpcb_water_1974",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "app_factory_plan",
+      "name": "Factory Plan Approval",
+      "description": "Approval of factory building plans under the Factories Act.",
+      "authority": "DISH",
+      "department": "dept_dish",
+      "jurisdiction": "Maharashtra",
+      "sector": ["Pharmaceuticals", "Manufacturing"],
+      "stage": "Pre-Establishment",
+      "applicability_conditions": ["project.sector == 'Pharmaceuticals'"],
+      "required_documents": ["doc_site_plan", "doc_factory_drawings"],
+      "depends_on": [],
+      "source_id": "src_dish_factories_1948",
+      "status": "ACTIVE"
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc_site_plan",
+      "name": "Site Plan",
+      "description": "Detailed site plan of the proposed industrial project.",
+      "mandatory": true,
+      "source_id": "src_mpcb_water_1974"
+    },
+    {
+      "id": "doc_process_flow",
+      "name": "Process Flow Diagram",
+      "description": "Diagram showing the manufacturing process and effluent generation points.",
+      "mandatory": true,
+      "source_id": "src_mpcb_water_1974"
+    },
+    {
+      "id": "doc_factory_drawings",
+      "name": "Factory Building Drawings",
+      "description": "Detailed engineering drawings of the factory layout.",
+      "mandatory": true,
+      "source_id": "src_dish_factories_1948"
+    }
+  ],
+  "rules": [
+    {
+      "id": "rule_cte_pharma",
+      "rule_code": "R-CTE-01",
+      "condition": "project.sector IN ['Pharmaceuticals']",
+      "effect": "REQUIRE app_cte",
+      "approval_id": "app_cte",
+      "source_id": "src_mpcb_water_1974"
+    }
+  ]
+}
