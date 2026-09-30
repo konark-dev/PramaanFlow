@@ -13,6 +13,7 @@ import { IntelligenceAnalysisEngine } from "@/components/applicant/IntelligenceA
 import { LandingDiagram } from "@/components/LandingDiagram";
 import { EvidenceVaultChecklist } from "@/components/applicant/EvidenceVaultChecklist";
 import { ApplicantCommunication } from "@/components/applicant/ApplicantCommunication";
+import { GovernmentSupportView } from "@/components/applicant/GovernmentSupportView";
 import { SovereignLayout } from "@/components/sovereign/SovereignLayout";
 
 function ProjectDetailsForm({
@@ -150,7 +151,13 @@ function MainApp() {
   // TAB-SPECIFIC routes come FIRST so clicking a tab always works
   let mainContent: React.ReactNode = null;
 
-  if (activeRole === "applicant" && (activeTab === "Evidence Vault" || activeTab === "Document Review")) {
+  if (activeRole === "applicant" && activeTab === "Government Support") {
+    mainContent = (
+      <div className="max-w-5xl mx-auto mt-6">
+        <GovernmentSupportView />
+      </div>
+    );
+  } else if (activeRole === "applicant" && (activeTab === "Evidence Vault" || activeTab === "Document Review")) {
     mainContent = <EvidenceVaultChecklist />;
   } else if (activeRole === "applicant" && (activeTab === "Messages" || activeTab === "Communication")) {
     mainContent = <ApplicantCommunication />;
@@ -273,7 +280,7 @@ function MainApp() {
 
   let hideSidebars = false;
   if (activeRole === "applicant") {
-    if (activeTab === "Project Details" || activeTab === "Evidence Vault" || activeTab === "Document Review" || activeTab === "Communication" || activeTab === "Messages" || activeTab === "AI Copilot") {
+    if (activeTab === "Project Details" || activeTab === "Evidence Vault" || activeTab === "Document Review" || activeTab === "Government Support" || activeTab === "Communication" || activeTab === "Messages" || activeTab === "AI Copilot") {
       hideSidebars = true;
     }
     // Also hide if on Dashboard but rendering the Workspace

@@ -470,9 +470,9 @@ export function DiscoveryApplicationWorkspace({ discoveryResult, initialApproval
                 );
               })()}
 
-              <div className="flex flex-col items-stretch justify-between gap-4 pt-6 border-t border-slate-700 mt-2">
+              <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 pt-6 border-t border-slate-700 mt-2 flex-wrap">
                 {activeCase.caAssigned ? (
-                  <div className="flex flex-col bg-slate-800/50 rounded-xl p-4 max-h-48 overflow-y-auto border border-slate-700/50 shadow-inner w-full min-w-0">
+                  <div className="flex flex-col bg-slate-800/50 rounded-xl p-4 max-h-48 overflow-y-auto border border-slate-700/50 shadow-inner w-full lg:w-auto flex-1 min-w-0">
                     <div className="text-[10px] font-bold text-teal-400 uppercase tracking-wider mb-3 flex items-center gap-1.5 shrink-0">
                       <CheckCircle2 className="w-4 h-4" /> Professional CA Assistance Active
                     </div>
@@ -489,15 +489,15 @@ export function DiscoveryApplicationWorkspace({ discoveryResult, initialApproval
                   <button 
                     onClick={() => {
                       updateCase({ caAssigned: true, caStatus: 'Reviewing' });
-                      addMessage({ sender: 'applicant', text: `I need help preparing the application for ${activeApproval.name} and gathering documents.` });
+                      addMessage({ sender: 'applicant', text: `I need help preparing the application for ${activeApproval?.name || 'this approval'} and gathering documents.` });
                       alert("CA Assistance Requested. Switch to CA role to view requests.");
                     }}
-                    className="w-full px-5 py-3 rounded-lg text-sm font-bold text-blue-300 hover:text-white hover:bg-blue-900 border border-blue-800 transition-colors flex items-center justify-center gap-2 shrink-0 whitespace-nowrap"
+                    className="flex-1 lg:flex-none px-5 py-3 rounded-lg text-sm font-bold text-blue-300 hover:text-white hover:bg-blue-900 border border-blue-800 transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
                   >
-                    <MessageSquare className="w-4 h-4" /> Send to CA
+                    <MessageSquare className="w-4 h-4" /> Request CA Assistance
                   </button>
                 )}
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 shrink-0 w-full">
+                <div className="flex flex-wrap items-center justify-end gap-3 flex-1">
                   <button 
                     onClick={() => {
                       updateCase({ 
@@ -505,12 +505,13 @@ export function DiscoveryApplicationWorkspace({ discoveryResult, initialApproval
                       });
                       alert("Progress Saved!");
                     }}
-                    className="w-full sm:w-auto whitespace-nowrap px-6 py-3 rounded-lg text-sm font-bold text-slate-300 bg-slate-800 hover:text-white hover:bg-slate-700 border border-slate-600 transition-colors shrink-0">
+                    className="flex-1 sm:flex-none whitespace-nowrap px-6 py-3 rounded-lg text-sm font-bold text-slate-300 bg-slate-800 hover:text-white hover:bg-slate-700 border border-slate-600 transition-colors shrink-0">
                     Save Progress
                   </button>
                   <button 
                     disabled={!isReady}
                     onClick={() => {
+                      if (!activeApproval) return;
                       const newRoadmap = { ...roadmap };
                       const targetApprovalIndex = newRoadmap.approvals.findIndex((a: any) => a.id === activeApproval.id);
                       if (targetApprovalIndex >= 0) {
@@ -533,9 +534,9 @@ export function DiscoveryApplicationWorkspace({ discoveryResult, initialApproval
                       
                       alert("Application Submitted Successfully!");
                     }}
-                    className={`w-full sm:w-auto whitespace-nowrap px-6 py-3 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all shrink-0 ${isReady ? 'bg-teal-500 hover:bg-teal-400 text-slate-900 shadow-md' : 'bg-slate-700 text-slate-500 cursor-not-allowed'}`}
+                    className={`flex-1 sm:flex-none whitespace-nowrap px-6 py-3 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all shrink-0 ${isReady ? 'bg-teal-500 hover:bg-teal-400 text-slate-900 shadow-md' : 'bg-slate-700 text-slate-500 cursor-not-allowed'}`}
                   >
-                    Continue / Submit Application <ChevronRight className="w-4 h-4 shrink-0" />
+                    Continue / Submit <ChevronRight className="w-4 h-4 shrink-0" />
                   </button>
                 </div>
               </div>
