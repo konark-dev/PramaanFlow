@@ -121,12 +121,13 @@ export function RegulatoryJourneyView({ discoveryResult, precomputedRoadmap, geo
               {roadmap.approvals.map((approval: any, index: number) => {
                 const isExpanded = expandedCard === approval.id;
                 const numberLabel = (index + 1).toString().padStart(2, '0');
-                const hasDependencies = approval.dependencies && approval.dependencies.length > 0;
+                const dependencies = Array.isArray(approval.dependencies) ? approval.dependencies : [];
+                const hasDependencies = dependencies.length > 0;
                 
-                // Map dependency IDs to structured info
-                const mappedDeps = approval.dependencies.map((depId: string) => {
-                  const depIndex = roadmap.approvals.findIndex((a: any) => a.id === depId);
-                  const found = roadmap.approvals[depIndex];
+                // Map dependency IDs to structured info safely
+                const mappedDeps = dependencies.map((depId: string) => {
+                  const depIndex = roadmap.approvals ? roadmap.approvals.findIndex((a: any) => a.id === depId) : -1;
+                  const found = depIndex >= 0 ? roadmap.approvals[depIndex] : null;
                   return {
                     name: found ? found.name : depId,
                     num: depIndex >= 0 ? (depIndex + 1).toString().padStart(2, '0') : '--'
@@ -149,10 +150,10 @@ export function RegulatoryJourneyView({ discoveryResult, precomputedRoadmap, geo
                           <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{approval.department}</p>
                           
                           {/* Dependencies shown in collapsed view */}
-                          {!isExpanded && hasDependencies && (
+                          {!isExpanded && hasDependencies && mappedDeps.length > 0 && (
                             <p className="text-[11px] font-medium text-slate-500 flex items-center gap-1.5 pt-1">
                               <LinkIcon className="w-3 h-3 text-slate-400" />
-                              Depends on: {mappedDeps[0].name} {mappedDeps.length > 1 ? `+ ${mappedDeps.length - 1} more` : ''}
+                              Depends on: {mappedDeps[0]?.name} {mappedDeps.length > 1 ? `+ ${mappedDeps.length - 1} more` : ''}
                             </p>
                           )}
                         </div>
@@ -161,6 +162,11 @@ export function RegulatoryJourneyView({ discoveryResult, precomputedRoadmap, geo
                       <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto pl-13 sm:pl-0">
                         <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2 text-right">
                           {/* Classification Badge (Secondary) */}
+                          {hasDependencies && (
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 border border-rose-200 uppercase tracking-wider flex items-center gap-1 opacity-90">
+                              <ShieldAlert className="w-3 h-3" /> BLOCKED
+                            </span>
+                          )}
                           {approval.riskLevel === "HIGH" && (
                             <span className="text-[10px] font-bold uppercase tracking-wider text-rose-600 flex items-center gap-1 opacity-80">
                               <ShieldAlert className="w-3 h-3" /> High Risk

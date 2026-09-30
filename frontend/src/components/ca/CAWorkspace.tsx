@@ -49,6 +49,61 @@ export function CAWorkspace() {
 
   const { discoveryResult } = activeCase;
 
+  if (activeTab === "Project Details") {
+    return (
+      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[80vh]">
+        <h2 className="text-xl font-bold text-slate-800 mb-6">Project Details</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span className="text-[10px] font-bold uppercase text-slate-500">Business Type</span>
+            <p className="font-bold text-slate-900 mt-1">{discoveryResult?.businessType || 'Food Processing'}</p>
+          </div>
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span className="text-[10px] font-bold uppercase text-slate-500">Sub-Type</span>
+            <p className="font-bold text-slate-900 mt-1">{discoveryResult?.subType || 'Commercial Dairy Processing'}</p>
+          </div>
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span className="text-[10px] font-bold uppercase text-slate-500">Location</span>
+            <p className="font-bold text-slate-900 mt-1">{discoveryResult?.location || 'Chakan MIDC, Pune'}</p>
+          </div>
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span className="text-[10px] font-bold uppercase text-slate-500">Case ID</span>
+            <p className="font-bold text-slate-900 mt-1">{activeCase.id || 'PF-2026-001'}</p>
+          </div>
+          <div className="p-4 bg-teal-50 rounded-xl border border-teal-200 sm:col-span-2">
+            <span className="text-[10px] font-bold uppercase text-teal-700">Regulatory Roadmap</span>
+            <p className="text-sm text-slate-700 mt-1">{activeCase.roadmap?.approvals?.length || 0} approvals identified across {new Set(activeCase.roadmap?.approvals?.map((a: any) => a.department)).size || 0} departments.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (activeTab === "Evidence Vault") {
+    return (
+      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[80vh]">
+        <h2 className="text-xl font-bold text-slate-800 mb-6">Evidence Vault</h2>
+        <div className="space-y-3">
+          {activeCase.documents?.map((doc: any) => (
+            <div key={doc.id} className="p-4 border border-slate-200 rounded-xl flex items-center justify-between bg-slate-50">
+              <span className="text-sm font-medium text-slate-800">{doc.name}</span>
+              <div className="flex items-center gap-2">
+                <span className={`text-xs font-bold px-2 py-1 rounded-full ${ doc.status === 'Verified' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }`}>{doc.status || 'Required'}</span>
+                <button
+                  onClick={() => updateCase({ documents: activeCase.documents.map((d: any) => d.id === doc.id ? { ...d, status: 'Verified' } : d) })}
+                  className="text-xs px-3 py-1 bg-teal-600 text-white rounded-lg hover:bg-teal-700 font-bold"
+                >Verify</button>
+              </div>
+            </div>
+          ))}
+          {(!activeCase.documents || activeCase.documents.length === 0) && (
+            <p className="text-sm text-slate-500 italic text-center py-8">No documents in vault.</p>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   if (activeTab === "Document Review") {
     return (
       <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[80vh]">
@@ -72,7 +127,7 @@ export function CAWorkspace() {
                   <button 
                     onClick={() => {
                       const updatedDocs = activeCase.documents.map(d => 
-                        d.id === doc.id ? { ...d, status: 'Verified' } : d
+                        d.id === doc.id ? { ...d, status: 'Verified' as const } : d
                       );
                       updateCase({ documents: updatedDocs });
                     }} 

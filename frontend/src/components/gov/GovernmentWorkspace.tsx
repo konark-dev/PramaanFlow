@@ -2,10 +2,10 @@
 
 import React, { useState } from "react";
 import { useDemoState } from "@/lib/context/DemoStateContext";
-import { 
-  Building2, 
-  MapPin, 
-  FileText, 
+import {
+  Building2,
+  MapPin,
+  FileText,
   CheckCircle,
   AlertCircle,
   Clock,
@@ -16,13 +16,20 @@ import {
   Lock,
   ChevronRight,
   ShieldCheck,
-  Ban
+  Ban,
+  Globe,
+  Scale,
+  Landmark,
+  Layers,
+  Eye,
+  Download
 } from "lucide-react";
 
 export function GovernmentWorkspace() {
   const { activeCase, updateCase, addMessage, activeTab, setActiveTab } = useDemoState();
   const [queryInput, setQueryInput] = useState("");
 
+  // --- TAB: Incoming Cases ---
   if (activeTab === "Incoming Cases") {
     return (
       <div className="flex flex-col gap-6 min-h-[80vh]">
@@ -64,9 +71,9 @@ export function GovernmentWorkspace() {
                   </span>
                 </td>
                 <td className="p-4 text-right">
-                  <button 
+                  <button
                     onClick={() => {
-                      setActiveTab("Clearance Review");
+                      setActiveTab("Jurisdiction");
                       if (activeCase.govStatus === 'Submitted') {
                         updateCase({ govStatus: 'Under Review' });
                       }
@@ -77,6 +84,27 @@ export function GovernmentWorkspace() {
                   </button>
                 </td>
               </tr>
+              {/* Additional mock cases */}
+              <tr className="hover:bg-slate-50 transition-colors opacity-60">
+                <td className="p-4 font-mono font-bold text-slate-800">PF-2026-047</td>
+                <td className="p-4">
+                  <div className="font-semibold text-slate-800">Textile Manufacturing</div>
+                  <div className="text-xs text-slate-500">Renewal Application</div>
+                </td>
+                <td className="p-4 text-slate-600">GIDC Ahmedabad, Gujarat</td>
+                <td className="p-4"><span className="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-700">Cleared</span></td>
+                <td className="p-4 text-right"><span className="text-sm text-slate-400">Completed</span></td>
+              </tr>
+              <tr className="hover:bg-slate-50 transition-colors opacity-60">
+                <td className="p-4 font-mono font-bold text-slate-800">PF-2026-089</td>
+                <td className="p-4">
+                  <div className="font-semibold text-slate-800">Pharmaceutical Unit</div>
+                  <div className="text-xs text-slate-500">New Application</div>
+                </td>
+                <td className="p-4 text-slate-600">SEZ Hyderabad, Telangana</td>
+                <td className="p-4"><span className="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-700">Under Review</span></td>
+                <td className="p-4 text-right"><span className="text-sm text-slate-400">Assigned</span></td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -84,139 +112,112 @@ export function GovernmentWorkspace() {
     );
   }
 
-  // Case Detail View
+  // For all other tabs, show "No Active Case" if discovery not done
+  if (!activeCase.discoveryResult) {
+    return (
+      <div className="flex-1 flex items-center justify-center min-h-[60vh]">
+        <div className="text-center bg-white p-8 rounded-xl border border-slate-200 shadow-sm max-w-md">
+          <Building2 className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-slate-800">No Active Case Found</h2>
+          <p className="text-slate-500 text-sm mt-2">
+            Switch to the Applicant role and complete the Discovery flow to generate a case for review.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   const { discoveryResult } = activeCase;
 
+  // --- TAB: Jurisdiction (Territorial & Subject-matter jurisdiction check) ---
+  if (activeTab === "Jurisdiction") {
+    return (
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 min-h-[80vh]">
+        <h2 className="text-xl font-bold text-slate-800 mb-6">Jurisdiction Details</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span className="text-[10px] font-bold uppercase text-slate-500">State</span>
+            <p className="font-bold text-slate-900 mt-1">{activeCase.discoveryResult?.state || 'Maharashtra'}</p>
+          </div>
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span className="text-[10px] font-bold uppercase text-slate-500">District</span>
+            <p className="font-bold text-slate-900 mt-1">{activeCase.discoveryResult?.district || 'Pune'}</p>
+          </div>
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span className="text-[10px] font-bold uppercase text-slate-500">Industrial Zone</span>
+            <p className="font-bold text-slate-900 mt-1">{activeCase.discoveryResult?.location || 'Chakan MIDC'}</p>
+          </div>
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span className="text-[10px] font-bold uppercase text-slate-500">Governing Authority</span>
+            <p className="font-bold text-slate-900 mt-1">MIDC Special Planning Authority (SPA)</p>
+          </div>
+          <div className="p-4 bg-teal-50 rounded-xl border border-teal-200 sm:col-span-2">
+            <span className="text-[10px] font-bold uppercase text-teal-700">Jurisdiction Note</span>
+            <p className="text-sm text-slate-700 mt-1">This project falls within MIDC notified industrial estate. Jurisdiction transfers from local municipal authority to MIDC SPA for building plan approvals and water/sewage connections.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // --- TAB: Regulatory Review ---
   if (activeTab === "Regulatory Review") {
+    const handleApprove = (approvalId: string) => {
+      const newRoadmap = { ...activeCase.roadmap };
+      const targetApprovalIndex = newRoadmap.approvals.findIndex((a: any) => a.id === approvalId);
+      if (targetApprovalIndex >= 0) {
+        newRoadmap.approvals[targetApprovalIndex].status = 'Approved';
+      }
+      updateCase({ roadmap: newRoadmap });
+      addMessage({ sender: 'government', text: `Approval Granted for ${newRoadmap.approvals[targetApprovalIndex].name}.` });
+    };
+
     return (
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 min-h-[80vh]">
-        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <FileText className="w-5 h-5 text-teal-600" />
-          Statutory Acts & Reference Library
-        </h2>
-        <div className="space-y-4">
-          <div className="p-4 border border-slate-200 rounded-lg bg-slate-50">
-            <h3 className="font-bold text-slate-800">The Factories Act, 1948</h3>
-            <p className="text-sm text-slate-600 mt-1">Reference materials for factory licensing, safety protocols, and labor regulations.</p>
-            <button onClick={() => alert("Opening The Factories Act, 1948 digital viewer...")} className="mt-3 text-xs font-bold text-teal-600 hover:underline">View Act</button>
-          </div>
-          <div className="p-4 border border-slate-200 rounded-lg bg-slate-50">
-            <h3 className="font-bold text-slate-800">Environment (Protection) Act, 1986</h3>
-            <p className="text-sm text-slate-600 mt-1">Guidelines for MPCB pollution control, effluent treatment, and waste management.</p>
-            <button onClick={() => alert("Opening Environment (Protection) Act, 1986 digital viewer...")} className="mt-3 text-xs font-bold text-teal-600 hover:underline">View Act</button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (activeTab === "Timeline") {
-    return (
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 min-h-[80vh]">
-        <h2 className="text-xl font-bold text-slate-800 mb-6">Case Audit Trail</h2>
-        <div className="space-y-6">
-          {activeCase.timeline?.slice().reverse().map((event: any, idx: number) => (
-            <div key={idx} className="flex gap-4">
-              <div className="w-32 text-xs font-mono text-slate-500 shrink-0">
-                {new Date(event.timestamp).toLocaleString()}
-              </div>
-              <div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5 shrink-0" />
-              <div className="text-sm font-semibold text-slate-800">
-                {event.event}
-              </div>
-            </div>
-          ))}
-          {(!activeCase.timeline || activeCase.timeline.length === 0) && (
-            <p className="text-slate-500 italic text-sm">No timeline events recorded.</p>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  const handleApprove = (approvalId: string) => {
-    const newRoadmap = { ...activeCase.roadmap };
-    const targetApprovalIndex = newRoadmap.approvals.findIndex((a: any) => a.id === approvalId);
-    if (targetApprovalIndex >= 0) {
-      newRoadmap.approvals[targetApprovalIndex].status = 'Approved';
-    }
-    updateCase({ roadmap: newRoadmap });
-    addMessage({ sender: 'government', text: `Approval Granted for ${newRoadmap.approvals[targetApprovalIndex].name}.` });
-  };
-
-  const handleRequireInspection = () => {
-    updateCase({ govStatus: 'Inspection Pending', inspectorAssigned: true });
-    addMessage({ sender: 'government', text: `Physical Inspection Scheduled.` });
-    alert("Case forwarded to Inspector.");
-  };
-
-  const handleSubmitQuery = () => {
-    if (!queryInput.trim()) return;
-    addMessage({ sender: 'government', text: `Query: ${queryInput}` });
-    setQueryInput("");
-  };
-
-  return (
-    <div className="flex flex-col lg:flex-row gap-6 min-h-[80vh]">
-      {/* LEFT PANE */}
-      <div className="w-full lg:w-80 space-y-4">
-        <button onClick={() => setActiveTab('queue')} className="text-sm font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1 mb-2">
-          ← Back to Queue
-        </button>
-
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-          <div className="flex items-center justify-between mb-4 pb-4 border-b border-slate-100">
-            <div>
-              <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider block">Case Profile</span>
-              <span className="font-mono text-sm font-bold text-slate-800">{activeCase.id}</span>
-            </div>
-            <span className="px-2 py-1 bg-amber-50 text-amber-700 text-[10px] font-bold rounded uppercase">{activeCase.govStatus}</span>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <span className="text-xs text-slate-500 block mb-1">Business Activity</span>
-              <div className="flex items-center gap-2 text-sm font-semibold text-slate-800">
-                <Building2 className="w-4 h-4 text-slate-400" />
-                {discoveryResult?.subType || 'N/A'}
-              </div>
-            </div>
-            
-            <div>
-              <span className="text-xs text-slate-500 block mb-1">Location</span>
-              <div className="flex items-center gap-2 text-sm font-semibold text-slate-800">
-                <MapPin className="w-4 h-4 text-slate-400" />
-                {discoveryResult?.location || 'N/A'}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
-          <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-teal-600" />
-            Decision Actions
-          </h3>
-          <button onClick={handleRequireInspection} className="w-full text-left px-3 py-2 text-sm font-medium rounded-lg text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200">
-            Require Physical Inspection
-          </button>
-          <button onClick={() => updateCase({ govStatus: 'Cleared' })} className="w-full text-left px-3 py-2 text-sm font-medium rounded-lg text-teal-700 bg-teal-50 hover:bg-teal-100 border border-teal-200">
-            Issue Final Clearance
-          </button>
-        </div>
-      </div>
-
-      {/* CENTER PANE */}
-      <div className="flex-1 space-y-6">
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-          <h2 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-            <FileText className="w-5 h-5 text-blue-600" />
-            Application Review
+      <div className="flex flex-col gap-6 min-h-[80vh]">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+            <Landmark className="w-5 h-5 text-indigo-600" />
+            Regulatory Review & Approval
           </h2>
+          <span className="px-3 py-1 bg-amber-50 text-amber-700 text-xs font-bold rounded-full border border-amber-200 uppercase">
+            {activeCase.govStatus}
+          </span>
+        </div>
 
-          <div className="space-y-4">
+        {/* Statutory References */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+          <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <FileText className="w-4 h-4 text-teal-600" />
+            Applicable Statutory Acts
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              { name: "The Factories Act, 1948", desc: "Factory licensing, safety protocols, labor regulations", sections: "§ 6, 7, 11-21" },
+              { name: "Environment (Protection) Act, 1986", desc: "MPCB pollution control, ETP, waste management", sections: "§ 3, 5, 25" },
+              { name: "Maharashtra Industrial Development Act, 1961", desc: "MIDC land allotment and building plan", sections: "§ 32, 44A" },
+              { name: "Fire Prevention & Life Safety Act, 2006", desc: "Fire NOC, safety equipment, emergency exits", sections: "§ 3-8" },
+            ].map((act, idx) => (
+              <div key={idx} className="p-4 border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors">
+                <h4 className="font-bold text-slate-800 text-sm">{act.name}</h4>
+                <p className="text-xs text-slate-600 mt-1">{act.desc}</p>
+                <div className="mt-2 flex items-center justify-between">
+                  <span className="text-[10px] font-mono text-slate-500">Sections: {act.sections}</span>
+                  <button onClick={() => alert(`Opening ${act.name} digital viewer...`)} className="text-xs font-bold text-teal-600 hover:underline">View Act</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Approval Queue */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+          <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <Layers className="w-4 h-4 text-blue-600" />
+            Application Approval Queue
+          </h3>
+          <div className="space-y-3">
             {activeCase.roadmap?.approvals?.map((approval: any) => (
-              <div key={approval.id} className="p-4 border border-slate-200 rounded-lg flex items-center justify-between">
+              <div key={approval.id} className="p-4 border border-slate-200 rounded-lg flex items-center justify-between hover:bg-slate-50 transition-colors">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <span className={`w-2 h-2 rounded-full ${approval.status === 'Submitted' ? 'bg-amber-400' : approval.status === 'Approved' ? 'bg-teal-500' : 'bg-slate-300'}`}></span>
@@ -244,77 +245,98 @@ export function GovernmentWorkspace() {
           </div>
         </div>
 
+        {/* Decision Actions */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-          <h2 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-            <CheckCircle className="w-5 h-5 text-teal-600" />
-            Evidence & Documents
-          </h2>
-          <div className="space-y-3">
-            {activeCase.documents?.map((doc: any) => (
-              <div key={doc.id} className="p-3 border border-slate-200 rounded-lg flex items-center justify-between bg-slate-50">
-                <div className="flex items-center gap-3">
-                  <FileText className="w-5 h-5 text-slate-400" />
-                  <div>
-                    <p className="font-bold text-slate-800 text-sm">{doc.name}</p>
-                    <p className="text-[10px] uppercase font-bold tracking-wider text-slate-500">Status: {doc.status}</p>
-                  </div>
-                </div>
-                <button onClick={() => alert(`Opening official document viewer for verification: ${doc.name}`)} className="text-[11px] font-bold text-slate-600 bg-white hover:bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg uppercase transition-colors">
-                  View
-                </button>
-              </div>
-            ))}
-            {(!activeCase.documents || activeCase.documents.length === 0) && (
-              <p className="text-sm text-slate-500 italic">No evidence provided.</p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* RIGHT PANE: Communication */}
-      <div className="w-full lg:w-80 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col overflow-hidden max-h-[80vh]">
-        <div className="p-4 border-b border-slate-200 bg-slate-50">
-          <h3 className="font-bold text-slate-800 flex items-center gap-2">
-            <MessageSquare className="w-4 h-4 text-blue-600" />
-            Queries & Communication
+          <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-teal-600" />
+            Final Decision
           </h3>
-        </div>
-        
-        <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50/50">
-          {activeCase.messages.map(msg => (
-            <div key={msg.id} className={`flex flex-col ${msg.sender === 'government' ? 'items-end' : 'items-start'}`}>
-              <div className={`max-w-[85%] p-3 rounded-xl text-sm ${
-                msg.sender === 'government' 
-                  ? 'bg-amber-600 text-white rounded-tr-sm' 
-                  : 'bg-white border border-slate-200 text-slate-800 rounded-tl-sm shadow-sm'
-              }`}>
-                <span className="text-[10px] font-bold opacity-70 block mb-1 uppercase tracking-wider">{msg.sender}</span>
-                {msg.text}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="p-4 bg-white border-t border-slate-200 space-y-3">
-          <div className="flex gap-2">
-            <input 
-              type="text"
-              value={queryInput}
-              onChange={e => setQueryInput(e.target.value)}
-              placeholder="Raise a query..."
-              className="flex-1 p-2 bg-slate-100 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-amber-400"
-            />
-            <button 
-              onClick={handleSubmitQuery}
-              disabled={!queryInput.trim()}
-              className="bg-amber-600 text-white px-3 py-2 rounded-lg hover:bg-amber-700 disabled:opacity-50 transition-colors font-bold text-sm"
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => {
+                updateCase({ govStatus: 'Inspection Pending', inspectorAssigned: true });
+                addMessage({ sender: 'government', text: 'Physical Inspection Scheduled.' });
+                alert("Case forwarded to Inspector.");
+              }}
+              className="px-5 py-2.5 text-sm font-bold rounded-lg text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200"
             >
-              Send
+              Require Physical Inspection
+            </button>
+            <button
+              onClick={() => updateCase({ govStatus: 'Cleared' })}
+              className="px-5 py-2.5 text-sm font-bold rounded-lg text-teal-700 bg-teal-50 hover:bg-teal-100 border border-teal-200"
+            >
+              Issue Final Clearance
             </button>
           </div>
         </div>
       </div>
+    );
+  }
 
+  // --- TAB: Evidence (Submitted Documents from Applicant) ---
+  if (activeTab === "Evidence") {
+    return (
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 min-h-[80vh]">
+        <h2 className="text-xl font-bold text-slate-800 mb-6">Evidence & Documents</h2>
+        <div className="space-y-3">
+          {activeCase.documents?.map((doc: any) => (
+            <div key={doc.id} className="p-4 border border-slate-200 rounded-xl flex items-center justify-between bg-slate-50 hover:bg-white transition-colors">
+              <div className="flex items-center gap-3">
+                <div className={`w-2 h-2 rounded-full ${ doc.status === 'Verified' ? 'bg-emerald-500' : doc.status === 'Submitted' ? 'bg-blue-500' : 'bg-amber-400' }`} />
+                <span className="text-sm font-medium text-slate-800">{doc.name}</span>
+              </div>
+              <span className={`text-xs font-bold px-2 py-1 rounded-full ${ doc.status === 'Verified' ? 'bg-emerald-100 text-emerald-700' : doc.status === 'Submitted' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700' }`}>
+                {doc.status || 'Pending'}
+              </span>
+            </div>
+          ))}
+          {(!activeCase.documents || activeCase.documents.length === 0) && (
+            <p className="text-sm text-slate-500 italic text-center py-8">No documents submitted yet.</p>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // --- TAB: Timeline ---
+  if (activeTab === "Timeline") {
+    return (
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 min-h-[80vh]">
+        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+          <Clock className="w-5 h-5 text-amber-600" />
+          Case Audit Trail
+        </h2>
+        <div className="space-y-6">
+          {activeCase.timeline?.slice().reverse().map((event: any, idx: number) => (
+            <div key={idx} className="flex gap-4">
+              <div className="w-32 text-xs font-mono text-slate-500 shrink-0">
+                {new Date(event.timestamp).toLocaleString()}
+              </div>
+              <div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5 shrink-0" />
+              <div className="text-sm font-semibold text-slate-800">
+                {event.event}
+              </div>
+            </div>
+          ))}
+          {(!activeCase.timeline || activeCase.timeline.length === 0) && (
+            <p className="text-slate-500 italic text-sm">No timeline events recorded.</p>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // --- DEFAULT / FALLBACK (should not reach, but safe) ---
+  return (
+    <div className="flex-1 flex items-center justify-center min-h-[60vh]">
+      <div className="text-center bg-white p-8 rounded-xl border border-slate-200 shadow-sm max-w-md">
+        <Landmark className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+        <h2 className="text-xl font-bold text-slate-800">Government Portal</h2>
+        <p className="text-slate-500 text-sm mt-2">
+          Select a tab above to navigate the case review workflow.
+        </p>
+      </div>
     </div>
   );
 }

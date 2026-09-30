@@ -215,19 +215,6 @@ export const REGULATORY_QUESTIONS: QuestionDef[] = [
       { id: 'No', label: 'No' }
     ]
   },
-  {
-    id: 'dairy_boiler',
-    stepIndex: 2,
-    parentId: 'dairy_etp',
-    numbering: '3.2.3',
-    title: 'Will you install an industrial boiler?',
-    type: 'boolean',
-    condition: (a) => a.subType_food === 'Dairy Processing' && !!a.dairy_etp,
-    options: [
-      { id: 'Yes', label: 'YES' },
-      { id: 'No', label: 'NO' }
-    ]
-  },
 
   // MINING SPECIFIC
   {
@@ -315,8 +302,9 @@ export const REGULATORY_QUESTIONS: QuestionDef[] = [
       ]
     },
     options: [
-      { id: 'Chakan Industrial Area / MIDC', label: 'Chakan Industrial Area / MIDC' },
-      { id: 'Non-MIDC Khed', label: 'Non-MIDC / Private Land' }
+      { id: 'Chakan MIDC', label: 'Chakan MIDC' },
+      { id: 'Ranjangaon MIDC', label: 'Ranjangaon MIDC' },
+      { id: 'Non-MIDC / Private Land', label: 'Non-MIDC / Private Land' }
     ]
   }
 ];

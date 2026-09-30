@@ -142,10 +142,29 @@ export function IntelligenceAnalysisEngine({ discoveryResult, onAnalysisComplete
             </div>
             
             {step > 2 && (
-              <div className="ml-8 bg-teal-50/50 rounded-lg p-4 border border-teal-100 animate-in fade-in duration-500">
-                <p className="text-sm text-teal-900 font-medium">
-                  Identified <span className="font-bold">{roadmapData?.approvals?.length || 0}</span> statutory clearances across <span className="font-bold">{new Set(roadmapData?.approvals?.map((a:any) => a.department)).size}</span> departments.
-                </p>
+              <div className="ml-8 space-y-4 animate-in fade-in duration-500">
+                <div className="bg-teal-50/50 rounded-lg p-4 border border-teal-100">
+                  <h4 className="font-bold text-slate-800 mb-2">Summary</h4>
+                  <p className="text-sm text-teal-900 font-medium">
+                    Identified <span className="font-bold">{roadmapData?.approvals?.length || 0}</span> statutory clearances across <span className="font-bold">{new Set(roadmapData?.approvals?.map((a:any) => a.department)).size}</span> departments.
+                  </p>
+                </div>
+                <div className="bg-white rounded-lg p-4 border border-slate-200">
+                  <h4 className="font-bold text-slate-800">Approvals</h4>
+                  <p className="text-sm text-slate-600 mt-1">Found {roadmapData?.approvals?.length || 0} clearances.</p>
+                </div>
+                <div className="bg-white rounded-lg p-4 border border-slate-200">
+                  <h4 className="font-bold text-slate-800">Authorities</h4>
+                  <p className="text-sm text-slate-600 mt-1">Mapped to {new Set(roadmapData?.approvals?.map((a:any) => a.department)).size} governing bodies.</p>
+                </div>
+                <div className="bg-white rounded-lg p-4 border border-slate-200">
+                  <h4 className="font-bold text-slate-800">Documents</h4>
+                  <p className="text-sm text-slate-600 mt-1">Cross-referencing evidence required.</p>
+                </div>
+                <div className="bg-white rounded-lg p-4 border border-slate-200">
+                  <h4 className="font-bold text-slate-800">Signals</h4>
+                  <p className="text-sm text-slate-600 mt-1">No overlapping jurisdictions detected.</p>
+                </div>
               </div>
             )}
           </div>

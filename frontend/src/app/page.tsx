@@ -12,6 +12,7 @@ import { DiscoveryApplicationWorkspace } from "@/components/applicant/DiscoveryA
 import { IntelligenceAnalysisEngine } from "@/components/applicant/IntelligenceAnalysisEngine";
 import { LandingDiagram } from "@/components/LandingDiagram";
 import { EvidenceVaultChecklist } from "@/components/applicant/EvidenceVaultChecklist";
+import { ApplicantCommunication } from "@/components/applicant/ApplicantCommunication";
 import { SovereignLayout } from "@/components/sovereign/SovereignLayout";
 
 function MainApp() {
@@ -74,45 +75,13 @@ function MainApp() {
   // LANDING PAGE REMOVED: Go straight into Applicant flow
 
   // Determine the main content area based on current flow state
+  // TAB-SPECIFIC routes come FIRST so clicking a tab always works
   let mainContent: React.ReactNode = null;
 
-  if (activeRole === "applicant" && !hasCompletedDiscovery) {
-    mainContent = <ApplicantDiscoveryFlow onComplete={handleDiscoveryComplete} onChange={setDraftAnswers} onStepChange={setDiscoveryStepIndex} />;
-  } else if (activeRole === "applicant" && hasCompletedDiscovery && !hasCompletedAnalysis && activeCase.discoveryResult) {
-    mainContent = (
-      <IntelligenceAnalysisEngine
-        discoveryResult={activeCase.discoveryResult}
-        onAnalysisComplete={(roadmap, geo, governmentSupport) => {
-          updateCase({ roadmap, geoContext: geo, governmentSupport });
-          setHasCompletedAnalysis(true);
-        }}
-      />
-    );
-  } else if (activeRole === "applicant" && hasCompletedDiscovery && hasCompletedAnalysis && !hasViewedJourney && activeCase.discoveryResult) {
-    mainContent = (
-      <RegulatoryJourneyView
-        discoveryResult={activeCase.discoveryResult}
-        precomputedRoadmap={activeCase.roadmap}
-        geoContext={activeCase.geoContext}
-        onProceedToWorkspace={handleJourneyProceed}
-        onEditAnswers={() => {
-          setHasCompletedDiscovery(false);
-          setHasCompletedAnalysis(false);
-        }}
-      />
-    );
-  } else if (activeRole === "applicant" && activeTab === "Evidence Vault") {
+  if (activeRole === "applicant" && (activeTab === "Evidence Vault" || activeTab === "Document Review")) {
     mainContent = <EvidenceVaultChecklist />;
-  } else if (activeRole === "applicant" && activeTab === "Messages") {
-    mainContent = (
-      <div className="flex-1 flex flex-col items-center justify-center min-h-[60vh]">
-        <div className="text-center bg-white p-8 rounded-xl border border-slate-200 shadow-sm max-w-md w-full">
-          <h2 className="text-xl font-bold text-slate-800 mb-2">Message Center</h2>
-          <p className="text-slate-500 text-sm mb-6">View your communication with CAs and Government Officers.</p>
-          <button onClick={() => alert("Opening full message center...")} className="w-full py-2 bg-slate-900 text-white rounded-lg text-sm font-bold">Open Inbox</button>
-        </div>
-      </div>
-    );
+  } else if (activeRole === "applicant" && (activeTab === "Messages" || activeTab === "Communication")) {
+    mainContent = <ApplicantCommunication />;
   } else if (activeRole === "applicant" && activeTab === "AI Copilot") {
     mainContent = (
       <div className="flex-1 flex flex-col items-center justify-center min-h-[60vh]">
@@ -123,7 +92,20 @@ function MainApp() {
         </div>
       </div>
     );
-  } else if (activeRole === "applicant" && activeCase.discoveryResult) {
+  } else if (activeRole === "applicant" && activeTab === "Regulatory Roadmap" && activeCase.roadmap) {
+    mainContent = (
+      <RegulatoryJourneyView
+        discoveryResult={activeCase.discoveryResult!}
+        precomputedRoadmap={activeCase.roadmap}
+        geoContext={activeCase.geoContext}
+        onProceedToWorkspace={handleJourneyProceed}
+        onEditAnswers={() => {
+          setHasCompletedDiscovery(false);
+          setHasCompletedAnalysis(false);
+        }}
+      />
+    );
+  } else if (activeRole === "applicant" && activeTab === "Project Details" && activeCase.discoveryResult) {
     mainContent = (
       <DiscoveryApplicationWorkspace
         discoveryResult={activeCase.discoveryResult}
@@ -134,6 +116,45 @@ function MainApp() {
         }}
       />
     );
+  } else if (activeRole === "applicant" && (activeTab === "Dashboard" || !activeTab)) {
+    // Dashboard = default applicant view — show workspace if discovery done, else show discovery flow
+    if (!hasCompletedDiscovery) {
+      mainContent = <ApplicantDiscoveryFlow onComplete={handleDiscoveryComplete} onChange={setDraftAnswers} onStepChange={setDiscoveryStepIndex} />;
+    } else if (hasCompletedDiscovery && !hasCompletedAnalysis && activeCase.discoveryResult) {
+      mainContent = (
+        <IntelligenceAnalysisEngine
+          discoveryResult={activeCase.discoveryResult}
+          onAnalysisComplete={(roadmap, geo, governmentSupport) => {
+            updateCase({ roadmap, geoContext: geo, governmentSupport });
+            setHasCompletedAnalysis(true);
+          }}
+        />
+      );
+    } else if (hasCompletedDiscovery && hasCompletedAnalysis && !hasViewedJourney && activeCase.discoveryResult) {
+      mainContent = (
+        <RegulatoryJourneyView
+          discoveryResult={activeCase.discoveryResult}
+          precomputedRoadmap={activeCase.roadmap}
+          geoContext={activeCase.geoContext}
+          onProceedToWorkspace={handleJourneyProceed}
+          onEditAnswers={() => {
+            setHasCompletedDiscovery(false);
+            setHasCompletedAnalysis(false);
+          }}
+        />
+      );
+    } else if (activeCase.discoveryResult) {
+      mainContent = (
+        <DiscoveryApplicationWorkspace
+          discoveryResult={activeCase.discoveryResult}
+          initialApprovalId={targetApprovalId}
+          onBackToJourney={() => {
+            setHasViewedJourney(false);
+            setTargetApprovalId(undefined);
+          }}
+        />
+      );
+    }
   } else if (activeRole === "ca") {
     mainContent = <CAWorkspace />;
   } else if (activeRole === "government") {
