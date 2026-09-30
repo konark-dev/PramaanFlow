@@ -6,15 +6,19 @@ import { DiscoveryResult } from '@/components/applicant/ApplicantDiscoveryFlow';
 // Basic Shared Models
 export type Role = 'applicant' | 'ca' | 'government' | 'inspector' | 'inspector';
 export type ApprovalStatus = 'Pending' | 'In Review' | 'Action Required' | 'Approved' | 'Blocked';
-export type DocumentStatus = 'Missing' | 'Uploaded' | 'Under Review' | 'Verified' | 'Rejected';
+export type DocumentStatus = 'Missing' | 'Uploaded' | 'Under Review' | 'Verified' | 'VERIFIED' | 'Rejected';
 
 export interface DemoDocument {
   id: string;
   name: string;
   status: DocumentStatus;
   requiredFor: string[];
-  reusable: boolean;
-  owner: 'Applicant' | 'CA';
+  reusable?: boolean;
+  owner?: 'Applicant' | 'CA';
+  type?: string;
+  url?: string;
+  hash?: string;
+  uploadedAt?: string;
 }
 
 export interface DemoApproval {
@@ -52,6 +56,8 @@ export interface DemoCase {
   
   govStatus: 'Draft' | 'Submitted' | 'Under Review' | 'Inspection Pending' | 'Cleared';
   inspectorAssigned: boolean;
+  isPackaged?: boolean;
+  packageHash?: string;
 }
 
 const INITIAL_CASE: DemoCase = {

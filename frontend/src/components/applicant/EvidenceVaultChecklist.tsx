@@ -14,8 +14,8 @@ export function EvidenceVaultChecklist() {
     const docs = new Map<string, { id: string; name: string; requiredFor: string[] }>();
     
     if (activeCase.roadmap?.approvals) {
-      activeCase.roadmap.approvals.forEach(approval => {
-        approval.requirements?.forEach(req => {
+      activeCase.roadmap.approvals.forEach((approval: any) => {
+        approval.requirements?.forEach((req: string) => {
           if (!docs.has(req)) {
             docs.set(req, { id: req, name: req, requiredFor: [approval.name] });
           } else {
@@ -45,6 +45,8 @@ export function EvidenceVaultChecklist() {
         ...(activeCase.documents || []),
         {
           id: docId,
+          name: docId,
+          requiredFor: [],
           type: docId,
           status: "VERIFIED" as const,
           url: "/mock-doc.pdf",
