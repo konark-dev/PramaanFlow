@@ -137,7 +137,7 @@ export function GovernmentWorkspace() {
     <div className="flex flex-col lg:flex-row gap-6 min-h-[80vh]">
       {/* LEFT PANE */}
       <div className="w-full lg:w-80 space-y-4">
-        <button onClick={() => setSelectedTab('queue')} className="text-sm font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1 mb-2">
+        <button onClick={() => setActiveTab('queue')} className="text-sm font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1 mb-2">
           ← Back to Queue
         </button>
 

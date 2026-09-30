@@ -153,7 +153,7 @@ export const REGULATORY_QUESTIONS: QuestionDef[] = [
     numbering: '3',
     title: 'Proposed Investment',
     type: 'amount_with_unit' as any,
-    units: ['Lakhs', 'Crores'] as any,
+    unit: ['Lakhs', 'Crores'] as any,
     placeholder: 'Enter amount'
   },
   {
