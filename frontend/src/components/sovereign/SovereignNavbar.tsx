@@ -19,10 +19,10 @@ const ROLES = [
 ] as const;
 
 const ROLE_TABS: Record<string, string[]> = {
-  applicant: ["Discovery Flow", "Evidence Vault", "AI Copilot", "Messages"],
-  ca: ["Case Review", "Document Verification", "Draft Response", "AI Copilot"],
-  government: ["Submission Queue", "Clearance Review", "Statutory Acts", "Audit Trail"],
-  inspector: ["Field Assignments", "VROOM Routing", "Site Evidence", "Reports"],
+  applicant: ["Dashboard", "Evidence Vault", "Messages"],
+  ca: ["Project Details", "Regulatory Roadmap", "Evidence Vault", "Document Review", "Communication"],
+  government: ["Incoming Cases", "Jurisdiction", "Regulatory Review", "Evidence", "Timeline"],
+  inspector: ["Inspection Queue", "Site Observation", "Reports"],
 };
 
 export function SovereignNavbar({

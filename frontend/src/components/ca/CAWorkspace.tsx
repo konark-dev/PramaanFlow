@@ -49,7 +49,7 @@ export function CAWorkspace() {
 
   const { discoveryResult } = activeCase;
 
-  if (activeTab === "Document Verification") {
+  if (activeTab === "Document Review") {
     return (
       <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[80vh]">
         <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
@@ -96,7 +96,7 @@ export function CAWorkspace() {
     );
   }
 
-  if (activeTab === "Draft Response") {
+  if (activeTab === "Communication") {
     return (
       <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[80vh] flex flex-col">
         <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
@@ -124,7 +124,7 @@ export function CAWorkspace() {
     );
   }
 
-  if (activeTab === "AI Copilot") {
+  if (activeTab === "Regulatory Roadmap") {
     return (
       <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[80vh] flex flex-col">
         <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">

@@ -23,7 +23,7 @@ export function GovernmentWorkspace() {
   const { activeCase, updateCase, addMessage, activeTab, setActiveTab } = useDemoState();
   const [queryInput, setQueryInput] = useState("");
 
-  if (activeTab === "Submission Queue") {
+  if (activeTab === "Incoming Cases") {
     return (
       <div className="flex flex-col gap-6 min-h-[80vh]">
         <div className="flex items-center justify-between">
@@ -87,7 +87,7 @@ export function GovernmentWorkspace() {
   // Case Detail View
   const { discoveryResult } = activeCase;
 
-  if (activeTab === "Statutory Acts") {
+  if (activeTab === "Regulatory Review") {
     return (
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 min-h-[80vh]">
         <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
@@ -110,7 +110,7 @@ export function GovernmentWorkspace() {
     );
   }
 
-  if (activeTab === "Audit Trail") {
+  if (activeTab === "Timeline") {
     return (
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 min-h-[80vh]">
         <h2 className="text-xl font-bold text-slate-800 mb-6">Case Audit Trail</h2>

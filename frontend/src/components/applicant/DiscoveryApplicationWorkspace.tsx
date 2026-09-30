@@ -132,10 +132,10 @@ export function DiscoveryApplicationWorkspace({ discoveryResult, initialApproval
   const isReady = isFormComplete && (totalDocsCount === 0 || isDocsComplete) && !activeApprovalLocked;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex text-slate-900 font-sans selection:bg-teal-500 selection:text-white">
+    <div className="w-full bg-slate-50 flex text-slate-900 font-sans selection:bg-teal-500 selection:text-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
       
       {/* Left Sidebar: Requirement Navigator */}
-      <div className="w-80 bg-white border-r border-slate-200 hidden md:flex flex-col h-screen sticky top-0 overflow-y-auto">
+      <div className="w-80 bg-white border-r border-slate-200 hidden md:flex flex-col shrink-0">
         <div className="p-5 border-b border-slate-200 bg-slate-50/50">
           <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Workspace</div>
           <h2 className="font-extrabold text-slate-900">Application Tasks</h2>
@@ -199,10 +199,10 @@ export function DiscoveryApplicationWorkspace({ discoveryResult, initialApproval
       </div>
 
       {/* Main Workspace Area */}
-      <div className="flex-1 flex flex-col min-w-0 max-h-screen overflow-y-auto">
+      <div className="flex-1 flex flex-col min-w-0 bg-white">
         
         {/* Header */}
-        <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-20 shadow-sm">
+        <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm">
           <div className="flex items-center gap-4">
             <button 
               onClick={onBackToJourney}
@@ -494,7 +494,7 @@ export function DiscoveryApplicationWorkspace({ discoveryResult, initialApproval
                     }}
                     className="w-full xl:w-auto px-5 py-3 rounded-lg text-sm font-bold text-blue-300 hover:text-white hover:bg-blue-900 border border-blue-800 transition-colors flex items-center justify-center gap-2 shrink-0 whitespace-nowrap"
                   >
-                    <MessageSquare className="w-4 h-4" /> Request CA Assistance
+                    <MessageSquare className="w-4 h-4" /> Send to CA
                   </button>
                 )}
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 w-full xl:w-auto">

@@ -347,7 +347,7 @@ export function InspectorWorkspace() {
         <div className="rounded-2xl p-5 border border-slate-200 bg-white shadow-sm space-y-4 h-fit sticky top-20">
           <div className="border-b border-slate-100 pb-3">
             <span className="text-[10px] uppercase font-bold text-teal-700 tracking-wider">
-              FIELD AUDIT CARD
+              Inspection Preparation
             </span>
             <h3 className="font-bold text-slate-900 text-base mt-1">
               {selectedInspection.projectName}
@@ -359,7 +359,7 @@ export function InspectorWorkspace() {
             {/* GPS Verification Simulation */}
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
               <div>
-                <span className="font-semibold text-slate-900 block">Geo-Fence Verification</span>
+                <span className="font-semibold text-slate-900 block">Site Observation (Geo-Fence)</span>
                 <span className="text-[11px] text-slate-500 font-mono">
                   Target: {selectedInspection.coordinates.lat}, {selectedInspection.coordinates.lng}
                 </span>
@@ -371,14 +371,14 @@ export function InspectorWorkspace() {
                     : "bg-teal-600 text-white hover:bg-teal-700"
                   }`}
               >
-                {gpsVerified ? "✓ In Geo-Fence" : "Verify GPS"}
+                {gpsVerified ? "Verified" : "Verify GPS"}
               </button>
             </div>
 
             {/* Statutory Checklist Items */}
             <div>
               <span className="text-slate-800 font-semibold block mb-2">
-                Mandatory Inspection Checklist:
+                Checklist
               </span>
               <div className="space-y-2">
                 {(selectedInspection.checklistItems || []).map((item) => {
@@ -406,14 +406,26 @@ export function InspectorWorkspace() {
                 })}
               </div>
             </div>
+            
+            {/* Findings */}
+            <div>
+              <span className="text-slate-800 font-semibold block mb-1">
+                Findings
+              </span>
+              <textarea 
+                className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs focus:ring-teal-500 focus:border-teal-500 outline-none" 
+                rows={2}
+                placeholder="Enter field observations..."
+              />
+            </div>
 
             {/* Photo / Evidence Upload Simulation */}
-            <div onClick={() => alert("Launching camera interface for geo-tagged capture...")} className="p-3 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-center cursor-pointer hover:border-teal-500 hover:bg-slate-100 transition-colors">
+            <div onClick={() => alert("Launching camera interface...")} className="p-3 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-center cursor-pointer hover:border-teal-500 hover:bg-slate-100 transition-colors">
               <Upload className="h-4 w-4 mx-auto text-slate-400 mb-1" />
               <span className="text-[11px] text-slate-700 block font-medium">
-                Attach Geo-Tagged Site Photographs
+                Evidence
               </span>
-              <span className="text-[10px] text-slate-500">Watermark with GPS &amp; Timestamp</span>
+              <span className="text-[10px] text-slate-500">Attach Geo-Tagged Site Photographs</span>
             </div>
 
             {/* Submit Action */}
@@ -427,8 +439,8 @@ export function InspectorWorkspace() {
                   }`}
               >
                 {submitted
-                  ? "✓ Digitally Signed & Synced to Raj Nivesh"
-                  : "Sign & Submit Inspection Report"}
+                  ? "Report Submitted"
+                  : "Submit Report"}
               </button>
             </div>
           </div>

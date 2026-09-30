@@ -320,3 +320,4 @@ export function RegulatoryJourneyView({ discoveryResult, precomputedRoadmap, geo
     </div>
   );
 }
+

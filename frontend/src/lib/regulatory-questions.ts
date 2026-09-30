@@ -29,13 +29,13 @@ export interface QuestionDef {
 export const DISCOVERY_STEPS = [
   { id: 'intent', title: '01 Intent' },
   { id: 'activity', title: '02 Business Activity' },
-  { id: 'profile', title: '03 Project Profile' },
+  { id: 'profile', title: '03 Project Details' },
   { id: 'location', title: '04 Location' },
   { id: 'intelligence', title: '05 Regulatory Intelligence' },
-  { id: 'support', title: '06 Government Support' },
-  { id: 'evidence', title: '07 Evidence' },
-  { id: 'readiness', title: '08 Readiness' },
-  { id: 'assistance', title: '09 Assistance' },
+  { id: 'roadmap', title: '06 Regulatory Roadmap' },
+  { id: 'support', title: '07 Government Support' },
+  { id: 'evidence', title: '08 Evidence Vault' },
+  { id: 'readiness', title: '09 Readiness' },
   { id: 'handoff', title: '10 Government Handoff' }
 ];
 
@@ -116,6 +116,19 @@ export const REGULATORY_QUESTIONS: QuestionDef[] = [
     ]
   },
   {
+    id: 'subType_dairy',
+    stepIndex: 1,
+    parentId: 'subType_food',
+    numbering: '2.1.1',
+    title: 'Select dairy operation type:',
+    type: 'radio',
+    condition: (a) => a.subType_food === 'Dairy Processing',
+    options: [
+      { id: 'Commercial Dairy Processing', label: 'Commercial Dairy Processing' },
+      { id: 'Artisanal / Small Scale', label: 'Artisanal / Small Scale' }
+    ]
+  },
+  {
     id: 'subType_mining',
     stepIndex: 1,
     parentId: 'businessType',
@@ -148,35 +161,13 @@ export const REGULATORY_QUESTIONS: QuestionDef[] = [
   // STEP 2: PROJECT PROFILE
   // ====================================================
   {
-    id: 'investment',
-    stepIndex: 2,
-    numbering: '3',
-    title: 'Proposed Investment',
-    type: 'amount_with_unit' as any,
-    unit: ['Lakhs', 'Crores'] as any,
-    placeholder: 'Enter amount'
-  },
-  {
-    id: 'land_area',
-    stepIndex: 2,
-    numbering: '3.1',
-    parentId: 'investment',
-    title: 'Total Land Area Required',
-    type: 'input',
-    placeholder: 'e.g. 2 Acres',
-    condition: (a) => !!a.investment
-  },
-  
-  // DAIRY SPECIFIC
-  {
     id: 'dairy_capacity',
     stepIndex: 2,
-    parentId: 'land_area',
-    numbering: '3.2',
+    numbering: '3',
     title: 'Daily production / processing capacity (L/day)',
     type: 'radio',
     apiTrigger: 'analyze',
-    condition: (a) => a.subType_food === 'Dairy Processing' && !!a.land_area,
+    condition: (a) => a.subType_dairy === 'Commercial Dairy Processing' || a.subType_food === 'Dairy Processing',
     contextInfo: {
       title: 'Dairy Thresholds',
       highlight: 'Regulatory Impact: > 50k LPD triggers central clearance.',
@@ -186,31 +177,42 @@ export const REGULATORY_QUESTIONS: QuestionDef[] = [
     },
     options: [
       { id: '10,000 L/day', label: 'Small Scale (< 10,000 L/day)' },
-      { id: '25,000 L/day', label: 'Medium Scale (10,000 - 50,000 L/day)', meta: { reqs: ['FSSAI State', 'MPCB Orange'] } },
+      { id: '25,000 L/day', label: '25,000 L/day', meta: { reqs: ['FSSAI State', 'MPCB Orange'] } },
       { id: '100,000 L/day', label: 'Large Scale (> 50,000 L/day)' }
     ]
   },
   {
-    id: 'dairy_water',
+    id: 'investment',
     stepIndex: 2,
+    numbering: '3.1',
     parentId: 'dairy_capacity',
-    numbering: '3.2.1',
-    title: 'Daily Water Requirement (KLD)',
-    type: 'input',
-    placeholder: 'e.g. 50 KLD',
-    condition: (a) => a.subType_food === 'Dairy Processing' && !!a.dairy_capacity
+    title: 'Proposed Investment',
+    type: 'amount_with_unit' as any,
+    unit: ['Lakhs', 'Crores'] as any,
+    placeholder: 'Enter amount',
+    condition: (a) => !!a.dairy_capacity || (a.businessType && a.businessType !== 'Food Processing')
   },
   {
-    id: 'dairy_etp',
+    id: 'power_req',
     stepIndex: 2,
-    parentId: 'dairy_water',
-    numbering: '3.2.2',
-    title: 'Will you establish an Effluent Treatment Plant (ETP)?',
-    type: 'boolean',
-    condition: (a) => a.subType_food === 'Dairy Processing' && !!a.dairy_water,
+    parentId: 'investment',
+    numbering: '3.2',
+    title: 'Power Requirement (kW/MW)',
+    type: 'input',
+    placeholder: 'e.g. 500 kW',
+    condition: (a) => !!a.investment
+  },
+  {
+    id: 'hazardous',
+    stepIndex: 2,
+    parentId: 'power_req',
+    numbering: '3.3',
+    title: 'Hazardous Chemicals / Ammonia Storage?',
+    type: 'radio',
+    condition: (a) => !!a.power_req,
     options: [
-      { id: 'Yes', label: 'YES' },
-      { id: 'No', label: 'NO' }
+      { id: 'Yes', label: 'Yes (Requires PESO / Factory Inspectorate)' },
+      { id: 'No', label: 'No' }
     ]
   },
   {

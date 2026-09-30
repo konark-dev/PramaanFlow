@@ -124,14 +124,31 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
   const updateCase = (updates: Partial<DemoCase>) => {
     setActiveCase(prev => {
       const events: { timestamp: string; event: string }[] = [];
-      if (updates.caStatus && updates.caStatus !== prev.caStatus) {
-        events.push({ timestamp: new Date().toISOString(), event: `CA Status changed to ${updates.caStatus}` });
+      if (updates.discoveryResult && !prev.discoveryResult) {
+        events.push({ timestamp: new Date().toISOString(), event: `Business Activity Classified` });
+      }
+      if (updates.roadmap && !prev.roadmap) {
+        events.push({ timestamp: new Date().toISOString(), event: `Regulatory Analysis` });
+      }
+      if (updates.caAssigned && !prev.caAssigned) {
+        events.push({ timestamp: new Date().toISOString(), event: `CA Review` });
       }
       if (updates.govStatus && updates.govStatus !== prev.govStatus) {
-        events.push({ timestamp: new Date().toISOString(), event: `Government Status changed to ${updates.govStatus}` });
+        if (updates.govStatus === 'Submitted') {
+          events.push({ timestamp: new Date().toISOString(), event: `Government Review` });
+        } else if (updates.govStatus === 'Approved') {
+          events.push({ timestamp: new Date().toISOString(), event: `Decision` });
+        } else {
+          events.push({ timestamp: new Date().toISOString(), event: `Government Status changed to ${updates.govStatus}` });
+        }
+      }
+      if (updates.inspectorAssigned && !prev.inspectorAssigned) {
+        events.push({ timestamp: new Date().toISOString(), event: `Inspection` });
       }
       if (events.length === 0) {
-        events.push({ timestamp: new Date().toISOString(), event: `Case updated` });
+        if (Object.keys(updates).length !== 1 || !updates.applicantAnswers) {
+          events.push({ timestamp: new Date().toISOString(), event: `Case updated` });
+        }
       }
       return {
         ...prev,
@@ -161,7 +178,7 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
       const updatedDocs = prev.documents.map(d => d.id === id ? { ...d, ...updates } : d);
       const timelineEvent = {
         timestamp: new Date().toISOString(),
-        event: updates.status ? `Document ${id} status changed to ${updates.status}` : `Document ${id} updated`
+        event: updates.status === 'Submitted' ? 'Evidence Submitted' : (updates.status ? `Document ${id} status changed to ${updates.status}` : `Document ${id} updated`)
       };
       return {
         ...prev,
