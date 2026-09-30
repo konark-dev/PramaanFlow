@@ -87,6 +87,29 @@ export function GovernmentWorkspace() {
   // Case Detail View
   const { discoveryResult } = activeCase;
 
+  if (activeTab === "Statutory Acts") {
+    return (
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 min-h-[80vh]">
+        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+          <FileText className="w-5 h-5 text-teal-600" />
+          Statutory Acts & Reference Library
+        </h2>
+        <div className="space-y-4">
+          <div className="p-4 border border-slate-200 rounded-lg bg-slate-50">
+            <h3 className="font-bold text-slate-800">The Factories Act, 1948</h3>
+            <p className="text-sm text-slate-600 mt-1">Reference materials for factory licensing, safety protocols, and labor regulations.</p>
+            <button onClick={() => alert("Opening The Factories Act, 1948 digital viewer...")} className="mt-3 text-xs font-bold text-teal-600 hover:underline">View Act</button>
+          </div>
+          <div className="p-4 border border-slate-200 rounded-lg bg-slate-50">
+            <h3 className="font-bold text-slate-800">Environment (Protection) Act, 1986</h3>
+            <p className="text-sm text-slate-600 mt-1">Guidelines for MPCB pollution control, effluent treatment, and waste management.</p>
+            <button onClick={() => alert("Opening Environment (Protection) Act, 1986 digital viewer...")} className="mt-3 text-xs font-bold text-teal-600 hover:underline">View Act</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (activeTab === "Audit Trail") {
     return (
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 min-h-[80vh]">

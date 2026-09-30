@@ -103,6 +103,26 @@ function MainApp() {
     );
   } else if (activeRole === "applicant" && activeTab === "Evidence Vault") {
     mainContent = <EvidenceVaultChecklist />;
+  } else if (activeRole === "applicant" && activeTab === "Messages") {
+    mainContent = (
+      <div className="flex-1 flex flex-col items-center justify-center min-h-[60vh]">
+        <div className="text-center bg-white p-8 rounded-xl border border-slate-200 shadow-sm max-w-md w-full">
+          <h2 className="text-xl font-bold text-slate-800 mb-2">Message Center</h2>
+          <p className="text-slate-500 text-sm mb-6">View your communication with CAs and Government Officers.</p>
+          <button onClick={() => alert("Opening full message center...")} className="w-full py-2 bg-slate-900 text-white rounded-lg text-sm font-bold">Open Inbox</button>
+        </div>
+      </div>
+    );
+  } else if (activeRole === "applicant" && activeTab === "AI Copilot") {
+    mainContent = (
+      <div className="flex-1 flex flex-col items-center justify-center min-h-[60vh]">
+        <div className="text-center bg-white p-8 rounded-xl border border-slate-200 shadow-sm max-w-md w-full">
+          <h2 className="text-xl font-bold text-slate-800 mb-2">Pramaan AI Copilot</h2>
+          <p className="text-slate-500 text-sm mb-6">Your intelligent regulatory assistant is ready to help.</p>
+          <button onClick={() => setIsCopilotOpen(true)} className="w-full py-2 bg-blue-600 text-white rounded-lg text-sm font-bold">Launch AI Assistant</button>
+        </div>
+      </div>
+    );
   } else if (activeRole === "applicant" && activeCase.discoveryResult) {
     mainContent = (
       <DiscoveryApplicationWorkspace

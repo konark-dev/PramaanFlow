@@ -68,7 +68,23 @@ export function CAWorkspace() {
               </div>
               <div className="flex gap-2">
                 <button onClick={() => alert(`Reviewing document: ${doc.name}...`)} className="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-100">Review</button>
-                <button onClick={() => alert(`Document verified: ${doc.name}. The applicant will be notified.`)} className="px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold hover:bg-blue-100">Verify</button>
+                {doc.status !== 'Verified' ? (
+                  <button 
+                    onClick={() => {
+                      const updatedDocs = activeCase.documents.map(d => 
+                        d.id === doc.id ? { ...d, status: 'Verified' } : d
+                      );
+                      updateCase({ documents: updatedDocs });
+                    }} 
+                    className="px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold hover:bg-blue-100"
+                  >
+                    Verify
+                  </button>
+                ) : (
+                  <span className="px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-bold flex items-center gap-1">
+                    <CheckCircle className="w-3 h-3" /> Verified
+                  </span>
+                )}
               </div>
             </div>
           ))}
@@ -80,6 +96,60 @@ export function CAWorkspace() {
     );
   }
 
+  if (activeTab === "Draft Response") {
+    return (
+      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[80vh] flex flex-col">
+        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+          <MessageSquare className="w-5 h-5 text-blue-600" />
+          Draft Response / Statutory Report
+        </h2>
+        <div className="flex-1 flex flex-col gap-4">
+          <p className="text-sm text-slate-600">
+            Draft an official review report or send requirements to the applicant regarding Case <strong>{activeCase.id}</strong>.
+          </p>
+          <textarea 
+            className="w-full flex-1 p-4 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 focus:bg-white transition-colors resize-none"
+            placeholder="E.g., Based on the submitted business profile for Food Processing, the following documents require revision before final submission to MPCB..."
+          />
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+            <button className="px-5 py-2.5 rounded-lg font-bold text-sm text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-colors">
+              Save Draft
+            </button>
+            <button onClick={() => alert("Response sent to Applicant!")} className="px-5 py-2.5 rounded-lg font-bold text-sm text-white bg-blue-600 hover:bg-blue-700 transition-colors flex items-center gap-2">
+              <Send className="w-4 h-4" /> Send Response
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (activeTab === "AI Copilot") {
+    return (
+      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[80vh] flex flex-col">
+        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+          <span className="bg-gradient-to-r from-blue-600 to-emerald-600 text-transparent bg-clip-text">Pramaan AI Copilot</span>
+        </h2>
+        <div className="flex-1 bg-slate-50 rounded-lg border border-slate-200 flex flex-col overflow-hidden">
+          <div className="p-4 bg-white border-b border-slate-200 flex items-center justify-between">
+            <span className="text-sm font-bold text-slate-700">CA Assistant</span>
+            <span className="text-xs font-bold px-2 py-1 bg-emerald-50 text-emerald-700 rounded-md">Online</span>
+          </div>
+          <div className="flex-1 p-4 overflow-y-auto flex flex-col justify-end space-y-4">
+            <div className="self-start max-w-[80%] bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-sm text-slate-700">
+              Hello! I am your regulatory AI assistant. I have pre-analyzed Case {activeCase.id}. I can help you cross-verify their documents against the Factory Act or check state subsidies. How can I assist?
+            </div>
+          </div>
+          <div className="p-3 bg-white border-t border-slate-200 flex gap-2">
+            <input type="text" placeholder="Ask AI about regulations or this case..." className="flex-1 p-2 bg-slate-100 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" />
+            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors">Ask</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // DEFAULT: Case Review
   return (
     <div className="flex flex-col lg:flex-row gap-6 min-h-[80vh]">
       {/* LEFT: Case Summary & Navigation */}

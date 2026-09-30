@@ -470,18 +470,20 @@ export function DiscoveryApplicationWorkspace({ discoveryResult, initialApproval
                 );
               })()}
 
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-5 border-t border-slate-700">
+              <div className="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4 pt-6 border-t border-slate-700 mt-2">
                 {activeCase.caAssigned ? (
-                  <div className="flex flex-col w-full sm:w-1/2 bg-slate-800 rounded-lg p-3 max-h-32 overflow-y-auto border border-slate-700">
-                    <div className="text-[10px] font-bold text-teal-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3" /> CA Assistance Active
+                  <div className="flex flex-col flex-1 bg-slate-800/50 rounded-xl p-4 max-h-48 overflow-y-auto border border-slate-700/50 shadow-inner w-full min-w-0">
+                    <div className="text-[10px] font-bold text-teal-400 uppercase tracking-wider mb-3 flex items-center gap-1.5 shrink-0">
+                      <CheckCircle2 className="w-4 h-4" /> Professional CA Assistance Active
                     </div>
-                    {activeCase.messages.map((m: any) => (
-                      <div key={m.id} className={`text-xs mb-1 ${m.sender === 'ca' ? 'text-blue-300' : 'text-slate-400'}`}>
-                        <span className="font-bold">{m.sender === 'ca' ? 'CA: ' : 'You: '}</span>
-                        {m.text}
-                      </div>
-                    ))}
+                    <div className="space-y-2">
+                      {activeCase.messages.map((m: any) => (
+                        <div key={m.id} className={`text-sm leading-relaxed break-words ${m.sender === 'ca' ? 'text-blue-200 bg-blue-900/20 p-2 rounded border border-blue-800/30' : 'text-slate-300 bg-slate-700/20 p-2 rounded border border-slate-600/30'}`}>
+                          <span className="font-bold block text-xs uppercase mb-1 opacity-70">{m.sender === 'ca' ? 'Chartered Accountant' : 'You'}</span>
+                          {m.text}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ) : (
                   <button 
@@ -490,12 +492,12 @@ export function DiscoveryApplicationWorkspace({ discoveryResult, initialApproval
                       addMessage({ sender: 'applicant', text: `I need help preparing the application for ${activeApproval.name} and gathering documents.` });
                       alert("CA Assistance Requested. Switch to CA role to view requests.");
                     }}
-                    className="w-full sm:w-auto px-5 py-2.5 rounded-lg text-sm font-bold text-blue-300 hover:text-white hover:bg-blue-900 border border-blue-800 transition-colors flex items-center justify-center gap-2"
+                    className="w-full xl:w-auto px-5 py-3 rounded-lg text-sm font-bold text-blue-300 hover:text-white hover:bg-blue-900 border border-blue-800 transition-colors flex items-center justify-center gap-2 shrink-0 whitespace-nowrap"
                   >
                     <MessageSquare className="w-4 h-4" /> Request CA Assistance
                   </button>
                 )}
-                <div className="flex items-center gap-3 w-full sm:w-auto">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 w-full xl:w-auto">
                   <button 
                     onClick={() => {
                       updateCase({ 
@@ -503,7 +505,7 @@ export function DiscoveryApplicationWorkspace({ discoveryResult, initialApproval
                       });
                       alert("Progress Saved!");
                     }}
-                    className="w-full sm:w-auto px-5 py-2.5 rounded-lg text-sm font-bold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                    className="w-full sm:w-auto whitespace-nowrap px-6 py-3 rounded-lg text-sm font-bold text-slate-300 bg-slate-800 hover:text-white hover:bg-slate-700 border border-slate-600 transition-colors shrink-0">
                     Save Progress
                   </button>
                   <button 
@@ -531,12 +533,13 @@ export function DiscoveryApplicationWorkspace({ discoveryResult, initialApproval
                       
                       alert("Application Submitted Successfully!");
                     }}
-                    className={`w-full sm:w-auto px-6 py-2.5 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all ${isReady ? 'bg-teal-500 hover:bg-teal-400 text-slate-900 shadow-md' : 'bg-slate-700 text-slate-500 cursor-not-allowed'}`}
+                    className={`w-full sm:w-auto whitespace-nowrap px-6 py-3 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all shrink-0 ${isReady ? 'bg-teal-500 hover:bg-teal-400 text-slate-900 shadow-md' : 'bg-slate-700 text-slate-500 cursor-not-allowed'}`}
                   >
-                    Continue / Submit Application <ChevronRight className="w-4 h-4" />
+                    Continue / Submit Application <ChevronRight className="w-4 h-4 shrink-0" />
                   </button>
                 </div>
               </div>
+
 
             </div>
           </section>
