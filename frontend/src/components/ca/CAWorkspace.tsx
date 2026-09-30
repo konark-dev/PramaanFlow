@@ -17,8 +17,26 @@ import {
 } from "lucide-react";
 
 export function CAWorkspace() {
-  const { activeCase, updateCase, addMessage, activeTab } = useDemoState();
+  const { activeCase, updateCase, addMessage, activeTab, setActiveTab } = useDemoState();
   const [msgInput, setMsgInput] = useState("");
+  const [reportDraft, setReportDraft] = useState("");
+  const [selectedDocument, setSelectedDocument] = useState<any>(null);
+
+  const project = activeCase.discoveryResult || {
+    businessType: "Food Processing & Manufacturing",
+    subType: "Edible Oil Extraction & Refinery",
+    location: "MIDC Chakan, Phase II",
+    district: "Pune",
+    capacity: "25,000 Litres/Day",
+    investment: "₹8.5 Crore",
+    employees: "120",
+  };
+  const approvals = activeCase.roadmap?.approvals || [
+    { id: "udyam", name: "Udyam / MSME Registration", authority: "Ministry of MSME", status: "Submitted", slaDays: 1, fee: 0 },
+    { id: "factory", name: "Factory License", authority: "DISH Maharashtra", status: "In Review", slaDays: 30, fee: 2500 },
+    { id: "mpcb", name: "MPCB Consent to Establish", authority: "MPCB", status: "Pending", slaDays: 90, fee: 50000 },
+    { id: "fssai", name: "FSSAI Central License", authority: "FSSAI", status: "Pending", slaDays: 60, fee: 7500 },
+  ];
 
   const handleSendMessage = () => {
     if (!msgInput.trim()) return;
@@ -54,15 +72,13 @@ export function CAWorkspace() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {activeCase.discoveryResult && (
-                <tr className="bg-blue-50/50 hover:bg-blue-50 transition-colors">
+              <tr className="bg-blue-50/50 hover:bg-blue-50 transition-colors">
                   <td className="p-4 font-mono font-bold text-slate-800">{activeCase.id}</td>
                   <td className="p-4 font-semibold text-slate-800">{activeCase.applicantAnswers?.enterpriseName || "New Enterprise"} <span className="ml-2 text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">ACTIVE</span></td>
-                  <td className="p-4 text-slate-600">{activeCase.discoveryResult.subType || activeCase.discoveryResult.businessType}</td>
+                  <td className="p-4 text-slate-600">{project.subType || project.businessType}</td>
                   <td className="p-4"><span className="px-2 py-1 rounded text-[10px] font-bold bg-amber-100 text-amber-700">{activeCase.caStatus}</span></td>
-                  <td className="p-4 text-right"><button className="text-xs px-3 py-1 bg-slate-900 text-white rounded-lg hover:bg-slate-800 font-bold">Open Workspace</button></td>
+                  <td className="p-4 text-right"><button onClick={() => setActiveTab("Document Review")} className="text-xs px-3 py-1 bg-slate-900 text-white rounded-lg hover:bg-slate-800 font-bold">Open Workspace</button></td>
                 </tr>
-              )}
               {mockCases.map((c) => (
                 <tr key={c.id} className="hover:bg-slate-50 transition-colors">
                   <td className="p-4 font-mono font-bold text-slate-800">{c.id}</td>
@@ -79,21 +95,7 @@ export function CAWorkspace() {
     );
   }
 
-  if (!activeCase.discoveryResult) {
-    return (
-      <div className="flex-1 flex items-center justify-center min-h-[60vh]">
-        <div className="text-center bg-white p-8 rounded-xl border border-slate-200 shadow-sm max-w-md">
-          <Building2 className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-slate-800">No Active Case Found</h2>
-          <p className="text-slate-500 text-sm mt-2">
-            Switch to the Applicant role and complete the Discovery flow to generate a case for review.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  const { discoveryResult } = activeCase;
+  const discoveryResult = project;
 
   if (activeTab === "Project Details") {
     return (
@@ -118,7 +120,13 @@ export function CAWorkspace() {
           </div>
           <div className="p-4 bg-teal-50 rounded-xl border border-teal-200 sm:col-span-2">
             <span className="text-[10px] font-bold uppercase text-teal-700">Regulatory Roadmap</span>
-            <p className="text-sm text-slate-700 mt-1">{activeCase.roadmap?.approvals?.length || 0} approvals identified across {new Set(activeCase.roadmap?.approvals?.map((a: any) => a.department)).size || 0} departments.</p>
+            <p className="text-sm text-slate-700 mt-1">{approvals.length} approvals are being tracked for this case.</p>
+          </div>
+        </div>
+        <div className="mt-8">
+          <div className="flex items-center justify-between mb-3"><h3 className="font-bold text-slate-900">Approval snapshot</h3><button onClick={() => setActiveTab("Regulatory Roadmap")} className="text-sm font-semibold text-blue-700">Open roadmap</button></div>
+          <div className="overflow-hidden rounded-xl border border-slate-200">
+            {approvals.slice(0, 3).map((approval: any) => <div key={approval.id} className="flex items-center justify-between gap-4 border-b border-slate-100 p-4 last:border-0"><div><p className="font-semibold text-slate-800">{approval.name}</p><p className="mt-1 text-xs text-slate-500">{approval.authority}</p></div><span className="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700">{approval.status}</span></div>)}
           </div>
         </div>
       </div>
@@ -134,7 +142,11 @@ export function CAWorkspace() {
             <div key={doc.id} className="p-4 border border-slate-200 rounded-xl flex items-center justify-between bg-slate-50">
               <span className="text-sm font-medium text-slate-800">{doc.name}</span>
               <div className="flex items-center gap-2">
-                <span className={`text-xs font-bold px-2 py-1 rounded-full ${ doc.status === 'Verified' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }`}>{doc.status || 'Required'}</span>
+                <span className={`text-xs font-bold px-2 py-1 rounded-full ${ ['Verified', 'VERIFIED'].includes(doc.status) ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }`}>{doc.status || 'Required'}</span>
+                <button
+                  onClick={() => setSelectedDocument(doc)}
+                  className="text-xs px-3 py-1 border border-slate-300 text-slate-700 rounded-lg hover:bg-white font-bold"
+                >View</button>
                 <button
                   onClick={() => updateCase({ documents: activeCase.documents.map((d: any) => d.id === doc.id ? { ...d, status: 'Verified' } : d) })}
                   className="text-xs px-3 py-1 bg-teal-600 text-white rounded-lg hover:bg-teal-700 font-bold"
@@ -144,6 +156,19 @@ export function CAWorkspace() {
           ))}
           {(!activeCase.documents || activeCase.documents.length === 0) && (
             <p className="text-sm text-slate-500 italic text-center py-8">No documents in vault.</p>
+          )}
+          {selectedDocument && (
+            <div className="mt-5 rounded-xl border border-blue-200 bg-blue-50 p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-blue-700">Evidence preview</p>
+                  <h3 className="mt-1 font-bold text-slate-900">{selectedDocument.name}</h3>
+                  <p className="mt-2 text-sm text-slate-600">Document hash: {selectedDocument.hash || 'Pending verification'} · Uploaded: {selectedDocument.uploadedAt ? new Date(selectedDocument.uploadedAt).toLocaleDateString() : 'Demo upload'}</p>
+                </div>
+                <button onClick={() => setSelectedDocument(null)} className="text-xs font-bold text-slate-500 hover:text-slate-800">Close</button>
+              </div>
+              <div className="mt-4 rounded-lg border border-blue-100 bg-white p-4 text-sm text-slate-600">Demo evidence is available for CA verification. Use Verify to record the review outcome.</div>
+            </div>
           )}
         </div>
       </div>
@@ -158,6 +183,19 @@ export function CAWorkspace() {
           Document Verification Queue
         </h2>
         <div className="space-y-4">
+          {selectedDocument && (
+            <div className="rounded-xl border border-blue-200 bg-blue-50 p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-blue-700">Reviewing evidence</p>
+                  <h3 className="mt-1 font-bold text-slate-900">{selectedDocument.name}</h3>
+                  <p className="mt-2 text-sm text-slate-600">Status: {selectedDocument.status} · Hash: {selectedDocument.hash || 'Pending verification'}</p>
+                </div>
+                <button onClick={() => setSelectedDocument(null)} className="text-xs font-bold text-slate-500 hover:text-slate-800">Close</button>
+              </div>
+              <p className="mt-4 rounded-lg border border-blue-100 bg-white p-4 text-sm text-slate-600">Demo review preview. Confirm the document record with Verify when the evidence is acceptable.</p>
+            </div>
+          )}
           {activeCase.documents?.map(doc => (
             <div key={doc.id} className="flex items-center justify-between p-4 border border-slate-200 rounded-lg bg-slate-50">
               <div className="flex items-center gap-3">
@@ -168,7 +206,7 @@ export function CAWorkspace() {
                 </div>
               </div>
               <div className="flex gap-2">
-                <button onClick={() => alert(`Reviewing document: ${doc.name}...`)} className="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-100">Review</button>
+                <button onClick={() => setSelectedDocument(doc)} className="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-100">Review</button>
                 {doc.status !== 'Verified' ? (
                   <button 
                     onClick={() => {
@@ -209,14 +247,16 @@ export function CAWorkspace() {
             Draft an official review report or send requirements to the applicant regarding Case <strong>{activeCase.id}</strong>.
           </p>
           <textarea 
+            value={reportDraft}
+            onChange={(event) => setReportDraft(event.target.value)}
             className="w-full flex-1 p-4 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 focus:bg-white transition-colors resize-none"
             placeholder="E.g., Based on the submitted business profile for Food Processing, the following documents require revision before final submission to MPCB..."
           />
           <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
-            <button className="px-5 py-2.5 rounded-lg font-bold text-sm text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-colors">
+            <button onClick={() => alert("Draft saved locally.")} className="px-5 py-2.5 rounded-lg font-bold text-sm text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-colors">
               Save Draft
             </button>
-            <button onClick={() => alert("Response sent to Applicant!")} className="px-5 py-2.5 rounded-lg font-bold text-sm text-white bg-blue-600 hover:bg-blue-700 transition-colors flex items-center gap-2">
+            <button onClick={() => { if (reportDraft.trim()) { addMessage({ sender: 'ca', text: reportDraft }); setReportDraft(""); } }} disabled={!reportDraft.trim()} className="px-5 py-2.5 rounded-lg font-bold text-sm text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 transition-colors flex items-center gap-2">
               <Send className="w-4 h-4" /> Send Response
             </button>
           </div>
@@ -225,26 +265,27 @@ export function CAWorkspace() {
     );
   }
 
+  if (activeTab === "Requirements") {
+    const requirements = [
+      ["Environmental Impact Assessment", "Confirm the noise-monitoring section and effluent mitigation timeline.", "Needs applicant input"],
+      ["Factory layout plan", "Provide architect seal and machinery placement schedule.", "Ready to review"],
+      ["Land lease deed", "Confirm plot number and MIDC allotment reference.", "Ready to review"],
+    ];
+    return (
+      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[80vh]">
+        <h2 className="text-xl font-bold text-slate-800">Requirements & Additional Information</h2>
+        <p className="mt-2 text-sm text-slate-500">Issue and track clarifications required before the CA can recommend submission.</p>
+        <div className="mt-6 space-y-3">{requirements.map(([title, detail, status]) => <div key={title} className="rounded-xl border border-slate-200 p-5"><div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><h3 className="font-bold text-slate-900">{title}</h3><p className="mt-1 text-sm text-slate-600">{detail}</p></div><span className={`w-fit rounded-full px-3 py-1 text-xs font-bold ${status === 'Needs applicant input' ? 'bg-amber-50 text-amber-700' : 'bg-emerald-50 text-emerald-700'}`}>{status}</span></div><button onClick={() => { addMessage({ sender: 'ca', text: `Additional information requested: ${title}. ${detail}` }); setActiveTab("Communication"); }} className="mt-4 text-sm font-bold text-blue-700 hover:text-blue-800">Request clarification</button></div>)}</div>
+      </div>
+    );
+  }
+
   if (activeTab === "Regulatory Roadmap") {
     return (
-      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[80vh] flex flex-col">
-        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <span className="bg-gradient-to-r from-blue-600 to-emerald-600 text-transparent bg-clip-text">Pramaan AI Copilot</span>
-        </h2>
-        <div className="flex-1 bg-slate-50 rounded-lg border border-slate-200 flex flex-col overflow-hidden">
-          <div className="p-4 bg-white border-b border-slate-200 flex items-center justify-between">
-            <span className="text-sm font-bold text-slate-700">CA Assistant</span>
-            <span className="text-xs font-bold px-2 py-1 bg-emerald-50 text-emerald-700 rounded-md">Online</span>
-          </div>
-          <div className="flex-1 p-4 overflow-y-auto flex flex-col justify-end space-y-4">
-            <div className="self-start max-w-[80%] bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-sm text-slate-700">
-              Hello! I am your regulatory AI assistant. I have pre-analyzed Case {activeCase.id}. I can help you cross-verify their documents against the Factory Act or check state subsidies. How can I assist?
-            </div>
-          </div>
-          <div className="p-3 bg-white border-t border-slate-200 flex gap-2">
-            <input type="text" placeholder="Ask AI about regulations or this case..." className="flex-1 p-2 bg-slate-100 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" />
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors">Ask</button>
-          </div>
+      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[80vh]">
+        <div className="flex items-start justify-between gap-4 mb-6"><div><h2 className="text-xl font-bold text-slate-800">Regulatory Roadmap</h2><p className="mt-1 text-sm text-slate-500">CA review sequence for Case {activeCase.id}</p></div><span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">{approvals.length} approvals</span></div>
+        <div className="space-y-3">
+          {approvals.map((approval: any, index: number) => <div key={approval.id} className="flex flex-col gap-3 rounded-xl border border-slate-200 p-5 sm:flex-row sm:items-center"><span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-slate-700">{index + 1}</span><div className="flex-1"><h3 className="font-bold text-slate-900">{approval.name}</h3><p className="mt-1 text-sm text-slate-500">{approval.authority} · SLA {approval.slaDays || '—'} days · Fee ₹{approval.fee || 0}</p></div><span className="w-fit rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700">{approval.status}</span></div>)}
         </div>
       </div>
     );
@@ -269,7 +310,7 @@ export function CAWorkspace() {
               <span className="text-xs text-slate-500 block mb-1">Business Activity</span>
               <div className="flex items-center gap-2 text-sm font-semibold text-slate-800">
                 <Building2 className="w-4 h-4 text-slate-400" />
-                {discoveryResult.subType || discoveryResult.businessType}
+                {discoveryResult?.subType || discoveryResult?.businessType || 'Pending project classification'}
               </div>
             </div>
             
@@ -277,7 +318,7 @@ export function CAWorkspace() {
               <span className="text-xs text-slate-500 block mb-1">Location</span>
               <div className="flex items-center gap-2 text-sm font-semibold text-slate-800">
                 <MapPin className="w-4 h-4 text-slate-400" />
-                {discoveryResult.location}, {discoveryResult.district}
+                {discoveryResult?.location || 'Location pending'}{discoveryResult?.district ? `, ${discoveryResult.district}` : ''}
               </div>
             </div>
 

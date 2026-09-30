@@ -19,9 +19,31 @@ const ROLES = [
 ] as const;
 
 const ROLE_TABS: Record<string, string[]> = {
-  applicant: ["Dashboard", "Project Details", "Regulatory Roadmap", "Government Support", "Evidence Vault", "Document Review", "Communication"],
-  ca: ["Client Dashboard", "Project Details", "Regulatory Roadmap", "Evidence Vault", "Document Review", "Communication"],
-  government: ["Incoming Cases", "Jurisdiction", "Regulatory Review", "Evidence", "Timeline"],
+  applicant: [
+    "Dashboard",
+    "Project Details",
+    "Regulatory Roadmap",
+    "Government Support",
+    "Evidence Vault",
+    "Document Review",
+    "Communication",
+  ],
+  ca: [
+    "Client Dashboard",
+    "Project Details",
+    "Regulatory Roadmap",
+    "Evidence Vault",
+    "Document Review",
+    "Requirements",
+    "Communication",
+  ],
+  government: [
+    "Incoming Cases",
+    "Jurisdiction",
+    "Regulatory Review",
+    "Evidence",
+    "Timeline",
+  ],
   inspector: ["Inspection Queue", "Site Observation", "Reports"],
 };
 
@@ -32,7 +54,11 @@ export function SovereignNavbar({
   onOpenCopilot,
 }: SovereignNavbarProps) {
   const { activeTab, setActiveTab, resetCase } = useDemoState();
-  const currentRoleKey = (activeRole || "applicant").toLowerCase().includes("ca") ? "ca" : (activeRole || "applicant").toLowerCase();
+  const currentRoleKey = (activeRole || "applicant")
+    .toLowerCase()
+    .includes("ca")
+    ? "ca"
+    : (activeRole || "applicant").toLowerCase();
   const tabs = ROLE_TABS[currentRoleKey] || ROLE_TABS.applicant;
 
   // Make sure activeTab is updated when role changes, if it's not in the new list
@@ -45,9 +71,15 @@ export function SovereignNavbar({
   const isRoleActive = (role: { id: string; label: string }) => {
     const current = (activeRole || "").toLowerCase().trim();
     if (role.id === "ca") {
-      return current === "ca" || current === "ca/consultant" || current === "consultant";
+      return (
+        current === "ca" ||
+        current === "ca/consultant" ||
+        current === "consultant"
+      );
     }
-    return current === role.id.toLowerCase() || current === role.label.toLowerCase();
+    return (
+      current === role.id.toLowerCase() || current === role.label.toLowerCase()
+    );
   };
 
   const handleRoleClick = (role: { id: string; label: string }) => {
@@ -104,7 +136,10 @@ export function SovereignNavbar({
         </div>
 
         {/* Center tabs (horizontal row) */}
-        <nav aria-label="Center Navigation" className="hidden lg:flex items-center gap-4 xl:gap-6 h-full">
+        <nav
+          aria-label="Center Navigation"
+          className="hidden lg:flex items-center gap-4 xl:gap-6 h-full"
+        >
           {tabs.map((tab) => {
             const isActive = activeTab === tab;
             return (
@@ -153,7 +188,11 @@ export function SovereignNavbar({
             <div className="relative">
               <button
                 type="button"
-                onClick={() => alert("Notification Center:\n- CA Document Review requested\n- New schemes matched for Food Processing")}
+                onClick={() =>
+                  alert(
+                    "Notification Center:\n- CA Document Review requested\n- New schemes matched for Food Processing",
+                  )
+                }
                 aria-label="Notifications"
                 className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors relative"
               >
@@ -165,7 +204,11 @@ export function SovereignNavbar({
             {/* Settings icon */}
             <button
               type="button"
-              onClick={() => alert("Settings Panel:\n- Profile details\n- Security & Access\n- Preferences")}
+              onClick={() =>
+                alert(
+                  "Settings Panel:\n- Profile details\n- Security & Access\n- Preferences",
+                )
+              }
               aria-label="Settings"
               className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors hidden sm:block"
             >
@@ -176,19 +219,27 @@ export function SovereignNavbar({
             <button
               type="button"
               onClick={() => {
-                if (window.confirm('Are you sure you want to completely restart the PramaanFlow process? All progress will be lost.')) {
+                if (
+                  window.confirm(
+                    "Are you sure you want to completely start a new case for the PramaanFlow process? All progress will be lost.",
+                  )
+                ) {
                   resetCase();
                 }
               }}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition-colors shadow-sm shrink-0"
             >
-              Restart
+              New Case
             </button>
 
             {/* 'Verify & Dispatch' green button (bg-emerald-700 text-white rounded-lg) */}
             <button
               type="button"
-              onClick={() => alert(`Dispatch Initiated!\nRole: ${activeRole.toUpperCase()}\nStatus: Pre-checks running via Sovereign Engine.`)}
+              onClick={() =>
+                alert(
+                  `Dispatch Initiated!\nRole: ${activeRole.toUpperCase()}\nStatus: Pre-checks running via Sovereign Engine.`,
+                )
+              }
               className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-700 text-white hover:bg-emerald-800 active:bg-emerald-900 transition-colors shadow-sm shrink-0"
             >
               <CheckCircle2 className="w-3.5 h-3.5" />
@@ -216,7 +267,11 @@ export function SovereignNavbar({
               key={tab}
               type="button"
               onClick={() => handleTabClick(tab)}
-              className={activeTab === tab ? "font-bold text-slate-900" : "text-slate-500"}
+              className={
+                activeTab === tab
+                  ? "font-bold text-slate-900"
+                  : "text-slate-500"
+              }
             >
               {tab}
             </button>
