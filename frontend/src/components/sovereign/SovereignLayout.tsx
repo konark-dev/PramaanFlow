@@ -24,6 +24,7 @@ interface SovereignLayoutProps {
   };
   onOpenCopilot?: () => void;
   onViewRoadmap?: () => void;
+  hideSidebars?: boolean;
   children: React.ReactNode;
 }
 
@@ -36,6 +37,7 @@ export function SovereignLayout({
   caseData,
   onOpenCopilot,
   onViewRoadmap,
+  hideSidebars = false,
   children,
 }: SovereignLayoutProps) {
   return (
@@ -56,22 +58,22 @@ export function SovereignLayout({
       )}
 
       {/* Three-Column Layout */}
-      <div className="flex-1 flex">
+      <div className="flex-1 flex min-h-0">
         {/* Left Sidebar: Case Ledger Facts */}
-        {activeRole === "applicant" && (
-          <aside className="w-64 xl:w-72 hidden lg:flex flex-col border-r border-slate-200 bg-white overflow-y-auto">
+        {activeRole === "applicant" && !hideSidebars && (
+          <aside className="w-64 xl:w-72 hidden lg:flex flex-col border-r border-slate-200 bg-white overflow-y-auto shrink-0">
             <CaseLedgerSidebar caseData={caseData} />
           </aside>
         )}
 
         {/* Center: Main Content */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-6 min-w-0">
           {children}
         </main>
 
         {/* Right Sidebar: Intelligence Panel (Only after Discovery is complete) */}
-        {activeRole === "applicant" && currentStep >= 4 && (
-          <aside className="w-72 xl:w-80 hidden xl:flex flex-col border-l border-slate-200 bg-white overflow-y-auto">
+        {activeRole === "applicant" && currentStep >= 4 && !hideSidebars && (
+          <aside className="w-72 xl:w-80 hidden xl:flex flex-col border-l border-slate-200 bg-white overflow-y-auto shrink-0">
             <IntelligencePanel onViewRoadmap={onViewRoadmap} />
           </aside>
         )}

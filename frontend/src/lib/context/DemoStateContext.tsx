@@ -82,12 +82,12 @@ const DEMO_DISCOVERY_RESULT: DiscoveryResult = {
 
 const DEMO_ROADMAP = {
   approvals: [
-    { id: "udyam", name: "Udyam / MSME Registration", authority: "Ministry of MSME", status: "Submitted", fee: 0, slaDays: 1, risk: "Low", requirements: ["id_proof", "gst_cert"] },
-    { id: "factory_license", name: "Factory License", authority: "DISH Maharashtra", status: "Submitted", fee: 2500, slaDays: 30, risk: "Medium", requirements: ["site_plan", "env_clearance"] },
-    { id: "mpcb_cte", name: "MPCB Consent to Establish", authority: "Maharashtra Pollution Control Board", status: "Pending", fee: 50000, slaDays: 90, risk: "High", requirements: ["env_clearance", "site_plan"] },
-    { id: "fssai", name: "FSSAI Central License", authority: "Food Safety & Standards Authority", status: "Pending", fee: 7500, slaDays: 60, risk: "Medium", requirements: ["gst_cert", "site_plan"] },
-    { id: "fire_noc", name: "Fire Safety NOC", authority: "Chief Fire Officer, Pune", status: "Pending", fee: 5000, slaDays: 15, risk: "Low", requirements: ["site_plan", "land_registry"] },
-    { id: "midc_bpa", name: "MIDC Building Plan Approval", authority: "MIDC Special Planning Authority", status: "Submitted", fee: 35000, slaDays: 45, risk: "Medium", requirements: ["site_plan", "land_registry"] },
+    { id: "udyam", name: "Udyam / MSME Registration", authority: "Ministry of MSME", department: "Ministry of MSME", status: "Submitted", fee: 0, slaDays: 1, risk: "Low", requirements: ["id_proof", "gst_cert"], dependencies: [], requiredDocuments: ["Aadhaar Card of Proprietor/Partner", "PAN Card", "GST Registration Certificate"] },
+    { id: "factory_license", name: "Factory License", authority: "DISH Maharashtra", department: "Directorate of Industrial Safety & Health", status: "Submitted", fee: 2500, slaDays: 30, risk: "Medium", requirements: ["site_plan", "env_clearance"], dependencies: ["udyam"], requiredDocuments: ["Approved Site/Layout Plan", "Architect Certificate", "List of Machinery & Equipment"] },
+    { id: "mpcb_cte", name: "MPCB Consent to Establish", authority: "Maharashtra Pollution Control Board", department: "Maharashtra Pollution Control Board", status: "Pending", fee: 50000, slaDays: 90, risk: "High", requirements: ["env_clearance", "site_plan"], dependencies: ["factory_license"], requiredDocuments: ["Environmental Impact Assessment Report", "Process Flow Diagram", "Effluent Treatment Plan", "Waste Management Plan"] },
+    { id: "fssai", name: "FSSAI Central License", authority: "Food Safety & Standards Authority", department: "FSSAI", status: "Pending", fee: 7500, slaDays: 60, risk: "Medium", requirements: ["gst_cert", "site_plan"], dependencies: ["udyam"], requiredDocuments: ["Food Safety Management Plan", "Product List with Category", "GST Certificate"] },
+    { id: "fire_noc", name: "Fire Safety NOC", authority: "Chief Fire Officer, Pune", department: "Fire Department, Pune", status: "Pending", fee: 5000, slaDays: 15, risk: "Low", requirements: ["site_plan", "land_registry"], dependencies: [], requiredDocuments: ["Building Layout Plan", "Fire Fighting Equipment Details", "Emergency Evacuation Plan"] },
+    { id: "midc_bpa", name: "MIDC Building Plan Approval", authority: "MIDC Special Planning Authority", department: "MIDC", status: "Submitted", fee: 35000, slaDays: 45, risk: "Medium", requirements: ["site_plan", "land_registry"], dependencies: ["fire_noc"], requiredDocuments: ["Architect-certified Building Plan", "Land Lease/Ownership Deed", "Structural Stability Certificate"] },
   ]
 };
 
@@ -186,8 +186,8 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        // If saved data has no discoveryResult, use fresh demo data
-        if (!parsed.discoveryResult) {
+        // If saved data has no discoveryResult OR has old roadmap schema, use fresh demo data
+        if (!parsed.discoveryResult || (parsed.roadmap && !parsed.roadmap.approvals?.[0]?.dependencies)) {
           setActiveCase(INITIAL_CASE);
         } else {
           setActiveCase(parsed);

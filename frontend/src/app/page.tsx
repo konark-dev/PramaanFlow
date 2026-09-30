@@ -22,7 +22,7 @@ function MainApp() {
   const [hasStartedDemo, setHasStartedDemo] = useState(!!activeCase.discoveryResult);
   const [hasCompletedDiscovery, setHasCompletedDiscovery] = useState(!!activeCase.discoveryResult);
   const [hasCompletedAnalysis, setHasCompletedAnalysis] = useState(!!activeCase.roadmap);
-  const [hasViewedJourney, setHasViewedJourney] = useState(false);
+  const [hasViewedJourney, setHasViewedJourney] = useState(!!activeCase.roadmap);
   const [targetApprovalId, setTargetApprovalId] = useState<string | undefined>();
   const [draftAnswers, setDraftAnswers] = useState<Record<string, any>>({});
   const [discoveryStepIndex, setDiscoveryStepIndex] = useState(0);
@@ -102,17 +102,6 @@ function MainApp() {
         onEditAnswers={() => {
           setHasCompletedDiscovery(false);
           setHasCompletedAnalysis(false);
-        }}
-      />
-    );
-  } else if (activeRole === "applicant" && activeTab === "Project Details" && activeCase.discoveryResult) {
-    mainContent = (
-      <DiscoveryApplicationWorkspace
-        discoveryResult={activeCase.discoveryResult}
-        initialApprovalId={targetApprovalId}
-        onBackToJourney={() => {
-          setHasViewedJourney(false);
-          setTargetApprovalId(undefined);
         }}
       />
     );

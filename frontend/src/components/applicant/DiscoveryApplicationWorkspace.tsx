@@ -430,7 +430,7 @@ export function DiscoveryApplicationWorkspace({ discoveryResult, initialApproval
                 const isReady = (evidenceAvailable >= totalEvidenceNeeded) && !activeApprovalLocked && isFormComplete;
                 
                 return (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                     
                     <div>
                       <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Regulatory</div>
@@ -470,9 +470,9 @@ export function DiscoveryApplicationWorkspace({ discoveryResult, initialApproval
                 );
               })()}
 
-              <div className="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4 pt-6 border-t border-slate-700 mt-2">
+              <div className="flex flex-col items-stretch justify-between gap-4 pt-6 border-t border-slate-700 mt-2">
                 {activeCase.caAssigned ? (
-                  <div className="flex flex-col flex-1 bg-slate-800/50 rounded-xl p-4 max-h-48 overflow-y-auto border border-slate-700/50 shadow-inner w-full min-w-0">
+                  <div className="flex flex-col bg-slate-800/50 rounded-xl p-4 max-h-48 overflow-y-auto border border-slate-700/50 shadow-inner w-full min-w-0">
                     <div className="text-[10px] font-bold text-teal-400 uppercase tracking-wider mb-3 flex items-center gap-1.5 shrink-0">
                       <CheckCircle2 className="w-4 h-4" /> Professional CA Assistance Active
                     </div>
@@ -492,12 +492,12 @@ export function DiscoveryApplicationWorkspace({ discoveryResult, initialApproval
                       addMessage({ sender: 'applicant', text: `I need help preparing the application for ${activeApproval.name} and gathering documents.` });
                       alert("CA Assistance Requested. Switch to CA role to view requests.");
                     }}
-                    className="w-full xl:w-auto px-5 py-3 rounded-lg text-sm font-bold text-blue-300 hover:text-white hover:bg-blue-900 border border-blue-800 transition-colors flex items-center justify-center gap-2 shrink-0 whitespace-nowrap"
+                    className="w-full px-5 py-3 rounded-lg text-sm font-bold text-blue-300 hover:text-white hover:bg-blue-900 border border-blue-800 transition-colors flex items-center justify-center gap-2 shrink-0 whitespace-nowrap"
                   >
                     <MessageSquare className="w-4 h-4" /> Send to CA
                   </button>
                 )}
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 w-full xl:w-auto">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 shrink-0 w-full">
                   <button 
                     onClick={() => {
                       updateCase({ 
