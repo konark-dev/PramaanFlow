@@ -151,6 +151,13 @@ export function CAWorkspace() {
                   onClick={() => updateCase({ documents: activeCase.documents.map((d: any) => d.id === doc.id ? { ...d, status: 'Verified' } : d) })}
                   className="text-xs px-3 py-1 bg-teal-600 text-white rounded-lg hover:bg-teal-700 font-bold"
                 >Verify</button>
+                <button
+                  onClick={() => {
+                    updateCase({ documents: activeCase.documents.map((d: any) => d.id === doc.id ? { ...d, status: 'Rejected' } : d) });
+                    addMessage({ sender: 'ca', text: `Issue raised for ${doc.name}: please upload a corrected, legible version with all mandatory details.` });
+                  }}
+                  className="text-xs px-3 py-1 border border-rose-300 bg-rose-50 text-rose-700 rounded-lg hover:bg-rose-100 font-bold"
+                >Raise Issue</button>
               </div>
             </div>
           ))}

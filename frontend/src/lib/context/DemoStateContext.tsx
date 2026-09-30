@@ -198,7 +198,14 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
     if (savedRole) {
       setActiveRole(savedRole);
     }
+    const syncTabFromHash = () => {
+      const tab = decodeURIComponent(window.location.hash.slice(1));
+      if (tab) setActiveTab(tab);
+    };
+    syncTabFromHash();
+    window.addEventListener('hashchange', syncTabFromHash);
     setIsLoaded(true);
+    return () => window.removeEventListener('hashchange', syncTabFromHash);
   }, []);
 
   useEffect(() => {

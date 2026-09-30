@@ -44,7 +44,7 @@ const ROLE_TABS: Record<string, string[]> = {
     "Evidence",
     "Timeline",
   ],
-  inspector: ["Inspection Queue", "Site Observation", "Reports"],
+  inspector: ["Inspection Queue", "Site Observation", "Site Evidence", "Reports"],
 };
 
 export function SovereignNavbar({
@@ -60,13 +60,6 @@ export function SovereignNavbar({
     ? "ca"
     : (activeRole || "applicant").toLowerCase();
   const tabs = ROLE_TABS[currentRoleKey] || ROLE_TABS.applicant;
-
-  // Make sure activeTab is updated when role changes, if it's not in the new list
-  React.useEffect(() => {
-    if (!tabs.includes(activeTab)) {
-      setActiveTab(tabs[0]);
-    }
-  }, [tabs, activeTab, setActiveTab]);
 
   const isRoleActive = (role: { id: string; label: string }) => {
     const current = (activeRole || "").toLowerCase().trim();
@@ -84,11 +77,9 @@ export function SovereignNavbar({
 
   const handleRoleClick = (role: { id: string; label: string }) => {
     // Preserve caller's role casing preference if it matches label or id
-    if (activeRole === role.label) {
-      onRoleChange(role.label);
-    } else {
-      onRoleChange(role.id);
-    }
+    onRoleChange(activeRole === role.label ? role.label : role.id);
+    const roleKey = role.id === "ca" ? "ca" : role.id;
+    setActiveTab(ROLE_TABS[roleKey][0]);
   };
 
   const handleTabClick = (tab: string) => {
@@ -97,6 +88,8 @@ export function SovereignNavbar({
       onOpenCopilot();
     }
   };
+
+  const tabHash = (tab: string) => `#${encodeURIComponent(tab)}`;
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-slate-200">
@@ -143,9 +136,10 @@ export function SovereignNavbar({
           {tabs.map((tab) => {
             const isActive = activeTab === tab;
             return (
-              <button
+              <a
                 key={tab}
-                type="button"
+                href={tabHash(tab)}
+                onMouseDown={() => setActiveTab(tab)}
                 onClick={() => handleTabClick(tab)}
                 className={`relative h-full flex items-center px-1 text-xs transition-colors duration-150 ${
                   isActive
@@ -154,7 +148,7 @@ export function SovereignNavbar({
                 }`}
               >
                 {tab}
-              </button>
+              </a>
             );
           })}
         </nav>
@@ -263,9 +257,10 @@ export function SovereignNavbar({
         </div>
         <div className="flex items-center gap-3 overflow-x-auto text-[11px]">
           {tabs.map((tab) => (
-            <button
+            <a
               key={tab}
-              type="button"
+              href={tabHash(tab)}
+              onMouseDown={() => setActiveTab(tab)}
               onClick={() => handleTabClick(tab)}
               className={
                 activeTab === tab
@@ -274,7 +269,7 @@ export function SovereignNavbar({
               }
             >
               {tab}
-            </button>
+            </a>
           ))}
         </div>
       </div>

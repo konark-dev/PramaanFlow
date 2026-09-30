@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { InspectionJob, INITIAL_INSPECTIONS } from "@/lib/regulatory-data";
 import { OptimizedRouteResult } from "@/lib/vroom-router";
 import {
@@ -17,7 +17,10 @@ import {
   ShieldCheck,
   CheckSquare,
   FileText,
-  Upload
+  Upload,
+  Eye,
+  FileImage,
+  FileSpreadsheet
 } from "lucide-react";
 import { CaseTimelineView } from "@/components/CaseTimelineView";
 import { useDemoState } from "@/lib/context/DemoStateContext";
@@ -60,6 +63,27 @@ export function InspectorWorkspace() {
   const [checklist, setChecklist] = useState<Record<string, boolean>>({});
   const [gpsVerified, setGpsVerified] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [reportDecision, setReportDecision] = useState<'approved' | 'rejected' | null>(null);
+  const [fieldNotes, setFieldNotes] = useState("");
+  const [selectedEvidence, setSelectedEvidence] = useState<string | null>(null);
+  const [evidenceAttached, setEvidenceAttached] = useState(false);
+  const [hashTab, setHashTab] = useState("");
+
+  useEffect(() => {
+    const syncHashTab = () => setHashTab(decodeURIComponent(window.location.hash.slice(1)));
+    syncHashTab();
+    window.addEventListener("hashchange", syncHashTab);
+    return () => window.removeEventListener("hashchange", syncHashTab);
+  }, []);
+
+  const inspectorTab = ["Inspection Queue", "Site Observation", "Site Evidence", "Reports"].includes(hashTab) ? hashTab : activeTab;
+
+  const demoEvidence = [
+    { id: "site-front", name: "Site frontage — geotagged.jpg", type: "JPEG image", size: "2.8 MB", captured: "30 Sep 2026, 10:18 AM", note: "Main entrance and factory name board" },
+    { id: "equipment", name: "Process equipment inspection.jpg", type: "JPEG image", size: "3.4 MB", captured: "30 Sep 2026, 10:31 AM", note: "Refinery equipment against the submitted DPR" },
+    { id: "gps-log", name: "GPS verification log.csv", type: "Location log", size: "18 KB", captured: "30 Sep 2026, 10:16 AM", note: "18.7500, 73.8000 — within the approved geo-fence" },
+    { id: "site-plan", name: "Approved site layout.pdf", type: "PDF document", size: "1.2 MB", captured: "Applicant evidence", note: "Reference layout used for boundary verification" },
+  ];
 
   const handleOptimizeRoute = async () => {
     setOptimizing(true);
@@ -91,25 +115,41 @@ export function InspectorWorkspace() {
     setGpsVerified(true);
   };
 
-  const handleSubmitInspection = () => {
+  const handleSubmitInspection = (decision: 'approved' | 'rejected' = 'approved') => {
     setSubmitted(true);
+    setReportDecision(decision);
     setInspections((prev) =>
       prev.map((i) =>
         i.id === selectedInspection.id ? { ...i, status: "COMPLETED" } : i
       )
     );
     if ((selectedInspection as any).caseId === activeCase.id) {
-       updateCase({ govStatus: 'Cleared' });
-       addMessage({ sender: 'inspector', text: 'Inspection completed and cleared without issues.' });
+       updateCase({ govStatus: decision === 'approved' ? 'Cleared' : 'Under Review' });
+       addMessage({ sender: 'inspector', text: decision === 'approved' ? (fieldNotes.trim() ? `Inspection report approved. Findings: ${fieldNotes}` : 'Inspection report approved. Site verification completed without issues.') : `Inspection report rejected for follow-up. ${fieldNotes.trim() || 'Additional corrective evidence is required before clearance.'}` });
     }
   };
 
-  if (activeTab === "Site Evidence" || activeTab === "Reports") {
+  if (inspectorTab === "Site Evidence") {
     return (
-      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[80vh] flex flex-col items-center justify-center">
-        <FileText className="w-16 h-16 text-slate-300 mb-4" />
-        <h2 className="text-xl font-bold text-slate-800">{activeTab}</h2>
-        <p className="text-slate-500 mt-2">No {activeTab.toLowerCase()} are currently pending your review.</p>
+      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[80vh]">
+        <div className="flex items-start justify-between gap-4 mb-6"><div><h2 className="text-xl font-bold text-slate-800">Site Evidence</h2><p className="mt-1 text-sm text-slate-500">Demo geo-tagged files collected during the field inspection.</p></div><span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">{demoEvidence.length} files attached</span></div>
+        <div className="grid gap-4 md:grid-cols-2">{demoEvidence.map((file) => <div key={file.id} className="rounded-xl border border-slate-200 p-5"><div className="flex items-start gap-3"><div className="rounded-lg bg-slate-100 p-2.5">{file.type.includes("image") ? <FileImage className="h-5 w-5 text-teal-700" /> : file.type.includes("Location") ? <FileSpreadsheet className="h-5 w-5 text-blue-700" /> : <FileText className="h-5 w-5 text-rose-700" />}</div><div className="min-w-0 flex-1"><h3 className="font-semibold text-slate-900 truncate">{file.name}</h3><p className="mt-1 text-xs text-slate-500">{file.type} · {file.size}</p><p className="mt-2 text-sm text-slate-600">{file.note}</p><p className="mt-3 text-xs text-slate-400">{file.captured}</p></div></div><button onClick={() => setSelectedEvidence(file.id)} className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-blue-700 hover:text-blue-800"><Eye className="h-4 w-4" /> View evidence</button></div>)}</div>
+        {selectedEvidence && <div className="mt-6 rounded-xl border border-teal-200 bg-teal-50 p-5"><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-wider text-teal-700">Evidence preview</p><h3 className="mt-1 font-bold text-slate-900">{demoEvidence.find((file) => file.id === selectedEvidence)?.name}</h3><p className="mt-3 text-sm text-slate-600">Demo file preview for the inspection record. The geo-tag, capture time, and source are available for the final report.</p></div><button onClick={() => setSelectedEvidence(null)} className="text-xs font-bold text-slate-500">Close</button></div></div>}
+      </div>
+    );
+  }
+
+  if (inspectorTab === "Reports") {
+    return (
+      <div className="max-w-4xl mx-auto bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[80vh]">
+        <div className="flex items-start justify-between gap-4"><div><h2 className="text-xl font-bold text-slate-800">Inspection Report</h2><p className="mt-1 text-sm text-slate-500">Prepare and submit the field verification report for {selectedInspection.projectName}.</p></div><span className={`rounded-full px-3 py-1 text-xs font-bold ${reportDecision === 'rejected' ? 'bg-rose-50 text-rose-700' : submitted ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>{reportDecision === 'rejected' ? 'Rejected' : submitted ? 'Approved' : 'Draft'}</span></div>
+        <div className="mt-6 grid gap-4 sm:grid-cols-3"><div className="rounded-xl bg-slate-50 p-4 border border-slate-200"><p className="text-xs font-bold text-slate-500 uppercase">Geo-fence</p><p className="mt-2 font-semibold text-slate-900">{gpsVerified ? 'Verified' : 'Pending'}</p></div><div className="rounded-xl bg-slate-50 p-4 border border-slate-200"><p className="text-xs font-bold text-slate-500 uppercase">Checklist</p><p className="mt-2 font-semibold text-slate-900">{Object.values(checklist).filter(Boolean).length} / {(selectedInspection.checklistItems || []).length} complete</p></div><div className="rounded-xl bg-slate-50 p-4 border border-slate-200"><p className="text-xs font-bold text-slate-500 uppercase">Evidence</p><p className="mt-2 font-semibold text-slate-900">{evidenceAttached ? demoEvidence.length : 0} files attached</p></div></div>
+        <label className="mt-6 block"><span className="text-sm font-semibold text-slate-700">Inspector observations</span><textarea value={fieldNotes} onChange={(event) => setFieldNotes(event.target.value)} rows={6} placeholder="Demo: Site boundaries verified. Equipment matches DPR specifications. No violations observed." className="mt-2 w-full rounded-xl border border-slate-300 p-3 text-sm outline-none focus:border-teal-600" /></label>
+        <div className="mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 flex items-center justify-between gap-4"><div><p className="font-semibold text-slate-800">Demo site evidence package</p><p className="mt-1 text-sm text-slate-500">Attach the four geo-tagged files to the report.</p></div><button onClick={() => setEvidenceAttached(true)} className="rounded-lg border border-teal-600 px-4 py-2 text-sm font-bold text-teal-700 hover:bg-teal-50">{evidenceAttached ? 'Evidence attached' : 'Attach evidence'}</button></div>
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          <button onClick={() => handleSubmitInspection('approved')} disabled={submitted} className="rounded-lg bg-emerald-600 px-5 py-3 text-sm font-bold text-white hover:bg-emerald-700 disabled:cursor-default disabled:bg-emerald-600">{reportDecision === 'approved' ? 'Report approved' : 'Approve & submit report'}</button>
+          <button onClick={() => handleSubmitInspection('rejected')} disabled={submitted} className="rounded-lg border border-rose-300 bg-rose-50 px-5 py-3 text-sm font-bold text-rose-700 hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-50">Reject & request follow-up</button>
+        </div>
       </div>
     );
   }
@@ -413,6 +453,8 @@ export function InspectorWorkspace() {
                 Findings
               </span>
               <textarea 
+                value={fieldNotes}
+                onChange={(event) => setFieldNotes(event.target.value)}
                 className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs focus:ring-teal-500 focus:border-teal-500 outline-none" 
                 rows={2}
                 placeholder="Enter field observations..."
@@ -420,10 +462,10 @@ export function InspectorWorkspace() {
             </div>
 
             {/* Photo / Evidence Upload Simulation */}
-            <div onClick={() => alert("Launching camera interface...")} className="p-3 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-center cursor-pointer hover:border-teal-500 hover:bg-slate-100 transition-colors">
+            <div onClick={() => setEvidenceAttached(true)} className="p-3 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-center cursor-pointer hover:border-teal-500 hover:bg-slate-100 transition-colors">
               <Upload className="h-4 w-4 mx-auto text-slate-400 mb-1" />
               <span className="text-[11px] text-slate-700 block font-medium">
-                Evidence
+                {evidenceAttached ? "Evidence attached" : "Evidence"}
               </span>
               <span className="text-[10px] text-slate-500">Attach Geo-Tagged Site Photographs</span>
             </div>
@@ -431,7 +473,7 @@ export function InspectorWorkspace() {
             {/* Submit Action */}
             <div className="pt-2 border-t border-slate-100">
               <button
-                onClick={handleSubmitInspection}
+                onClick={() => handleSubmitInspection('approved')}
                 disabled={submitted}
                 className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm ${submitted
                     ? "bg-emerald-600 text-white cursor-default"
@@ -439,8 +481,8 @@ export function InspectorWorkspace() {
                   }`}
               >
                 {submitted
-                  ? "Report Submitted"
-                  : "Submit Report"}
+                  ? "Report approved"
+                  : "Approve Report"}
               </button>
             </div>
           </div>
