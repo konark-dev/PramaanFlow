@@ -106,55 +106,53 @@ const DEMO_GOV_SUPPORT = [
   { name: "Maharashtra Industrial Policy 2024", ministry: "State Industries Dept", benefit: "Stamp Duty Exemption + Power Tariff Subsidy", eligible: true },
 ];
 
+const now = Date.now();
+const minutesAgo = (min: number) => new Date(now - min * 60000).toISOString();
+const hoursAgo = (hours: number) => new Date(now - hours * 3600000).toISOString();
+const daysAgo = (days: number) => new Date(now - days * 86400000).toISOString();
+
 const DEMO_DOCUMENTS: DemoDocument[] = [
-  { id: "site_plan", name: "Approved Site/Layout Plan", status: "VERIFIED", requiredFor: ["Building Plan Approval", "Fire NOC"], type: "site_plan", url: "/docs/site_plan.pdf", hash: "0xA3F8B21C", uploadedAt: "2026-09-28T10:15:00Z" },
-  { id: "id_proof", name: "Director ID Proof (Aadhaar/PAN)", status: "VERIFIED", requiredFor: ["Company Incorporation", "Tax Registration"], type: "id_proof", url: "/docs/id_proof.pdf", hash: "0x7E4D9F01", uploadedAt: "2026-09-28T09:30:00Z" },
-  { id: "land_registry", name: "Land Ownership/Lease Deed", status: "VERIFIED", requiredFor: ["Land Use Clearance", "Fire NOC"], type: "land_registry", url: "/docs/land_deed.pdf", hash: "0xC2B5A8E7", uploadedAt: "2026-09-28T11:00:00Z" },
-  { id: "gst_cert", name: "GST Registration Certificate", status: "VERIFIED", requiredFor: ["Tax Registration", "FSSAI License"], type: "gst_cert", url: "/docs/gst_cert.pdf", hash: "0xD1F63B9A", uploadedAt: "2026-09-29T08:45:00Z" },
-  { id: "env_clearance", name: "Environmental Impact Assessment", status: "Uploaded", requiredFor: ["CPCB Clearance", "State Pollution Board"], type: "env_clearance", url: "/docs/eia_report.pdf", hash: "0x9A4E27C3", uploadedAt: "2026-09-29T14:20:00Z" },
+  { id: "site_plan", name: "Approved Site/Layout Plan", status: "VERIFIED", requiredFor: ["Building Plan Approval", "Fire NOC"], type: "site_plan", url: "/docs/site_plan.pdf", hash: "0xA3F8B21C", uploadedAt: daysAgo(2) },
+  { id: "id_proof", name: "Director ID Proof (Aadhaar/PAN)", status: "VERIFIED", requiredFor: ["Company Incorporation", "Tax Registration"], type: "id_proof", url: "/docs/id_proof.pdf", hash: "0x7E4D9F01", uploadedAt: daysAgo(2) },
+  { id: "land_registry", name: "Land Ownership/Lease Deed", status: "VERIFIED", requiredFor: ["Land Use Clearance", "Fire NOC"], type: "land_registry", url: "/docs/land_deed.pdf", hash: "0xC2B5A8E7", uploadedAt: daysAgo(1.5) },
+  { id: "gst_cert", name: "GST Registration Certificate", status: "VERIFIED", requiredFor: ["Tax Registration", "FSSAI License"], type: "gst_cert", url: "/docs/gst_cert.pdf", hash: "0xD1F63B9A", uploadedAt: daysAgo(1) },
+  { id: "env_clearance", name: "Environmental Impact Assessment", status: "Uploaded", requiredFor: ["CPCB Clearance", "State Pollution Board"], type: "env_clearance", url: "/docs/eia_report.pdf", hash: "0x9A4E27C3", uploadedAt: hoursAgo(5) },
 ];
 
 const DEMO_MESSAGES: DemoMessage[] = [
-  { id: "m1", sender: "applicant", text: "Application submitted for Edible Oil Extraction unit at MIDC Chakan.", timestamp: "2026-09-28T09:00:00Z" },
-  { id: "m2", sender: "ca", text: "Reviewed your documents. Site Plan and ID Proof look good. Please ensure EIA report covers noise pollution data as per MPCB 2024 guidelines.", timestamp: "2026-09-28T14:30:00Z" },
-  { id: "m3", sender: "applicant", text: "Updated EIA report uploaded with Section 5.3 noise data added.", timestamp: "2026-09-29T10:15:00Z" },
-  { id: "m4", sender: "government", text: "Case PF-2026-199 received. Under preliminary jurisdictional review.", timestamp: "2026-09-29T16:00:00Z" },
-  { id: "m5", sender: "ca", text: "Suggested Change: Update capacity from 25,000 to 45,000 LPD to remain in the Orange Category threshold for faster clearance.", timestamp: "2026-09-30T09:00:00Z" },
+  { id: "m1", sender: "applicant", text: "Application submitted for Edible Oil Extraction unit at MIDC Chakan.", timestamp: daysAgo(2) },
+  { id: "m2", sender: "ca", text: "Reviewed your documents. Site Plan and ID Proof look good. Please ensure EIA report covers noise pollution data as per MPCB 2024 guidelines.", timestamp: daysAgo(1) },
+  { id: "m3", sender: "applicant", text: "Updated EIA report uploaded with Section 5.3 noise data added.", timestamp: hoursAgo(10) },
+  { id: "m4", sender: "government", text: "Case PF-2026-199 received. Under preliminary jurisdictional review.", timestamp: hoursAgo(4) },
+  { id: "m5", sender: "ca", text: "Suggested Change: Update capacity from 25,000 to 45,000 LPD to remain in the Orange Category threshold for faster clearance.", timestamp: minutesAgo(15) },
 ];
 
 const DEMO_TIMELINE = [
-  { timestamp: "2026-09-28T08:30:00Z", event: "Case Created — Applicant initiated new business setup" },
-  { timestamp: "2026-09-28T09:00:00Z", event: "Discovery Flow Completed — Business classified as Food Processing (Orange)" },
-  { timestamp: "2026-09-28T09:45:00Z", event: "Regulatory Analysis Complete — 6 approvals identified" },
-  { timestamp: "2026-09-28T10:30:00Z", event: "Documents Uploaded — Site Plan, ID Proof, Land Deed" },
-  { timestamp: "2026-09-29T08:45:00Z", event: "GST Certificate Uploaded & Verified" },
-  { timestamp: "2026-09-29T11:00:00Z", event: "CA Assigned — Reviewing application" },
-  { timestamp: "2026-09-29T14:20:00Z", event: "EIA Report Uploaded" },
-  { timestamp: "2026-09-29T16:00:00Z", event: "Government Review — Case received by Dept. of Industries" },
-  { timestamp: "2026-09-30T09:00:00Z", event: "CA Suggested capacity change for Orange category optimization" },
+  { timestamp: daysAgo(2), event: "Case Created — Applicant initiated new business setup" },
+  { timestamp: daysAgo(2), event: "Discovery Flow Completed — Business classified as Food Processing (Orange)" },
+  { timestamp: daysAgo(1.9), event: "Regulatory Analysis Complete — 6 approvals identified" },
+  { timestamp: daysAgo(1.8), event: "Documents Uploaded — Site Plan, ID Proof, Land Deed" },
+  { timestamp: daysAgo(1), event: "GST Certificate Uploaded & Verified" },
+  { timestamp: hoursAgo(23), event: "CA Assigned — Reviewing application" },
+  { timestamp: hoursAgo(5), event: "EIA Report Uploaded" },
+  { timestamp: hoursAgo(4), event: "Government Review — Case received by Dept. of Industries" },
+  { timestamp: minutesAgo(15), event: "CA Suggested capacity change for Orange category optimization" },
 ];
 
 const INITIAL_CASE: DemoCase = {
   id: "PF-2026-199",
-  applicantAnswers: {
-    intent: "Start a new business",
-    businessType: "Food Processing & Manufacturing",
-    subType: "Edible Oil Extraction & Refinery",
-    state: "Maharashtra",
-    district: "Pune",
-    location: "MIDC Chakan, Phase II",
-  },
-  discoveryResult: DEMO_DISCOVERY_RESULT,
-  roadmap: DEMO_ROADMAP,
-  geoContext: DEMO_GEO_CONTEXT,
-  governmentSupport: DEMO_GOV_SUPPORT,
+  applicantAnswers: {},
+  discoveryResult: null,
+  roadmap: null,
+  geoContext: null,
+  governmentSupport: [],
   approvals: [],
   documents: DEMO_DOCUMENTS,
   messages: DEMO_MESSAGES,
-  timeline: DEMO_TIMELINE,
-  caAssigned: true,
-  caStatus: 'Reviewing',
-  govStatus: 'Under Review',
+  timeline: [{ timestamp: new Date().toISOString(), event: 'Case Created' }],
+  caAssigned: false,
+  caStatus: 'Unassigned',
+  govStatus: 'Draft',
   inspectorAssigned: false
 };
 
@@ -186,8 +184,8 @@ export function DemoStateProvider({ children }: { children: React.ReactNode }) {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        // If saved data has no discoveryResult OR has old roadmap schema, use fresh demo data
-        if (!parsed.discoveryResult || (parsed.roadmap && !parsed.roadmap.approvals?.[0]?.dependencies)) {
+        // If saved data has old roadmap schema, use fresh demo data
+        if (parsed.roadmap && !parsed.roadmap.approvals?.[0]?.dependencies) {
           setActiveCase(INITIAL_CASE);
         } else {
           setActiveCase(parsed);

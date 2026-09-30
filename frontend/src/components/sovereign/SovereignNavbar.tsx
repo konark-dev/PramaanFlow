@@ -19,8 +19,8 @@ const ROLES = [
 ] as const;
 
 const ROLE_TABS: Record<string, string[]> = {
-  applicant: ["Dashboard", "Evidence Vault", "Communication"],
-  ca: ["Project Details", "Regulatory Roadmap", "Evidence Vault", "Document Review", "Communication"],
+  applicant: ["Dashboard", "Project Details", "Regulatory Roadmap", "Evidence Vault", "Document Review", "Communication"],
+  ca: ["Client Dashboard", "Project Details", "Regulatory Roadmap", "Evidence Vault", "Document Review", "Communication"],
   government: ["Incoming Cases", "Jurisdiction", "Regulatory Review", "Evidence", "Timeline"],
   inspector: ["Inspection Queue", "Site Observation", "Reports"],
 };

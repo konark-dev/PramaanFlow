@@ -33,6 +33,52 @@ export function CAWorkspace() {
     });
   };
 
+  if (activeTab === "Client Dashboard" || !activeTab) {
+    const mockCases = [
+      { id: "PF-2026-102", client: "TechCorp Logistics", type: "Warehousing", status: "Review Complete", action: "Submit to Gov" },
+      { id: "PF-2026-145", client: "GreenEnergy Pvt", type: "Solar Farm", status: "Awaiting Docs", action: "Follow up" },
+      { id: "PF-2026-180", client: "HealthPlus Pharma", type: "Manufacturing", status: "Under Review", action: "Check Evidence" },
+    ];
+    return (
+      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[80vh]">
+        <h2 className="text-xl font-bold text-slate-800 mb-6">Client Dashboard</h2>
+        <div className="bg-slate-50 rounded-xl border border-slate-200 overflow-hidden mb-6">
+          <table className="w-full text-left text-sm">
+            <thead>
+              <tr className="bg-slate-100 border-b border-slate-200 text-slate-500 font-medium">
+                <th className="p-4">Case ID</th>
+                <th className="p-4">Client Name</th>
+                <th className="p-4">Business Type</th>
+                <th className="p-4">Status</th>
+                <th className="p-4 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {activeCase.discoveryResult && (
+                <tr className="bg-blue-50/50 hover:bg-blue-50 transition-colors">
+                  <td className="p-4 font-mono font-bold text-slate-800">{activeCase.id}</td>
+                  <td className="p-4 font-semibold text-slate-800">{activeCase.applicantAnswers?.enterpriseName || "New Enterprise"} <span className="ml-2 text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">ACTIVE</span></td>
+                  <td className="p-4 text-slate-600">{activeCase.discoveryResult.subType || activeCase.discoveryResult.businessType}</td>
+                  <td className="p-4"><span className="px-2 py-1 rounded text-[10px] font-bold bg-amber-100 text-amber-700">{activeCase.caStatus}</span></td>
+                  <td className="p-4 text-right"><button className="text-xs px-3 py-1 bg-slate-900 text-white rounded-lg hover:bg-slate-800 font-bold">Open Workspace</button></td>
+                </tr>
+              )}
+              {mockCases.map((c) => (
+                <tr key={c.id} className="hover:bg-slate-50 transition-colors">
+                  <td className="p-4 font-mono font-bold text-slate-800">{c.id}</td>
+                  <td className="p-4 font-semibold text-slate-700">{c.client}</td>
+                  <td className="p-4 text-slate-500">{c.type}</td>
+                  <td className="p-4"><span className="px-2 py-1 rounded text-[10px] font-bold bg-slate-100 text-slate-600">{c.status}</span></td>
+                  <td className="p-4 text-right"><button className="text-xs px-3 py-1 bg-white border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 font-bold">{c.action}</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
+
   if (!activeCase.discoveryResult) {
     return (
       <div className="flex-1 flex items-center justify-center min-h-[60vh]">

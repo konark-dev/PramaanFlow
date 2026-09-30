@@ -16,9 +16,21 @@ function generateCaseId(): string {
   return 'PF-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 9000) + 1000);
 }
 
+const DEFAULT_ANSWERS = {
+  intent: "Start a new business",
+  businessType: "Food Processing & Manufacturing",
+  subType_food: "Edible Oil Extraction & Refinery",
+  location: "Plot B-42, MIDC Chakan Industrial Area Phase II",
+  district: "Pune",
+  capacity: "25000",
+  capacityUnit: "Liters/Day",
+  investment: "8.5",
+  investmentUnit: "Crores",
+};
+
 export function useDiscoveryEngine() {
   // 1. QUESTION STATE (Persisted)
-  const [answers, setAnswersRaw] = useState<Record<string, any>>({});
+  const [answers, setAnswersRaw] = useState<Record<string, any>>(DEFAULT_ANSWERS);
   const [isLoaded, setIsLoaded] = useState(false);
   
   // 2. REGULATORY STATE
