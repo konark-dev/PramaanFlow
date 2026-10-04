@@ -6,7 +6,21 @@ import { NotFoundError } from '../lib/errors';
 
 export async function computeImpact(projectId: string, changedFacts: Record<string, unknown>) {
   // 1. Load project's current facts
-  const currentProfile = await getProjectProfile(projectId);
+  const project = await prisma.project.findUnique({
+    where: { id: projectId },
+    include: { attributes: true },
+  });
+  if (!project) throw new NotFoundError('Project not found');
+
+  const currentProfile: ProjectProfile = {
+    sector: project.sector,
+    district: project.district,
+    industrial_area: project.industrial_area,
+    investment_amount: Number(project.investment_amount),
+    employee_count: project.employee_count,
+    stage: project.stage,
+    ...Object.fromEntries(project.attributes.map((a) => [a.key, a.value])),
+  };
   
   const rules = await prisma.applicabilityRule.findMany({ where: { active: true } });
   const evaluableRules: EvaluableRule[] = rules.map((r) => ({
@@ -85,10 +99,10 @@ export async function computeImpact(projectId: string, changedFacts: Record<stri
     return rule.conditions[0] || null; // fallback
   };
 
-  const impacts = [];
+  const impacts: any[] = [];
 
   for (const appId of affectedApprovalIds) {
-    const approval = approvalMap.get(appId);
+    const approval: any = approvalMap.get(appId);
     if (!approval) continue;
 
     let type = '';

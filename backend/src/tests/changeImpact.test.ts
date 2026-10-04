@@ -63,7 +63,7 @@ test('Change Impact - 10 Scenarios', async (t) => {
         console.log(`\n--- ${s.name} ---`);
         if (result.impacts.length > 0) {
           console.log(`Affected: ${result.impacts.length}`);
-          result.impacts.forEach(i => console.log(` - ${i.impact_type}: ${i.approval_name}`));
+          (result.impacts as any[]).forEach(i => console.log(` - ${i.impact_type}: ${i.approval_name}`));
         } else {
           console.log(`No impacts found.`);
         }
