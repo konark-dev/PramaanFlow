@@ -1,3 +1,4 @@
+import { computeImpact } from '../services/changeImpactService';
 import { Router } from 'express';
 import { requireAuth } from '../middleware/auth';
 import * as projectService from '../services/projectService';
@@ -174,7 +175,6 @@ router.get('/projects/:id/document-checklist', requireAuth, async (req, res, nex
 
 router.post('/projects/:id/impact', requireAuth, async (req, res, next) => {
   try {
-    const { computeImpact } = await import('../services/changeImpactService');
     const { changedFacts } = req.body;
     res.json(await computeImpact(req.params.id, changedFacts));
   } catch (err) {
