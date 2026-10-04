@@ -62,10 +62,10 @@ function DashboardContent() {
           </p>
         </div>
         {cc && (
-          <div className="bg-white px-5 py-3 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-end">
-            <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider">{cc.project.organization.legal_name}</p>
-            <p className="text-sm font-bold text-gray-800 mt-1">{cc.project.name}</p>
-            <p className="text-xs text-gray-500 mt-0.5">{cc.project.sector} · {cc.project.district}</p>
+          <div className="text-right bg-white px-5 py-3 rounded-2xl shadow-sm border border-gray-100">
+            <p className="text-[11px] text-gray-400 font-bold uppercase tracking-wider">{cc.project.organization.legal_name}</p>
+            <p className="text-sm font-extrabold text-gray-800 mt-0.5">{cc.project.name}</p>
+            <p className="text-xs text-gray-500 mt-0.5 font-medium">{cc.project.sector} · {cc.project.district}</p>
           </div>
         )}
       </div>
@@ -362,7 +362,7 @@ function StatCard({
           <p className="text-sm font-bold text-gray-500 mb-1">{label}</p>
           <p className="text-3xl font-extrabold text-gray-800">{value}</p>
         </div>
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center shadow-lg shadow-gray-900/20 transform group-hover:scale-105 transition-transform duration-300 flex-shrink-0">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center shadow-md shadow-gray-900/10 transform group-hover:scale-105 transition-transform duration-300 flex-shrink-0 border border-gray-700">
           {icon}
         </div>
       </div>
