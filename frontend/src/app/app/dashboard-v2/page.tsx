@@ -49,7 +49,7 @@ export default function DashboardV2() {
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
-              <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+              <Calendar mode="single" selected={date} onSelect={setDate} />
             </PopoverContent>
           </Popover>
           <Button variant="default" className="bg-gray-900 text-white hover:bg-gray-800">
