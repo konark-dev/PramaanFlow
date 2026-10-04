@@ -24,6 +24,8 @@ export interface EvaluableRule {
   rule_name: string;
   conditions: RuleCondition[];
   jurisdiction: string;
+  source_citation?: string | null;
+  version?: string | null;
   sector?: string | null;
 }
 

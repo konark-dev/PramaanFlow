@@ -211,6 +211,8 @@ export interface ApprovalType {
   renewal_period_days?: number | null;
   requires_inspection: boolean;
   source_reference?: string | null;
+    source_citation?: string | null;
+    version?: string | null;
   active: boolean;
   created_at: Date | string;
   applicability_rules?: ApplicabilityRule[];
@@ -231,6 +233,8 @@ export interface ApplicabilityRule {
   effective_from: Date | string;
   effective_to?: Date | string | null;
   source_reference?: string | null;
+    source_citation?: string | null;
+    version?: string | null;
   active: boolean;
   approval_type?: ApprovalType;
 }
@@ -408,6 +412,8 @@ export interface IncentiveScheme {
   benefit_description: string;
   deadline?: Date | string | null;
   source_reference?: string | null;
+    source_citation?: string | null;
+    version?: string | null;
   created_at: Date | string;
   matches?: IncentiveMatch[];
 }

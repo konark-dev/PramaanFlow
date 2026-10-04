@@ -30,6 +30,7 @@ import {
 } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/utils';
 import { ParallelOrchestrationModal } from '@/components/orchestration/ParallelOrchestrationModal';
+import { ImpactAnalysisPanel } from '@/components/orchestration/ImpactAnalysisPanel';
 import type { ParallelOrchestrationResult } from '@/types/api';
 
 import ProjectApprovalTrackerPage from './approval-tracker/page';
@@ -165,6 +166,8 @@ function ProjectControlCentreContent({ params }: { params: { id: string } }) {
 
       {/* TAB CONTENT: OVERVIEW */}
       {activeTab === 'overview' && (
+          <div>
+            <ImpactAnalysisPanel projectId={params.id} />
         <div className="space-y-6">
           {error && <ErrorState message={(error as Error).message} onRetry={() => refetch()} />}
 
@@ -474,6 +477,7 @@ function ProjectControlCentreContent({ params }: { params: { id: string } }) {
               </div>
             </>
           )}
+        </div>
         </div>
       )}
 
