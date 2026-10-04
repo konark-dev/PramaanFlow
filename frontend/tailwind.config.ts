@@ -18,7 +18,7 @@ const config: Config = {
           border: '#2A2F3D',
         },
         surface: {
-          DEFAULT: '#F5F6F8',
+          DEFAULT: '#f8f9fa',
           card: '#FFFFFF',
         },
         accent: {
@@ -54,13 +54,13 @@ const config: Config = {
         },
       },
       borderRadius: {
-        card: '0.875rem',
+        card: '1rem',
         xl: '0.875rem',
         '2xl': '1rem',
       },
       boxShadow: {
-        card: '0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.08)',
-        'card-hover': '0 4px 6px -1px rgba(16, 24, 40, 0.1), 0 2px 4px -1px rgba(16, 24, 40, 0.06)',
+        card: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+        'card-hover': '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
         'dropdown': '0 4px 6px -2px rgba(16, 24, 40, 0.05), 0 10px 15px -3px rgba(16, 24, 40, 0.1)',
       },
     },

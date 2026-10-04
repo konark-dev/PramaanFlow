@@ -228,42 +228,44 @@ export default function ApprovalDirectoryPage() {
 
       {/* Metrics Summary Ribbon */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="card p-4 border border-gray-100 shadow-sm bg-white">
+        <div className="card p-4 border border-gray-100 shadow-sm bg-white hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-gray-500">Total Clearances</span>
             <Layers className="w-4 h-4 text-primary-600" />
           </div>
-          <p className="text-2xl font-bold text-gray-900 mt-2">{approvals?.length ?? 0}</p>
-          <p className="text-[11px] text-gray-400 mt-0.5">Active single window approvals</p>
+          <p className="text-2xl font-bold text-gray-900 mt-2">{filteredApprovals.length}</p>
+          <p className="text-[11px] text-gray-400 mt-0.5">Matching current filters</p>
         </div>
 
-        <div className="card p-4 border border-gray-100 shadow-sm bg-white">
+        <div className="card p-4 border border-gray-100 shadow-sm bg-white hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-gray-500">Regulating Authorities</span>
             <Building2 className="w-4 h-4 text-blue-600" />
           </div>
-          <p className="text-2xl font-bold text-gray-900 mt-2">{authorities.length}</p>
-          <p className="text-[11px] text-gray-400 mt-0.5">MPCB, MIDC, DISH, Fire, FSSAI...</p>
+          <p className="text-2xl font-bold text-gray-900 mt-2">
+            {Array.from(new Set(filteredApprovals.map((a) => a.authority))).length}
+          </p>
+          <p className="text-[11px] text-gray-400 mt-0.5">Departments involved</p>
         </div>
 
-        <div className="card p-4 border border-gray-100 shadow-sm bg-white">
+        <div className="card p-4 border border-gray-100 shadow-sm bg-white hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-gray-500">Site Inspection Regimes</span>
             <ClipboardCheck className="w-4 h-4 text-amber-600" />
           </div>
           <p className="text-2xl font-bold text-gray-900 mt-2">
-            {approvals?.filter((a) => a.requires_inspection).length ?? 0}
+            {filteredApprovals.filter((a) => a.requires_inspection).length}
           </p>
           <p className="text-[11px] text-gray-400 mt-0.5">Statutory pre-grant inspections</p>
         </div>
 
-        <div className="card p-4 border border-gray-100 shadow-sm bg-white">
+        <div className="card p-4 border border-gray-100 shadow-sm bg-white hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-gray-500">Periodic Renewals</span>
             <RotateCcw className="w-4 h-4 text-purple-600" />
           </div>
           <p className="text-2xl font-bold text-gray-900 mt-2">
-            {approvals?.filter((a) => !!a.renewal_period_days).length ?? 0}
+            {filteredApprovals.filter((a) => !!a.renewal_period_days).length}
           </p>
           <p className="text-[11px] text-gray-400 mt-0.5">Time-bound statutory renewal</p>
         </div>

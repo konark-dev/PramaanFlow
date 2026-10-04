@@ -23,6 +23,7 @@
     "express": "^4.21.0",
     "jsonwebtoken": "^9.0.2",
     "pdf-parse": "^2.4.5",
+    "sih26-ps130-workspace": "file:..",
     "zod": "^3.23.8"
   },
   "devDependencies": {
