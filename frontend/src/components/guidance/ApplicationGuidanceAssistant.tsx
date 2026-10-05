@@ -236,7 +236,7 @@ function ApplicationGuidanceAssistantContent() {
   return (
     <>
       {/* Floating Launcher Button - Logo Only */}
-      <div className="fixed bottom-22 right-6 z-40">
+      <div className="fixed bottom-8 right-6 z-40">
         <button
           type="button"
           onClick={() => setIsOpen(true)}
