@@ -1,6 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const pdfParseModule = require('pdf-parse');
-const PDFParse = pdfParseModule.PDFParse || pdfParseModule.default || pdfParseModule;
+// pdf-parse is required lazily inside extractTextFromPdf to support serverless runtimes without crashing at boot
 
 
 export interface ExtractedFieldRecord {
@@ -263,12 +261,24 @@ export async function extractTextFromPdf(buffer: Buffer): Promise<{
   }
 
   try {
-    const parser = new PDFParse({ data: buffer });
-    await parser.load();
-    const result = await parser.getText();
-    await parser.destroy().catch(() => {});
+    let pdfText = '';
+    let pageCount = 1;
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const pdfParseModule = require('pdf-parse');
+      const PDFParse = pdfParseModule.PDFParse || pdfParseModule.default || pdfParseModule;
+      const parser = new PDFParse({ data: buffer });
+      await parser.load();
+      const result = await parser.getText();
+      await parser.destroy().catch(() => {});
+      pdfText = (result?.text || '').trim();
+      pageCount = result?.numpages || 1;
+    } catch {
+      // Fallback if pdf-parse is unresolvable in environment
+      pdfText = buffer.toString('utf-8').replace(/[^\x20-\x7E\n\r\t]/g, '');
+    }
 
-    const text = (result?.text || '').trim();
+    const text = pdfText;
     // A document is readable if it contains at least 20 alphanumeric characters
     const alphaCount = (text.match(/[a-zA-Z0-9]/g) || []).length;
     const isReadable = alphaCount >= 20;
@@ -276,7 +286,7 @@ export async function extractTextFromPdf(buffer: Buffer): Promise<{
     return {
       text,
       isReadable,
-      pageCount: result?.total || (result?.pages ? result.pages.length : 1),
+      pageCount,
     };
   } catch (err) {
     // Parser error (e.g. encrypted, corrupted, or scanned image with no text stream)

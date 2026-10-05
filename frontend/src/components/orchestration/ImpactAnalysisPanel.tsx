@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { api } from '@/lib/api'; // Wait, let's use fetch directly to avoid guessing api.ts structure
+import { getApiBaseUrl } from '@/lib/api';
 import { Activity, AlertTriangle, FileWarning, Search, Info } from 'lucide-react';
 
 export function ImpactAnalysisPanel({ projectId }: { projectId: string }) {
@@ -16,7 +16,7 @@ export function ImpactAnalysisPanel({ projectId }: { projectId: string }) {
       let val: any = factValue;
       if (!isNaN(Number(val))) val = Number(val);
       
-      const res = await fetch(`/api/projects/${projectId}/impact`, {
+      const res = await fetch(`${getApiBaseUrl()}/projects/${projectId}/impact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
