@@ -187,8 +187,8 @@ export function resolveGuidanceQuestion(query: string, ctx: GuidanceContext): Gu
   ) {
     return {
       intentId: 'greeting',
-      title: 'Welcome to Udyog Setu Guidance Assistant 👋',
-      answer: `Hello! Welcome back to **Udyog Setu** — Maharashtra's Single Window Industrial Clearance Portal.\n\nI am here to guide you with:\n• **Statutory Prerequisites & Clearances** (MPCB, DISH, MIDC, Fire Services)\n• **Document Checklist & Pre-validation Rules**\n• **Parallel Application Roadmap & Turnaround Estimation**\n• **Departmental Queries & RTS Act Specified Time Limit Tracking**\n\nHow can I assist your industrial proposal today?`,
+      title: 'Welcome to PramaanFlow Guidance Assistant 👋',
+      answer: `Hello! Welcome back to **PramaanFlow** — Maharashtra's Single Window Industrial Clearance Portal.\n\nI am here to guide you with:\n• **Statutory Prerequisites & Clearances** (MPCB, DISH, MIDC, Fire Services)\n• **Document Checklist & Pre-validation Rules**\n• **Parallel Application Roadmap & Turnaround Estimation**\n• **Departmental Queries & RTS Act Specified Time Limit Tracking**\n\nHow can I assist your industrial proposal today?`,
       actions: [
         { label: 'View Clearances Roadmap', href: '/app/approvals' },
         { label: 'Open Document Vault', href: '/app/documents' },
@@ -238,7 +238,7 @@ export function resolveGuidanceQuestion(query: string, ctx: GuidanceContext): Gu
   ) {
     return {
       intentId: 'capabilities',
-      title: 'Udyog Setu Statutory Assistant Capabilities',
+      title: 'PramaanFlow Statutory Assistant Capabilities',
       answer: `I am your digital regulatory guide for industrial approvals in Maharashtra.\n\n**Here is what I can do for you**:\n1. **Document Validation**: Check if your documents meet MIDC, MPCB, and DISH statutory standards.\n2. **Dependency Resolution**: Explain why an application might be waiting on prerequisite clearances.\n3. **Parallel Processing**: Identify clearances that can proceed concurrently to save time.\n4. **Statutory RTS Deadlines**: Track deemed approval countdowns under Maharashtra Right to Services.\n5. **Department Query Guidance**: Help you draft complete responses to officer clarifications.`,
       actions: [
         { label: 'View Clearances Roadmap', href: '/app/approvals' },

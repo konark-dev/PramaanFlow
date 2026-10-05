@@ -288,7 +288,7 @@ export default function NewProjectWizardPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200 pb-5">
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold text-primary-700 tracking-wide uppercase">
-            <span>Udyog Setu Single Window</span>
+            <span>PramaanFlow Single Window</span>
             <span>•</span>
             <span>New Project Onboarding Wizard</span>
           </div>
@@ -696,7 +696,7 @@ export default function NewProjectWizardPage() {
                 <input
                   type="text"
                   className="input-base bg-gray-50"
-                  value="Maharashtra (Udyog Setu / Single Window Portal)"
+                  value="Maharashtra (PramaanFlow / Single Window Portal)"
                   readOnly
                 />
               </div>

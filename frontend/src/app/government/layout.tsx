@@ -98,7 +98,7 @@ export default function GovernmentLayout({ children }: { children: React.ReactNo
         <header className="bg-white border-b border-gray-200 px-6 py-2.5 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Building2 className="w-5 h-5 text-blue-700" />
-            <span className="font-bold text-gray-900 text-sm">Udyog Setu · Portal Boundary</span>
+            <span className="font-bold text-gray-900 text-sm">PramaanFlow · Portal Boundary</span>
           </div>
           <QuickDemoDock />
         </header>

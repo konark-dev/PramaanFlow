@@ -185,7 +185,7 @@ export default function ApprovalDirectoryPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-200 pb-5">
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold text-primary-700 tracking-wide uppercase">
-            <span>Udyog Setu Single Window</span>
+            <span>PramaanFlow Single Window</span>
             <span>•</span>
             <span>Approval & Permission Directory</span>
           </div>

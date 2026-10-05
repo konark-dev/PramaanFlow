@@ -31,7 +31,7 @@ interface TourStep {
 
 const TOUR_STEPS: TourStep[] = [
   {
-    title: 'Consolidated Single Window Clearance (Udyog Setu)',
+    title: 'Consolidated Single Window Clearance (PramaanFlow)',
     badge: 'Core Architecture',
     description:
       'Replaces scattered departmental portals with a unified, state-wide orchestrator. Single submission gateway across MIDC, MPCB, DISH, Fire Services, and Labour Department.',

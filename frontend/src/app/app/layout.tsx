@@ -113,7 +113,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <header className="bg-white border-b border-gray-200 px-6 py-2.5 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Building2 className="w-5 h-5 text-blue-700" />
-            <span className="font-bold text-gray-900 text-sm">Udyog Setu · Portal Boundary</span>
+            <span className="font-bold text-gray-900 text-sm">PramaanFlow · Portal Boundary</span>
           </div>
           <QuickDemoDock />
         </header>
@@ -136,7 +136,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <header className="bg-white border-b border-gray-200 px-6 py-2.5 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Building2 className="w-5 h-5 text-purple-700" />
-            <span className="font-bold text-gray-900 text-sm">Udyog Setu · System Governance</span>
+            <span className="font-bold text-gray-900 text-sm">PramaanFlow · System Governance</span>
           </div>
           <QuickDemoDock />
         </header>
@@ -171,7 +171,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             {!collapsed && (
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
-                  <p className="text-white text-sm font-bold leading-none truncate">Udyog Setu</p>
+                  <p className="text-white text-sm font-bold leading-none truncate">PramaanFlow</p>
                   <span className="text-[9px] bg-primary-500/20 text-primary-300 font-bold px-1.5 py-0.5 rounded border border-primary-500/30">
                     GoM
                   </span>

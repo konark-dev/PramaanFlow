@@ -40,7 +40,7 @@ function getOfficialPortalUrl(schemeName: string, authority: string): { url: str
   if (text.includes('employment') || text.includes('skill')) {
     return { url: 'https://maharashtraskill.gov.in', label: 'MSSDS Portal' };
   }
-  return { url: 'https://maitri.mahaonline.gov.in', label: 'Udyog Setu Single Window' };
+  return { url: 'https://maitri.mahaonline.gov.in', label: 'PramaanFlow Single Window' };
 }
 
 export default function ApplicantIncentivesPage() {
