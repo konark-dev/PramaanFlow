@@ -108,7 +108,7 @@ export function CrossDocumentConsistencyCard({
       </div>
 
       {/* Metrics Banner */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+      <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
         <div className="p-2.5 rounded-lg bg-gray-50 border border-gray-100">
           <span className="text-[10px] text-gray-400 block font-semibold">Analyzed Files</span>
           <span className="font-bold text-gray-900 text-sm mt-0.5 block">

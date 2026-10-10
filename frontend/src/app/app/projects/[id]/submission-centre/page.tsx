@@ -182,7 +182,7 @@ export default function ProjectSubmissionCentrePage({ params }: { params: { id: 
       {error && <ErrorState message={(error as Error).message} onRetry={() => refetch()} />}
 
       {isLoading && (
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-3">
           {[...Array(6)].map((_, i) => (
             <CardSkeleton key={i} lines={2} />
           ))}
@@ -192,7 +192,7 @@ export default function ProjectSubmissionCentrePage({ params }: { params: { id: 
       {sc && (
         <>
           {/* Submission Readiness KPI Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             <div className="card p-4 border border-gray-100 shadow-sm flex flex-col justify-between">
               <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
                 Total Clearances

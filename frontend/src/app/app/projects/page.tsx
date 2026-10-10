@@ -76,7 +76,7 @@ export default function ProjectsPage() {
               </Link>
               <p className="text-xs text-gray-500 mt-0.5">{project.sector}</p>
 
-              <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mt-4 text-xs">
                 <div className="flex items-center gap-1.5 text-gray-600">
                   <MapPin className="w-3.5 h-3.5 text-gray-400" />
                   {project.district}

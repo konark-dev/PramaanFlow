@@ -63,7 +63,7 @@ export function BhashiniSeamButton() {
               <p className="font-semibold text-gray-800 text-[11px] uppercase tracking-wider">
                 Planned Language Pipelines
               </p>
-              <div className="grid grid-cols-2 gap-2 text-[11px]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
                 <div className="p-2 border border-gray-200 rounded-lg flex items-center justify-between bg-gray-50/50">
                   <span className="font-medium text-gray-800">English (Current)</span>
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />

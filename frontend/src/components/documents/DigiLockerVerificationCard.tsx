@@ -409,7 +409,7 @@ export function DigiLockerVerificationCard({
             </div>
 
             {/* Quick Preview of What Will Be Retrieved */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-2.5 text-center text-xs">
               <div className="p-2.5 bg-white rounded-xl border border-gray-200">
                 <span className="text-[10px] text-gray-400 uppercase font-semibold block">Company Document</span>
                 <p className="font-bold text-gray-800 mt-0.5 truncate">Company PAN Card</p>

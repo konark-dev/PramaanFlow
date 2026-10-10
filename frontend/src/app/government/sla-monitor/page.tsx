@@ -211,7 +211,7 @@ export default function SLAMonitorPage() {
       </div>
 
       {/* KPI Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <div className="card p-4 text-center border-l-4 border-l-red-500 bg-red-50/20">
           <p className="text-3xl font-bold text-red-600">{breachedCount}</p>
           <p className="text-xs text-gray-600 font-medium mt-1">Specified Limit Breached</p>

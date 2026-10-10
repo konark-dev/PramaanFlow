@@ -136,7 +136,7 @@ export function QuickDemoDock() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 p-2.5 z-50 animate-scale-in">
+        <div className="absolute right-0 mt-2 w-full sm:w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 p-2.5 z-50 animate-scale-in">
           <div className="px-3 py-2 border-b border-gray-100 flex items-center justify-between">
             <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
               Judge Demo Role Switcher

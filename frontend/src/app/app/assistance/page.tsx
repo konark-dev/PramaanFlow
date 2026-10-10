@@ -186,7 +186,7 @@ export default function InvestorAssistancePage() {
         </div>
 
         {/* Top metric highlights */}
-        <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-gray-100">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4 pt-4 border-t border-gray-100">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 font-bold text-xs">
               {totalCount}
@@ -398,7 +398,7 @@ export default function InvestorAssistancePage() {
             </div>
 
             {/* Context desk & Assignment card */}
-            <div className="grid grid-cols-2 gap-3 my-4 bg-gray-50 p-3.5 rounded-xl border border-gray-200 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-4 bg-gray-50 p-3.5 rounded-xl border border-gray-200 text-xs">
               <div>
                 <span className="text-gray-500 font-medium">Concerned Nodal Desk:</span>
                 <p className="font-semibold text-gray-900 mt-0.5 flex items-center gap-1.5">
@@ -606,7 +606,7 @@ export default function InvestorAssistancePage() {
                 <label className="block font-semibold text-gray-700 mb-1">
                   Urgency / Priority
                 </label>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
                   {(['LOW', 'MEDIUM', 'HIGH', 'URGENT'] as const).map((p) => (
                     <button
                       type="button"

@@ -236,7 +236,7 @@ function ComplianceContent() {
       )}
 
       {/* 4-Bucket Dashboard KPI Strip */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-4">
         {/* Bucket 1: Action Required */}
         <button
           type="button"
@@ -634,7 +634,7 @@ function ComplianceContent() {
               </div>
 
               {/* Statutory Specifications */}
-              <div className="grid grid-cols-2 gap-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
                 <div>
                   <span className="text-gray-400 block text-[11px]">Renewal Frequency</span>
                   <span className="font-bold text-gray-800">{selectedRenewalForDetail.frequency}</span>

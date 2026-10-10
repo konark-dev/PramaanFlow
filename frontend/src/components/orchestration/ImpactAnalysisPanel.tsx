@@ -95,7 +95,7 @@ export function ImpactAnalysisPanel({ projectId }: { projectId: string }) {
                       </span>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-4 text-xs text-amber-800 mb-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-amber-800 mb-3">
                       <div><span className="font-semibold">Type:</span> {impact.impact_type.replace(/_/g, ' ')}</div>
                       <div><span className="font-semibold">Rule Fired:</span> {impact.condition_fired}</div>
                       <div><span className="font-semibold">Owner:</span> {impact.owner}</div>

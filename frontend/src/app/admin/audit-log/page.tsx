@@ -156,7 +156,7 @@ export default function AuditLogPage() {
             </div>
 
             <div className="space-y-4 pt-4 text-xs">
-              <div className="grid grid-cols-2 gap-3 bg-gray-50 p-3 rounded-xl">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-gray-50 p-3 rounded-xl">
                 <div>
                   <span className="text-gray-400 block text-[10px] uppercase font-semibold">Actor</span>
                   <span className="font-semibold text-gray-800">{selectedLog.actor?.name ?? 'System'}</span>

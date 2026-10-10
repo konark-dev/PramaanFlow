@@ -278,7 +278,7 @@ export function CommonApplicationFormView({
         )}
 
         {/* Form Step Progress Bar */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-2 mt-6 pt-5 border-t border-gray-100">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-2 mt-6 pt-5 border-t border-gray-100">
           {steps.map((s, idx) => {
             const isCurrent = currentStep === s.id;
             const isPast = idx < currentStepIndex;

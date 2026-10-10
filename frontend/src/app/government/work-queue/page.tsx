@@ -565,7 +565,7 @@ function WorkQueueContent() {
 
             {/* Quick Metadata */}
             <div className="card p-4 space-y-3">
-              <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 {[
                   { label: 'Applicant Entity', value: selected.org_name },
                   { label: 'Project / Investment Proposal', value: selected.project_name },
@@ -628,7 +628,7 @@ function WorkQueueContent() {
                   <span className="font-semibold text-gray-800">{selected.department_name}</span>).
                 </div>
 
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <button
                     onClick={() => setShowNodalCoordinationModal(true)}
                     className="px-3 py-2 text-xs font-semibold rounded-lg border bg-purple-50 text-purple-800 border-purple-200 hover:bg-purple-100 transition-all text-left flex items-center justify-between"
@@ -748,7 +748,7 @@ function WorkQueueContent() {
                           )}
                         </div>
 
-                        <div className="grid grid-cols-2 gap-2 text-gray-600 bg-gray-50/60 p-2.5 rounded-lg text-[11px]">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-gray-600 bg-gray-50/60 p-2.5 rounded-lg text-[11px]">
                           <div>
                             <span className="text-gray-400">Scheduled Date: </span>
                             <span className="font-medium text-gray-800">{formatDateTime(insp.scheduled_date)}</span>
@@ -829,7 +829,7 @@ function WorkQueueContent() {
                   </div>
                   <span className="text-[11px] text-gray-400 font-medium">Competent Authority</span>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <button
                     disabled={selected.status === 'UNDER_REVIEW' || updateStatus.isPending || !isOwnDepartment}
                     onClick={() => updateStatus.mutate({ id: selected.id, newStatus: 'UNDER_REVIEW' })}
@@ -1288,7 +1288,7 @@ function WorkQueueContent() {
                   className="input-base text-xs mt-1"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="font-semibold text-gray-700">Priority</label>
                   <select

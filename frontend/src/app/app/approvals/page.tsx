@@ -301,7 +301,7 @@ function ApprovalDetail({ detail }: { detail: ProjectApprovalDetail }) {
 
         {detail.application ? (
           <div>
-            <div className="grid grid-cols-2 gap-2 text-xs mb-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs mb-3">
               <div>
                 <p className="text-gray-400">Application Reference Number</p>
                 <p className="font-mono font-medium text-gray-800">{detail.application.application_number}</p>
@@ -353,7 +353,7 @@ function ApprovalDetail({ detail }: { detail: ProjectApprovalDetail }) {
             {detail.sla.instance_status && <StatusBadge status={detail.sla.instance_status} />}
           </div>
           <p className="text-xs text-gray-500 mb-2">{detail.sla.label}</p>
-          <div className="grid grid-cols-2 gap-3 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div>
               <p className="text-gray-400">Duration</p>
               <p className="font-medium text-gray-800">{detail.sla.configured_duration_days} days</p>

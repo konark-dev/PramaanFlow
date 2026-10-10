@@ -210,8 +210,8 @@ export default function LoginPage() {
       {/* Left panel — Hero & Single Window Value Showcase */}
       <div className="lg:w-[48%] bg-gradient-to-br from-gray-50 via-white to-gray-50 flex flex-col justify-between p-8 sm:p-12 border-b lg:border-b-0 lg:border-r border-gray-200 relative overflow-hidden">
         {/* Subtle background glow */}
-        <div className="absolute top-0 left-0 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-0 w-full sm:w-96 h-96 bg-primary-600/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-full sm:w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Top Branding Bar */}
         <div className="relative z-10 space-y-4">
@@ -574,7 +574,7 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
                   <label className="block text-gray-600 font-medium mb-1">
                     Constitution

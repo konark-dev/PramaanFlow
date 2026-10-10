@@ -317,7 +317,7 @@ function DashboardContent() {
 
           {/* Project info footer */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center divide-x divide-gray-50">
+            <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-6 text-center divide-x divide-gray-50">
               <div>
                 <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Sector</p>
                 <p className="text-base font-bold text-gray-800 mt-2">{cc.project.sector}</p>

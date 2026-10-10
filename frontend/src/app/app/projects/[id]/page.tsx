@@ -172,7 +172,7 @@ function ProjectControlCentreContent({ params }: { params: { id: string } }) {
           {error && <ErrorState message={(error as Error).message} onRetry={() => refetch()} />}
 
           {isLoading && (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[...Array(4)].map((_, i) => <CardSkeleton key={i} lines={2} />)}
             </div>
           )}
@@ -180,7 +180,7 @@ function ProjectControlCentreContent({ params }: { params: { id: string } }) {
           {cc && (
             <>
               {/* Approval stats cards with URL filtered links */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatCard
                   label="Permissions & Approvals"
                   value={cc.approvals.total}
@@ -437,7 +437,7 @@ function ProjectControlCentreContent({ params }: { params: { id: string } }) {
                   </button>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
                   <div className="p-3 bg-gray-50/70 rounded-xl border border-gray-100">
                     <span className="text-gray-400 block font-medium">Legal Entity Name</span>
                     <p className="font-bold text-gray-900 mt-0.5 truncate">

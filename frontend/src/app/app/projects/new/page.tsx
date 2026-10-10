@@ -304,7 +304,7 @@ export default function NewProjectWizardPage() {
 
       {/* Stepper Header */}
       <div className="card p-4 bg-white border border-gray-100 shadow-sm">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
           {STEPS.map((s) => {
             const Icon = s.icon;
             const isCompleted = step > s.id;
@@ -1074,7 +1074,7 @@ export default function NewProjectWizardPage() {
             {!isAnalyzing && analysisResult && (
               <div className="space-y-6">
                 {/* Metric Summary Ribbon */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-3">
                   <div className="p-4 bg-emerald-50/70 border border-emerald-200/80 rounded-xl">
                     <p className="text-xs font-semibold text-emerald-800">Applicable Clearances</p>
                     <p className="text-2xl font-bold text-emerald-900 mt-1">

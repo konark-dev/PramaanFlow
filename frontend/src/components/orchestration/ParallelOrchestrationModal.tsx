@@ -85,7 +85,7 @@ export function ParallelOrchestrationModal({
           </div>
 
           {/* Metric cards */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             <div className="p-3.5 bg-emerald-50/60 rounded-xl border border-emerald-200 text-center">
               <p className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider">Started Now</p>
               <p className="text-2xl font-extrabold text-emerald-900 mt-1">

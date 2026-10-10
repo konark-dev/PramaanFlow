@@ -373,7 +373,7 @@ export default function DocumentsPage() {
       ) : (
         <>
           {/* Stats row */}
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-5 gap-3">
             {[
               { label: 'Total', val: stats.total, color: 'text-gray-700 bg-gray-50', border: 'border-gray-200' },
               { label: 'Verified', val: stats.verified, color: 'text-green-700 bg-green-50', border: 'border-green-200' },
@@ -915,7 +915,7 @@ export default function DocumentsPage() {
             )}
 
             {/* Metadata Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs p-3 bg-gray-50 rounded-xl border border-gray-100">
+            <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs p-3 bg-gray-50 rounded-xl border border-gray-100">
               <div>
                 <span className="text-[11px] text-gray-400 font-medium">Status</span>
                 <div className="mt-0.5"><StatusBadge status={docDetail.verification_status} size="sm" /></div>

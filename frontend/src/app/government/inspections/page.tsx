@@ -406,7 +406,7 @@ function CommonInspectionPlannerContent() {
       <div className="flex-1 overflow-y-auto p-6 max-w-7xl mx-auto w-full space-y-6">
         {/* KPI Strip */}
         {plannerTab === 'joint' ? (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-4">
             <div className="card p-4 border-l-4 border-l-purple-500">
               <span className="text-xs text-gray-500 font-medium">Coordinated Joint Visits</span>
               <p className="text-2xl font-bold text-gray-900 mt-1">{totalJointPlans}</p>
@@ -440,7 +440,7 @@ function CommonInspectionPlannerContent() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-4">
             <div className="card p-4 border-l-4 border-l-blue-500">
               <span className="text-xs text-gray-500 font-medium">Total Scheduled Visits</span>
               <p className="text-2xl font-bold text-gray-900 mt-1">{individualScheduledCount}</p>
@@ -1135,7 +1135,7 @@ function CommonInspectionPlannerContent() {
                               <StatusBadge status={insp.status} size="sm" />
                             </div>
 
-                            <div className="mt-3 pt-2 border-t border-gray-100 grid grid-cols-2 gap-2 text-[11px]">
+                            <div className="mt-3 pt-2 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
                               <div>
                                 <span className="text-gray-400 block">Authority</span>
                                 <span className="font-semibold text-gray-800">{insp.department?.name}</span>
@@ -1703,7 +1703,7 @@ function CommonInspectionPlannerContent() {
             </div>
 
             <div className="space-y-3">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs font-semibold text-gray-700 block mb-1">Finding Severity:</label>
                   <select

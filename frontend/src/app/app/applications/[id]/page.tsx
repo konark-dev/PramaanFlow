@@ -800,7 +800,7 @@ export default function ApplicationWorkspacePage() {
                     </p>
                     <span className="text-[11px] text-gray-400">Consumed by statutory rule engine</span>
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
                     {project.attributes.map((attr) => (
                       <div key={attr.key} className="p-2 bg-gray-50 rounded-lg text-xs border border-gray-100">
                         <span className="text-[10px] text-gray-400 uppercase tracking-wider block font-semibold">

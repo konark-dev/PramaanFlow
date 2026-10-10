@@ -146,7 +146,7 @@ export function ScrutinyPriorityCard({
               <Eye className="w-3.5 h-3.5 text-gray-600" />
               Underlying Workflow Metrics:
             </h4>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
               <div
                 className={`p-2.5 rounded-lg border text-center ${
                   priority.metrics.missing_documents > 0

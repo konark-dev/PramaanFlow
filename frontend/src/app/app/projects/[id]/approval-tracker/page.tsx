@@ -79,7 +79,7 @@ export default function ProjectApprovalTrackerPage({ params }: { params: { id: s
       <div className="p-6 max-w-7xl mx-auto space-y-6">
         <div className="h-6 w-48 skeleton rounded" />
         <div className="h-32 skeleton rounded-2xl" />
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
             <CardSkeleton key={i} lines={3} />
           ))}
@@ -225,7 +225,7 @@ export default function ProjectApprovalTrackerPage({ params }: { params: { id: s
         </div>
 
         {/* Decorative backdrop glow */}
-        <div className="absolute -right-10 -bottom-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -right-10 -bottom-10 w-full sm:w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
       </div>
 
       {/* 6-Stage Visual Journey Tracker (Project Setup → Permissions → Parallel Processing → Inspection → Decisions → Compliance) */}
@@ -242,7 +242,7 @@ export default function ProjectApprovalTrackerPage({ params }: { params: { id: s
           </span>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           {stages.map((st, idx) => {
             const isCompleted = st.status === 'COMPLETED';
             const isInProgress = st.status === 'IN_PROGRESS';
@@ -303,7 +303,7 @@ export default function ProjectApprovalTrackerPage({ params }: { params: { id: s
       </div>
 
       {/* Summary KPI Strip */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-5 gap-3">
         <div className="card p-3.5 bg-white border border-gray-200/80 text-center">
           <p className="text-[11px] text-gray-500 font-semibold uppercase tracking-wider">Total Required</p>
           <p className="text-2xl font-black text-gray-900 mt-0.5">{summary.total_permissions}</p>
@@ -560,7 +560,7 @@ function ApprovalTrackerCard({ item }: { item: ProjectApprovalTrackerItem }) {
       </div>
 
       {/* Metrics Row */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs bg-gray-50/70 p-2.5 rounded-lg border border-gray-100">
+      <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-2 text-xs bg-gray-50/70 p-2.5 rounded-lg border border-gray-100">
         <div>
           <span className="text-[10px] text-gray-400 block">Configured SLA Time Limit</span>
           <span className="font-semibold text-gray-800 flex items-center gap-1 mt-0.5">

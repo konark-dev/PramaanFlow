@@ -104,7 +104,7 @@ export function ScrutinyPriorityBadge({
       {/* Popover explaining Why? */}
       {isOpen && (
         <div
-          className="absolute z-50 left-0 mt-1.5 w-80 sm:w-96 rounded-xl bg-white shadow-xl border border-gray-200 p-4 text-left animate-in fade-in zoom-in-95 duration-150"
+          className="absolute z-50 left-0 mt-1.5 w-80 sm:w-full sm:w-96 rounded-xl bg-white shadow-xl border border-gray-200 p-4 text-left animate-in fade-in zoom-in-95 duration-150"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
@@ -146,7 +146,7 @@ export function ScrutinyPriorityBadge({
 
           {/* Key Metrics Strip */}
           {priority.metrics && (
-            <div className="mt-3 pt-2 border-t border-gray-100 grid grid-cols-3 gap-1.5 text-[10px]">
+            <div className="mt-3 pt-2 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1.5 text-[10px]">
               <div className="bg-gray-50 p-1.5 rounded border border-gray-100 text-center">
                 <span className="text-gray-400 block">Missing Docs</span>
                 <span className="font-bold text-gray-900">{priority.metrics.missing_documents}</span>

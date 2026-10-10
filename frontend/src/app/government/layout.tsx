@@ -40,6 +40,7 @@ export default function GovernmentLayout({ children }: { children: React.ReactNo
   const router = useRouter();
   const { user, loading, logout } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -96,6 +97,14 @@ export default function GovernmentLayout({ children }: { children: React.ReactNo
     return (
       <div className="min-h-screen bg-surface flex flex-col">
         <header className="bg-white border-b border-gray-200 px-6 py-2.5 flex items-center justify-between">
+          {/* Mobile menu button */}
+          <button
+            type="button"
+            className="md:hidden p-2 -ml-2 mr-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100"
+            onClick={() => setMobileMenuOpen(true)}
+          >
+            <Menu className="w-5 h-5" />
+          </button>
           <div className="flex items-center gap-2">
             <Building2 className="w-5 h-5 text-blue-700" />
             <span className="font-bold text-gray-900 text-sm">PramaanFlow · Portal Boundary</span>
@@ -150,9 +159,17 @@ export default function GovernmentLayout({ children }: { children: React.ReactNo
 
   return (
     <div className="flex h-screen overflow-hidden bg-surface">
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
       <aside
         className={cn(
-          'flex-shrink-0 bg-sidebar flex flex-col h-full transition-all duration-200 ease-in-out border-r border-sidebar-border/40 select-none',
+          "bg-sidebar flex flex-col h-full transition-all duration-200 ease-in-out border-r border-sidebar-border/40 select-none",
+          "fixed inset-y-0 left-0 z-50 md:relative md:flex md:flex-shrink-0",
+          mobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
           collapsed ? 'w-18' : 'w-60'
         )}
       >

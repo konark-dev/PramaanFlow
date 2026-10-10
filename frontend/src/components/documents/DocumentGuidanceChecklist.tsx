@@ -150,7 +150,7 @@ export function DocumentGuidanceChecklist({
         </div>
 
         {/* Quick Highlights Strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4 pt-3 border-t border-white/10 text-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-2 mt-4 pt-3 border-t border-white/10 text-center">
           <div className="bg-black/20 rounded-lg p-2">
             <p className="text-xs font-bold text-white">{metrics.total_requirements}</p>
             <p className="text-[10px] text-slate-300">Total Prescribed</p>

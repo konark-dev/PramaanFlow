@@ -48,10 +48,10 @@ export default function AnalyticsPage() {
     return (
       <div className="p-6 space-y-4">
         <div className="h-20 skeleton rounded-xl" />
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => <div key={i} className="h-28 skeleton rounded-xl" />)}
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[...Array(2)].map((_, i) => <div key={i} className="h-64 skeleton rounded-xl" />)}
         </div>
       </div>
@@ -133,7 +133,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* KPI Overview Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card p-4">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-gray-500 uppercase">Total Applications</span>
@@ -250,7 +250,7 @@ export default function AnalyticsPage() {
             </span>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 my-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 my-4">
             <div className="p-3 bg-orange-50/70 border border-orange-200 rounded-xl text-center">
               <span className="text-lg font-bold text-orange-700">{analytics.query_metrics?.open_awaiting_applicant ?? 0}</span>
               <p className="text-[11px] text-orange-900 font-medium mt-0.5">Awaiting Applicant</p>
@@ -283,7 +283,7 @@ export default function AnalyticsPage() {
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 my-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
             <div className="p-3 bg-gray-50 rounded-xl">
               <span className="text-xs text-gray-500">Scheduled Inspections</span>
               <p className="text-xl font-bold text-purple-700 mt-1">{analytics.inspection_metrics?.scheduled ?? 0}</p>

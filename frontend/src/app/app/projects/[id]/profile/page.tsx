@@ -352,7 +352,7 @@ export default function MasterProjectProfilePage() {
               <p className="text-sm font-bold text-gray-900">{profile.entity.legal_name}</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="p-3 bg-gray-50/80 rounded-xl border border-gray-100 space-y-1">
                 <div className="flex items-center justify-between text-gray-500">
                   <span>Entity Structure</span>
@@ -424,7 +424,7 @@ export default function MasterProjectProfilePage() {
               <p className="text-sm font-bold text-gray-900">{profile.proposal.name}</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="p-3 bg-gray-50/80 rounded-xl border border-gray-100 space-y-1">
                 <div className="flex items-center justify-between text-gray-500">
                   <span>Industry Sector</span>
@@ -496,7 +496,7 @@ export default function MasterProjectProfilePage() {
           </div>
 
           <div className="space-y-3 text-xs">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="p-3 bg-gray-50/80 rounded-xl border border-gray-100 space-y-1">
                 <span className="text-gray-500 block">State Jurisdiction</span>
                 <p className="font-semibold text-gray-900">Maharashtra</p>
@@ -547,7 +547,7 @@ export default function MasterProjectProfilePage() {
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div className="p-3 bg-gray-50/80 rounded-xl border border-gray-100 space-y-1">
               <span className="text-gray-500 block">Pollution Category</span>
               <span

@@ -200,7 +200,7 @@ export function DocumentDetailCentreView({ projectId }: Props) {
         </div>
 
         {/* Metrics Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-4 border-t border-blue-200/50">
+        <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-4 border-t border-blue-200/50">
           <div className="p-2.5 bg-white/80 rounded-xl border border-gray-200/80">
             <p className="text-[11px] text-gray-500 font-medium">Exhibits Analyzed</p>
             <p className="text-xl font-bold text-gray-900 mt-0.5">{exhibitsCount}</p>

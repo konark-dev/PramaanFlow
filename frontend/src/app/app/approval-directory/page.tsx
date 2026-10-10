@@ -227,7 +227,7 @@ export default function ApprovalDirectoryPage() {
       </div>
 
       {/* Metrics Summary Ribbon */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="card p-4 border border-gray-100 shadow-sm bg-white hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-gray-500">Total Clearances</span>
