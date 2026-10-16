@@ -11,7 +11,8 @@
  * Fixed UUIDs are used throughout so upserts work correctly.
  */
 
-import { db as prisma } from './lib/supabaseDb';
+import { db as defaultPrisma } from './lib/supabaseDb';
+let prisma: any = defaultPrisma;
 import {
   Role,
   ProjectApprovalStatus,
@@ -1551,7 +1552,11 @@ async function seedAuditLog() {
 // ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
-async function main() {
+export async function seedDatabase(targetPrisma?: any) {
+  if (targetPrisma) {
+    prisma = targetPrisma;
+  }
+
   console.log('🌱 Seeding database...\n');
 
   console.log('  → Organizations & departments');
@@ -1625,13 +1630,21 @@ async function main() {
   console.log('   • pcb.officer@demo.local   (OFFICER / PCB)');
   console.log('\n   Demo project: ABC Foods Pvt Ltd — New Food Processing Unit');
   console.log(`   Project ID: ${project.id}`);
+  return { project, org };
 }
 
-main()
-  .catch((err) => {
-    console.error('Seed failed:', err);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+async function main() {
+  await seedDatabase();
+}
+
+if (typeof process !== 'undefined' && process.argv && process.argv[1] && process.argv[1].includes('seed')) {
+  main()
+    .catch((err) => {
+      console.error('Seed failed:', err);
+      process.exit(1);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+}
+
