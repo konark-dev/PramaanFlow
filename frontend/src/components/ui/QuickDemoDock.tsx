@@ -124,12 +124,12 @@ export function QuickDemoDock() {
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         disabled={switching}
-        className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100/80 hover:to-indigo-100/80 border border-blue-200 text-blue-900 rounded-xl text-xs font-semibold shadow-xs transition-all active:scale-95"
+        className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100/80 hover:to-indigo-100/80 border border-blue-200 text-blue-900 rounded-xl text-xs font-semibold shadow-xs transition-all active:scale-95"
         title="Quick Role Switcher for SIH Presentation & Judges"
       >
         <Sparkles className="w-3.5 h-3.5 text-blue-600" />
         <span className="hidden sm:inline">Role Switcher:</span>
-        <span className="text-blue-800 font-bold max-w-[140px] truncate">
+        <span className="text-blue-800 font-bold max-w-[85px] sm:max-w-[140px] truncate">
           {currentRoleMatch ? currentRoleMatch.label.split('—')[0] : user?.role || 'Switch Role'}
         </span>
         <ChevronDown className={`w-3.5 h-3.5 text-blue-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />

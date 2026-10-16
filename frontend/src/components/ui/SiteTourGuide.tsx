@@ -175,7 +175,7 @@ export function SiteTourGuide() {
           setCurrentStep(0);
           setIsOpen(true);
         }}
-        className="fixed bottom-6 left-6 z-40 flex items-center gap-2 px-3.5 py-2 bg-slate-900/90 hover:bg-slate-900 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 border border-slate-700/80 backdrop-blur-sm group active:scale-95"
+        className="fixed bottom-6 left-6 z-40 hidden md:flex items-center gap-2 px-3.5 py-2 bg-slate-900/90 hover:bg-slate-900 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 border border-slate-700/80 backdrop-blur-sm group active:scale-95"
         title="Start Interactive Platform Tour for Judges"
       >
         <div className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center flex-shrink-0 group-hover:rotate-12 transition-transform">

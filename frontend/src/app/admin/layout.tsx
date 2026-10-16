@@ -8,7 +8,8 @@ import { cn } from '@/lib/utils';
 import { formatRole } from '@/lib/terminology';
 import {
   FileText, GitMerge, Clock, Gift, ScrollText, LogOut,
-  ShieldCheck, Settings, Users, ChevronLeft, Menu, ArrowLeft, Sparkles
+  ShieldCheck, Settings, Users, ChevronLeft, Menu,
+  X, ArrowLeft, Sparkles
 } from 'lucide-react';
 import { AuthLoadingState, PermissionDeniedState } from '@/components/ui/States';
 import { BhashiniSeamButton } from '@/components/ui/BhashiniSeam';
@@ -250,11 +251,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           <div className="flex items-center gap-2.5 flex-shrink-0">
             <QuickDemoDock />
-            <BhashiniSeamButton />
+            <div className="hidden sm:block"><BhashiniSeamButton /></div>
             <button
               type="button"
               onClick={() => window.dispatchEvent(new CustomEvent('open-site-tour'))}
-              className="flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 border border-amber-300 rounded-lg text-xs font-bold transition-all shadow-xs active:scale-95 group cursor-pointer"
+              className="hidden md:flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 border border-amber-300 rounded-lg text-xs font-bold transition-all shadow-xs active:scale-95 group cursor-pointer"
               title="Launch Interactive Platform Tour"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-600 group-hover:rotate-12 transition-transform" />
