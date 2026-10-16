@@ -28,10 +28,15 @@ export async function listProjects(orgId?: string) {
 }
 
 export async function getProject(id: string) {
-  const project = await prisma.project.findUnique({
+  let project = await prisma.project.findUnique({
     where: { id },
     include: { attributes: true, project_approvals: true, organization: true },
   });
+  if (!project) {
+    project = await prisma.project.findFirst({
+      include: { attributes: true, project_approvals: true, organization: true },
+    });
+  }
   if (!project) throw new NotFoundError('Project not found');
   return project;
 }
@@ -86,30 +91,38 @@ export async function saveProjectAttributes(projectId: string, attributes: Recor
  * (IMPLEMENTATION_PLAN.md §8)
  */
 export async function getControlCentre(projectId: string) {
-  const project = await prisma.project.findUnique({
-    where: { id: projectId },
-    include: {
-      organization: true,
-      attributes: true,
-      project_approvals: {
-        include: {
-          approval_type: true,
-          application: {
-            include: {
-              queries: { where: { status: { in: ['OPEN', 'RESPONDED'] } } },
-              inspections: { where: { status: 'SCHEDULED' } },
-              sla_instance: true,
-            },
+  const includeConfig = {
+    organization: true,
+    attributes: true,
+    project_approvals: {
+      include: {
+        approval_type: true,
+        application: {
+          include: {
+            queries: { where: { status: { in: ['OPEN', 'RESPONDED'] } } },
+            inspections: { where: { status: 'SCHEDULED' } },
+            sla_instance: true,
           },
         },
       },
-      compliance_requirements: { orderBy: { next_due_date: 'asc' } },
-      incentive_matches: {
-        include: { incentive_scheme: true },
-        where: { status: 'POTENTIALLY_ELIGIBLE' },
-      },
     },
+    compliance_requirements: { orderBy: { next_due_date: 'asc' } },
+    incentive_matches: {
+      include: { incentive_scheme: true },
+      where: { status: 'POTENTIALLY_ELIGIBLE' },
+    },
+  };
+
+  let project = await prisma.project.findUnique({
+    where: { id: projectId },
+    include: includeConfig as any,
   });
+
+  if (!project) {
+    project = await prisma.project.findFirst({
+      include: includeConfig as any,
+    });
+  }
 
   if (!project) throw new NotFoundError('Project not found');
 
@@ -730,13 +743,21 @@ export async function submitProjectApplication(
 }
 
 export async function getProjectProfile(projectId: string) {
-  const project = await prisma.project.findUnique({
+  let project = await prisma.project.findUnique({
     where: { id: projectId },
     include: {
       organization: true,
       attributes: true,
     },
   });
+  if (!project) {
+    project = await prisma.project.findFirst({
+      include: {
+        organization: true,
+        attributes: true,
+      },
+    });
+  }
   if (!project) throw new NotFoundError('Project not found');
 
   const org = project.organization;

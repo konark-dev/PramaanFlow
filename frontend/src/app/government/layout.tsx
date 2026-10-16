@@ -194,11 +194,21 @@ export default function GovernmentLayout({ children }: { children: React.ReactNo
               </div>
             )}
           </div>
+          {/* Mobile close button */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(false)}
+            className="md:hidden p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+            title="Close menu"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          {/* Desktop collapse button */}
           {!collapsed && (
             <button
               type="button"
               onClick={toggleSidebar}
-              className="p-1 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+              className="hidden md:block p-1 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
               title="Collapse sidebar"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -298,8 +308,18 @@ export default function GovernmentLayout({ children }: { children: React.ReactNo
 
       <main className="flex-1 overflow-y-auto flex flex-col min-w-0">
         {/* Top Context Header Bar */}
-        <header className="bg-white border-b border-gray-200 px-6 py-2.5 flex items-center justify-between flex-shrink-0 z-10 sticky top-0 shadow-xs">
-          <div className="flex items-center gap-3 min-w-0">
+        <header className="bg-white border-b border-gray-200 px-3 sm:px-6 py-2 sm:py-2.5 flex items-center justify-between flex-shrink-0 z-10 sticky top-0 shadow-xs">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            {/* Mobile Hamburger Menu Toggle */}
+            <button
+              type="button"
+              className="md:hidden p-1.5 text-gray-700 hover:text-gray-950 rounded-lg hover:bg-gray-100 flex-shrink-0 border border-gray-200 cursor-pointer"
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Open menu"
+            >
+              <Menu className="w-4 h-4" />
+            </button>
+
             <button
               type="button"
               onClick={() => router.back()}
@@ -310,7 +330,7 @@ export default function GovernmentLayout({ children }: { children: React.ReactNo
               <span className="hidden sm:inline">Back</span>
             </button>
 
-            <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200/80 rounded-xl text-blue-900 shadow-xs">
+            <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 bg-blue-50 border border-blue-200/80 rounded-xl text-blue-900 shadow-xs max-w-[130px] sm:max-w-none truncate">
               <ContextIcon className="w-4 h-4 text-blue-700 flex-shrink-0" />
               <div className="text-xs truncate">
                 <span className="font-semibold text-gray-900 hidden sm:inline">Concerned Department / Authority: </span>

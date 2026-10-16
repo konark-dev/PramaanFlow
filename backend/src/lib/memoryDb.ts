@@ -442,21 +442,25 @@ function hydrateRelations(
   }
 }
 
-let isSeeding = false;
+let seedPromise: Promise<void> | null = null;
 let isSeeded = false;
 
-export async function ensureSeeded() {
-  if (isSeeded || isSeeding) return;
-  isSeeding = true;
-  try {
-    const { seedDatabase } = await import('../seed');
-    await seedDatabase(memoryDb);
-    isSeeded = true;
-  } catch (err) {
-    console.error('Failed to auto-seed memory database:', err);
-  } finally {
-    isSeeding = false;
+export async function ensureSeeded(): Promise<void> {
+  if (isSeeded) return;
+  if (!seedPromise) {
+    seedPromise = (async () => {
+      try {
+        const { seedDatabase } = await import('../seed');
+        await seedDatabase(memoryDb);
+        isSeeded = true;
+      } catch (err) {
+        console.error('Failed to auto-seed memory database:', err);
+        seedPromise = null;
+        throw err;
+      }
+    })();
   }
+  return seedPromise;
 }
 
 export class MemoryModelClient<T = any> {
@@ -470,9 +474,7 @@ export class MemoryModelClient<T = any> {
     skip?: number;
     select?: any;
   }): Promise<T[]> {
-    if (!isSeeded && !isSeeding) {
-      await ensureSeeded();
-    }
+    await ensureSeeded();
     const table = getTable(this.tableName);
     let list: AnyRecord[] = Array.from(table.values()).map((r) => ({ ...r }));
 
@@ -506,6 +508,7 @@ export class MemoryModelClient<T = any> {
     include?: Record<string, any>;
     select?: any;
   }): Promise<T | null> {
+    await ensureSeeded();
     if (!args.where || Object.keys(args.where).length === 0) return null;
     const hasValidKey = Object.values(args.where).some((v) => v !== undefined && v !== 'undefined');
     if (!hasValidKey) return null;
@@ -544,6 +547,7 @@ export class MemoryModelClient<T = any> {
   }
 
   async count(args?: { where?: Record<string, any> }): Promise<number> {
+    await ensureSeeded();
     const table = getTable(this.tableName);
     if (!args?.where) return table.size;
     const items = await this.findMany({ where: args.where });
@@ -551,6 +555,7 @@ export class MemoryModelClient<T = any> {
   }
 
   async create(args: { data: Record<string, any>; include?: Record<string, any> }): Promise<T> {
+    await ensureSeeded();
     const table = getTable(this.tableName);
     const row = { ...args.data };
     if (!row.id) {

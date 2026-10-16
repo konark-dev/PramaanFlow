@@ -136,15 +136,20 @@ export function QuickDemoDock() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-full sm:w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 p-2.5 z-50 animate-scale-in">
-          <div className="px-3 py-2 border-b border-gray-100 flex items-center justify-between">
-            <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-              Judge Demo Role Switcher
-            </span>
-            <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.2 rounded">
-              Zero Leak Isolation
-            </span>
-          </div>
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black/20"
+            onClick={() => setIsOpen(false)}
+          />
+          <div className="absolute right-0 mt-2 w-72 sm:w-80 max-w-[calc(100vw-24px)] bg-white rounded-2xl shadow-2xl border border-gray-200 p-2.5 z-50 animate-scale-in">
+            <div className="px-3 py-2 border-b border-gray-100 flex items-center justify-between">
+              <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                Judge Demo Role Switcher
+              </span>
+              <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">
+                Zero Leak Isolation
+              </span>
+            </div>
 
           <div className="space-y-1 mt-1.5 max-h-96 overflow-y-auto">
             {DEMO_ROLES.map((r) => {
@@ -180,6 +185,7 @@ export function QuickDemoDock() {
             <span className="font-semibold text-gray-600">Smart Demo Mode</span>
           </div>
         </div>
+      </>
       )}
     </div>
   );

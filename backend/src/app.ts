@@ -28,6 +28,17 @@ app.use(cors({
 
 app.use(express.json());
 
+// Guarantee database seeding finishes before handling any requests
+app.use(async (_req, _res, next) => {
+  try {
+    const { ensureSeeded } = await import('./lib/memoryDb');
+    await ensureSeeded();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
