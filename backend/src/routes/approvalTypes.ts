@@ -10,7 +10,7 @@ import {
 
 const router = Router();
 
-router.get('/approval-types', requireAuth, async (_req, res, next) => {
+router.get('/approval-types', async (_req, res, next) => {
   try {
     res.json(await approvalService.listApprovalTypes());
   } catch (err) {
@@ -18,7 +18,7 @@ router.get('/approval-types', requireAuth, async (_req, res, next) => {
   }
 });
 
-router.get('/prescribed-forms', requireAuth, async (_req, res, next) => {
+router.get('/prescribed-forms', async (_req, res, next) => {
   try {
     res.json(listPrescribedForms());
   } catch (err) {
@@ -26,7 +26,7 @@ router.get('/prescribed-forms', requireAuth, async (_req, res, next) => {
   }
 });
 
-router.get('/prescribed-forms/:id', requireAuth, async (req, res, next) => {
+router.get('/prescribed-forms/:id', async (req, res, next) => {
   try {
     const form = getPrescribedFormById(req.params.id);
     if (!form) {

@@ -466,8 +466,8 @@ async function seedApprovalTypes() {
   for (const at of approvalTypes) {
     await prisma.approvalType.upsert({
       where: { id: at.id },
-      update: {},
-      create: at,
+      update: { active: true },
+      create: { ...at, active: true },
     });
   }
 }

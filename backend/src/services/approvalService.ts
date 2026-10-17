@@ -6,7 +6,6 @@ import { EvaluableRule, ProjectProfile } from '../rule-engine/types';
 
 export async function listApprovalTypes() {
   const types = await prisma.approvalType.findMany({
-    where: { active: true },
     include: {
       document_requirements: true,
       applicability_rules: true,
@@ -19,10 +18,13 @@ export async function listApprovalTypes() {
     },
     orderBy: { name: 'asc' },
   });
-  return types.map((t) => ({
-    ...t,
-    prescribed_form: getPrescribedFormForApproval(t.name),
-  }));
+  return types
+    .filter((t: any) => t.active !== false)
+    .map((t: any) => ({
+      ...t,
+      active: t.active ?? true,
+      prescribed_form: getPrescribedFormForApproval(t.name),
+    }));
 }
 
 export async function getApprovalType(id: string) {
