@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { documentsApi } from '@/lib/api';
+import { Portal } from '@/components/ui/Portal';
 import {
   Sparkles,
   AlertTriangle,
@@ -429,108 +430,110 @@ export function DocumentDetailCentreView({ projectId }: Props) {
 
       {/* Modal: Edit / Confirm Master Value (B0.3) */}
       {editField && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 animate-scale-in">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-primary-100 text-primary-700 flex items-center justify-center">
-                  <Edit3 className="w-4 h-4" />
+        <Portal>
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 animate-scale-in">
+              <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-primary-100 text-primary-700 flex items-center justify-center">
+                    <Edit3 className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-gray-900">Confirm Master Value</h3>
+                    <p className="text-[11px] text-gray-500">{editField.label} ({editField.field_key})</p>
+                  </div>
                 </div>
+                <button
+                  onClick={() => setEditField(null)}
+                  className="p-1 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveEdit} className="space-y-4">
                 <div>
-                  <h3 className="text-sm font-bold text-gray-900">Confirm Master Value</h3>
-                  <p className="text-[11px] text-gray-500">{editField.label} ({editField.field_key})</p>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">
+                    Authoritative Master Value *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
+                    className="input-base text-sm font-semibold py-2"
+                    placeholder="Enter confirmed value"
+                  />
                 </div>
-              </div>
-              <button
-                onClick={() => setEditField(null)}
-                className="p-1 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
 
-            <form onSubmit={handleSaveEdit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">
-                  Authoritative Master Value *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={editValue}
-                  onChange={(e) => setEditValue(e.target.value)}
-                  className="input-base text-sm font-semibold py-2"
-                  placeholder="Enter confirmed value"
-                />
-              </div>
+                {/* Source Exhibit Quick-Picks */}
+                {editField.occurrences?.length > 0 && (
+                  <div className="space-y-1.5">
+                    <span className="text-[11px] text-gray-500 font-medium">Or select from source document exhibits:</span>
+                    <div className="space-y-1 max-h-36 overflow-y-auto">
+                      {editField.occurrences.map((occ: any, idx: number) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setEditValue(String(occ.raw_value))}
+                          className={`w-full p-2 rounded-lg border text-left text-xs transition-colors flex items-center justify-between ${
+                            editValue === String(occ.raw_value)
+                              ? 'border-primary-500 bg-primary-50/60 font-bold text-primary-900'
+                              : 'border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700'
+                          }`}
+                        >
+                          <span className="truncate pr-2">{occ.document_type}</span>
+                          <span className="font-mono text-xs">{String(occ.raw_value)}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
-              {/* Source Exhibit Quick-Picks */}
-              {editField.occurrences?.length > 0 && (
-                <div className="space-y-1.5">
-                  <span className="text-[11px] text-gray-500 font-medium">Or select from source document exhibits:</span>
-                  <div className="space-y-1 max-h-36 overflow-y-auto">
-                    {editField.occurrences.map((occ: any, idx: number) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={() => setEditValue(String(occ.raw_value))}
-                        className={`w-full p-2 rounded-lg border text-left text-xs transition-colors flex items-center justify-between ${
-                          editValue === String(occ.raw_value)
-                            ? 'border-primary-500 bg-primary-50/60 font-bold text-primary-900'
-                            : 'border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700'
-                        }`}
-                      >
-                        <span className="truncate pr-2">{occ.document_type}</span>
-                        <span className="font-mono text-xs">{String(occ.raw_value)}</span>
-                      </button>
+                {/* Downstream propagation note */}
+                <div className="p-3 rounded-xl bg-blue-50/80 border border-blue-200 text-blue-900 text-xs space-y-1">
+                  <p className="font-bold flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-blue-600" />
+                    Automatic Downstream Propagation
+                  </p>
+                  <p className="text-[11px] leading-relaxed text-blue-800">
+                    Confirming this value will update your project attributes and cascade to:
+                  </p>
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {editField.downstream_targets?.map((t: string) => (
+                      <span key={t} className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-white text-blue-800 border border-blue-200">
+                        {t}
+                      </span>
                     ))}
                   </div>
                 </div>
-              )}
 
-              {/* Downstream propagation note */}
-              <div className="p-3 rounded-xl bg-blue-50/80 border border-blue-200 text-blue-900 text-xs space-y-1">
-                <p className="font-bold flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-blue-600" />
-                  Automatic Downstream Propagation
-                </p>
-                <p className="text-[11px] leading-relaxed text-blue-800">
-                  Confirming this value will update your project attributes and cascade to:
-                </p>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {editField.downstream_targets?.map((t: string) => (
-                    <span key={t} className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-white text-blue-800 border border-blue-200">
-                      {t}
-                    </span>
-                  ))}
+                {editError && (
+                  <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700">
+                    {editError}
+                  </div>
+                )}
+
+                <div className="pt-2 flex items-center justify-end gap-2 border-t border-gray-100">
+                  <button
+                    type="button"
+                    onClick={() => setEditField(null)}
+                    className="btn-secondary text-xs py-2 px-3"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={updateMutation.isPending}
+                    className="btn-primary text-xs py-2 px-4 shadow-sm"
+                  >
+                    {updateMutation.isPending ? 'Propagating Value...' : 'Confirm & Save Master Value'}
+                  </button>
                 </div>
-              </div>
-
-              {editError && (
-                <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700">
-                  {editError}
-                </div>
-              )}
-
-              <div className="pt-2 flex items-center justify-end gap-2 border-t border-gray-100">
-                <button
-                  type="button"
-                  onClick={() => setEditField(null)}
-                  className="btn-secondary text-xs py-2 px-3"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={updateMutation.isPending}
-                  className="btn-primary text-xs py-2 px-4 shadow-sm"
-                >
-                  {updateMutation.isPending ? 'Propagating Value...' : 'Confirm & Save Master Value'}
-                </button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
-        </div>
+        </Portal>
       )}
     </div>
   );

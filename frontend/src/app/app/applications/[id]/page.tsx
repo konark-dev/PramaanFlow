@@ -13,6 +13,7 @@ import {
 } from '@/lib/api';
 import { StatusBadge, PriorityBadge } from '@/components/ui/StatusBadge';
 import { CardSkeleton, EmptyState, ErrorState } from '@/components/ui/States';
+import { Portal } from '@/components/ui/Portal';
 import { formatDate, formatDateTime, formatCurrency } from '@/lib/utils';
 import { formatRole } from '@/lib/terminology';
 import type {
@@ -1489,369 +1490,379 @@ export default function ApplicationWorkspacePage() {
 
       {/* MODAL: Attach from Vault */}
       {showAttachVaultModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-6 space-y-4 my-auto max-h-[85vh] flex flex-col animate-scale-in">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-              <h3 className="text-sm font-bold text-gray-900">Attach Document from Project Vault</h3>
-              <button
-                onClick={() => setShowAttachVaultModal(false)}
-                className="text-gray-400 hover:text-gray-600 text-lg"
-              >
-                ×
-              </button>
-            </div>
-            <p className="text-xs text-gray-500">
-              Select existing documents from your vault to link to this application without re-uploading.
-            </p>
-            <div className="flex-1 overflow-y-auto space-y-2">
-              {vaultDocs?.map((doc) => {
-                const isAttached = attachedDocs.some((ad) => ad.document_id === doc.id);
-                return (
-                  <div
-                    key={doc.id}
-                    className="flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:bg-gray-50"
-                  >
-                    <div>
-                      <p className="text-xs font-semibold text-gray-900">{doc.document_type}</p>
-                      <p className="text-[11px] text-gray-400 font-mono">{doc.file_name}</p>
-                      <p className="text-[10px] text-gray-500 mt-0.5">
-                        Reused in {doc.reuse_count} application{doc.reuse_count !== 1 ? 's' : ''}
-                      </p>
+        <Portal>
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-6 space-y-4 my-auto max-h-[85vh] flex flex-col animate-scale-in">
+              <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+                <h3 className="text-sm font-bold text-gray-900">Attach Document from Project Vault</h3>
+                <button
+                  onClick={() => setShowAttachVaultModal(false)}
+                  className="text-gray-400 hover:text-gray-600 text-lg"
+                >
+                  ×
+                </button>
+              </div>
+              <p className="text-xs text-gray-500">
+                Select existing documents from your vault to link to this application without re-uploading.
+              </p>
+              <div className="flex-1 overflow-y-auto space-y-2">
+                {vaultDocs?.map((doc) => {
+                  const isAttached = attachedDocs.some((ad) => ad.document_id === doc.id);
+                  return (
+                    <div
+                      key={doc.id}
+                      className="flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:bg-gray-50"
+                    >
+                      <div>
+                        <p className="text-xs font-semibold text-gray-900">{doc.document_type}</p>
+                        <p className="text-[11px] text-gray-400 font-mono">{doc.file_name}</p>
+                        <p className="text-[10px] text-gray-500 mt-0.5">
+                          Reused in {doc.reuse_count} application{doc.reuse_count !== 1 ? 's' : ''}
+                        </p>
+                      </div>
+                      <div>
+                        {isAttached ? (
+                          <span className="text-[11px] text-green-700 bg-green-50 px-2 py-1 rounded font-semibold">
+                            Attached
+                          </span>
+                        ) : (
+                          <button
+                            onClick={() => attachDoc.mutate(doc.id)}
+                            disabled={attachDoc.isPending}
+                            className="btn-primary text-xs py-1 px-3"
+                          >
+                            Attach
+                          </button>
+                        )}
+                      </div>
                     </div>
-                    <div>
-                      {isAttached ? (
-                        <span className="text-[11px] text-green-700 bg-green-50 px-2 py-1 rounded font-semibold">
-                          Attached
-                        </span>
-                      ) : (
-                        <button
-                          onClick={() => attachDoc.mutate(doc.id)}
-                          disabled={attachDoc.isPending}
-                          className="btn-primary text-xs py-1 px-3"
-                        >
-                          Attach
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="pt-3 border-t border-gray-100 flex justify-end">
-              <button onClick={() => setShowAttachVaultModal(false)} className="btn-secondary text-xs py-1.5">
-                Close
-              </button>
+                  );
+                })}
+              </div>
+              <div className="pt-3 border-t border-gray-100 flex justify-end">
+                <button onClick={() => setShowAttachVaultModal(false)} className="btn-secondary text-xs py-1.5">
+                  Close
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </Portal>
       )}
 
       {/* MODAL: Upload New Document */}
       {showUploadModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 my-auto max-h-[90vh] overflow-y-auto animate-scale-in">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-              <div>
-                <h3 className="text-sm font-bold text-gray-900">Upload & Attach Document</h3>
-                <p className="text-xs text-gray-400">Statutory multi-tier pre-validation will be executed before attachment.</p>
+        <Portal>
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 my-auto max-h-[90vh] overflow-y-auto animate-scale-in">
+              <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+                <div>
+                  <h3 className="text-sm font-bold text-gray-900">Upload & Attach Document</h3>
+                  <p className="text-xs text-gray-400">Statutory multi-tier pre-validation will be executed before attachment.</p>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowUploadModal(false);
+                    setUploadValidation(null);
+                    setUploadFile(null);
+                  }}
+                  className="text-gray-400 hover:text-gray-600 text-lg"
+                >
+                  ×
+                </button>
               </div>
-              <button
-                onClick={() => {
-                  setShowUploadModal(false);
-                  setUploadValidation(null);
-                  setUploadFile(null);
-                }}
-                className="text-gray-400 hover:text-gray-600 text-lg"
-              >
-                ×
-              </button>
-            </div>
-            <div className="space-y-3 text-xs">
-              <div>
-                <label className="font-semibold text-gray-700">Document Type</label>
-                <input
-                  type="text"
-                  value={uploadDocType}
-                  onChange={(e) => {
-                    setUploadDocType(e.target.value);
-                    if (uploadFile) {
-                      handleUploadFileSelected(uploadFile);
+              <div className="space-y-3 text-xs">
+                <div>
+                  <label className="font-semibold text-gray-700">Document Type</label>
+                  <input
+                    type="text"
+                    value={uploadDocType}
+                    onChange={(e) => {
+                      setUploadDocType(e.target.value);
+                      if (uploadFile) {
+                        handleUploadFileSelected(uploadFile);
+                      }
+                    }}
+                    placeholder="e.g. Fire Safety Layout Drawing"
+                    className="input-base text-xs mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold text-gray-700">Select File (PDF, JPG, PNG)</label>
+                  <input
+                    type="file"
+                    onChange={(e) => handleUploadFileSelected(e.target.files?.[0] || null)}
+                    className="mt-1 block w-full text-xs text-gray-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold text-gray-700">Expiry Date (if applicable)</label>
+                  <input
+                    type="date"
+                    value={uploadExpiryDate}
+                    onChange={(e) => setUploadExpiryDate(e.target.value)}
+                    className="input-base text-xs mt-1"
+                  />
+                </div>
+
+                {/* Pre-validation feedback card */}
+                <DocumentPreValidationCard
+                  result={uploadValidation}
+                  isValidating={isUploadValidating}
+                  onResetFile={() => {
+                    setUploadFile(null);
+                    setUploadValidation(null);
+                  }}
+                />
+              </div>
+              <div className="pt-3 border-t border-gray-100 flex justify-end gap-2">
+                <button
+                  onClick={() => {
+                    setShowUploadModal(false);
+                    setUploadValidation(null);
+                    setUploadFile(null);
+                  }}
+                  className="btn-secondary text-xs py-1.5"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    if (uploadDocType && uploadFile) {
+                      uploadDoc.mutate({
+                        docType: uploadDocType,
+                        file: uploadFile,
+                        expiry: uploadExpiryDate || undefined,
+                      });
                     }
                   }}
-                  placeholder="e.g. Fire Safety Layout Drawing"
-                  className="input-base text-xs mt-1"
-                />
-              </div>
-              <div>
-                <label className="font-semibold text-gray-700">Select File (PDF, JPG, PNG)</label>
-                <input
-                  type="file"
-                  onChange={(e) => handleUploadFileSelected(e.target.files?.[0] || null)}
-                  className="mt-1 block w-full text-xs text-gray-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
-                />
-              </div>
-              <div>
-                <label className="font-semibold text-gray-700">Expiry Date (if applicable)</label>
-                <input
-                  type="date"
-                  value={uploadExpiryDate}
-                  onChange={(e) => setUploadExpiryDate(e.target.value)}
-                  className="input-base text-xs mt-1"
-                />
-              </div>
-
-              {/* Pre-validation feedback card */}
-              <DocumentPreValidationCard
-                result={uploadValidation}
-                isValidating={isUploadValidating}
-                onResetFile={() => {
-                  setUploadFile(null);
-                  setUploadValidation(null);
-                }}
-              />
-            </div>
-            <div className="pt-3 border-t border-gray-100 flex justify-end gap-2">
-              <button
-                onClick={() => {
-                  setShowUploadModal(false);
-                  setUploadValidation(null);
-                  setUploadFile(null);
-                }}
-                className="btn-secondary text-xs py-1.5"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  if (uploadDocType && uploadFile) {
-                    uploadDoc.mutate({
-                      docType: uploadDocType,
-                      file: uploadFile,
-                      expiry: uploadExpiryDate || undefined,
-                    });
+                  disabled={
+                    !uploadDocType ||
+                    !uploadFile ||
+                    uploadDoc.isPending ||
+                    isUploadValidating ||
+                    (uploadValidation !== null && !uploadValidation.accepted)
                   }
-                }}
-                disabled={
-                  !uploadDocType ||
-                  !uploadFile ||
-                  uploadDoc.isPending ||
-                  isUploadValidating ||
-                  (uploadValidation !== null && !uploadValidation.accepted)
-                }
-                className="btn-primary text-xs py-1.5"
-              >
-                {uploadDoc.isPending ? 'Uploading...' : 'Upload & Attach'}
-              </button>
+                  className="btn-primary text-xs py-1.5"
+                >
+                  {uploadDoc.isPending ? 'Uploading...' : 'Upload & Attach'}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </Portal>
       )}
 
       {/* MODAL: Replace Document */}
       {showReplaceModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 my-auto max-h-[90vh] overflow-y-auto animate-scale-in">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-              <div>
-                <h3 className="text-sm font-bold text-gray-900">Upload Replacement Document</h3>
-                <p className="text-xs text-gray-400">
-                  Target:{' '}
-                  <span className="font-semibold text-gray-700">
-                    {application?.application_documents?.find((d: any) => d.document?.id === showReplaceModal)?.document?.document_type ||
-                      'Statutory Document'}
-                  </span>
-                </p>
-              </div>
-              <button
-                onClick={() => {
-                  setShowReplaceModal(null);
-                  setReplaceValidation(null);
-                  setUploadFile(null);
-                }}
-                className="text-gray-400 hover:text-gray-600 text-lg"
-              >
-                ×
-              </button>
-            </div>
-            <p className="text-xs text-gray-500">
-              Uploading a replacement will increment the document version and reset verification status to PENDING for
-              officer review.
-            </p>
-            <div className="space-y-3 text-xs">
-              <div>
-                <label className="font-semibold text-gray-700">Replacement File</label>
-                <input
-                  type="file"
-                  onChange={(e) => {
-                    const targetDocType =
-                      application?.application_documents?.find((d: any) => d.document?.id === showReplaceModal)?.document?.document_type ||
-                      'Statutory Document';
-                    handleReplaceFileSelected(e.target.files?.[0] || null, targetDocType);
+        <Portal>
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 my-auto max-h-[90vh] overflow-y-auto animate-scale-in">
+              <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+                <div>
+                  <h3 className="text-sm font-bold text-gray-900">Upload Replacement Document</h3>
+                  <p className="text-xs text-gray-400">
+                    Target:{' '}
+                    <span className="font-semibold text-gray-700">
+                      {application?.application_documents?.find((d: any) => d.document?.id === showReplaceModal)?.document?.document_type ||
+                        'Statutory Document'}
+                    </span>
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowReplaceModal(null);
+                    setReplaceValidation(null);
+                    setUploadFile(null);
                   }}
-                  className="mt-1 block w-full text-xs text-gray-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
-                />
+                  className="text-gray-400 hover:text-gray-600 text-lg"
+                >
+                  ×
+                </button>
               </div>
-              <div>
-                <label className="font-semibold text-gray-700">New Expiry Date (optional)</label>
-                <input
-                  type="date"
-                  value={uploadExpiryDate}
-                  onChange={(e) => setUploadExpiryDate(e.target.value)}
-                  className="input-base text-xs mt-1"
-                />
-              </div>
+              <p className="text-xs text-gray-500">
+                Uploading a replacement will increment the document version and reset verification status to PENDING for
+                officer review.
+              </p>
+              <div className="space-y-3 text-xs">
+                <div>
+                  <label className="font-semibold text-gray-700">Replacement File</label>
+                  <input
+                    type="file"
+                    onChange={(e) => {
+                      const targetDocType =
+                        application?.application_documents?.find((d: any) => d.document?.id === showReplaceModal)?.document?.document_type ||
+                        'Statutory Document';
+                      handleReplaceFileSelected(e.target.files?.[0] || null, targetDocType);
+                    }}
+                    className="mt-1 block w-full text-xs text-gray-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold text-gray-700">New Expiry Date (optional)</label>
+                  <input
+                    type="date"
+                    value={uploadExpiryDate}
+                    onChange={(e) => setUploadExpiryDate(e.target.value)}
+                    className="input-base text-xs mt-1"
+                  />
+                </div>
 
-              {/* Pre-validation feedback card */}
-              <DocumentPreValidationCard
-                result={replaceValidation}
-                isValidating={isReplaceValidating}
-                onResetFile={() => {
-                  setUploadFile(null);
-                  setReplaceValidation(null);
-                }}
-              />
-            </div>
-            <div className="pt-3 border-t border-gray-100 flex justify-end gap-2">
-              <button
-                onClick={() => {
-                  setShowReplaceModal(null);
-                  setReplaceValidation(null);
-                  setUploadFile(null);
-                }}
-                className="btn-secondary text-xs py-1.5"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  if (uploadFile) {
-                    replaceDoc.mutate({
-                      docId: showReplaceModal,
-                      file: uploadFile,
-                      expiry: uploadExpiryDate || undefined,
-                    });
+                {/* Pre-validation feedback card */}
+                <DocumentPreValidationCard
+                  result={replaceValidation}
+                  isValidating={isReplaceValidating}
+                  onResetFile={() => {
+                    setUploadFile(null);
+                    setReplaceValidation(null);
+                  }}
+                />
+              </div>
+              <div className="pt-3 border-t border-gray-100 flex justify-end gap-2">
+                <button
+                  onClick={() => {
+                    setShowReplaceModal(null);
+                    setReplaceValidation(null);
+                    setUploadFile(null);
+                  }}
+                  className="btn-secondary text-xs py-1.5"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    if (uploadFile) {
+                      replaceDoc.mutate({
+                        docId: showReplaceModal,
+                        file: uploadFile,
+                        expiry: uploadExpiryDate || undefined,
+                      });
+                    }
+                  }}
+                  disabled={
+                    !uploadFile ||
+                    replaceDoc.isPending ||
+                    isReplaceValidating ||
+                    (replaceValidation !== null && !replaceValidation.accepted)
                   }
-                }}
-                disabled={
-                  !uploadFile ||
-                  replaceDoc.isPending ||
-                  isReplaceValidating ||
-                  (replaceValidation !== null && !replaceValidation.accepted)
-                }
-                className="btn-primary text-xs py-1.5"
-              >
-                {replaceDoc.isPending ? 'Replacing...' : 'Confirm Replacement'}
-              </button>
+                  className="btn-primary text-xs py-1.5"
+                >
+                  {replaceDoc.isPending ? 'Replacing...' : 'Confirm Replacement'}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </Portal>
       )}
 
       {/* MODAL: Reschedule Inspection */}
       {rescheduleInspectionModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 my-auto max-h-[90vh] overflow-y-auto animate-scale-in">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-              <h3 className="text-sm font-bold text-gray-900">Request Inspection Reschedule</h3>
-              <button
-                onClick={() => setRescheduleInspectionModal(null)}
-                className="text-gray-400 hover:text-gray-600 text-lg"
-              >
-                ×
-              </button>
-            </div>
-            <div className="space-y-3 text-xs">
-              <div>
-                <label className="font-semibold text-gray-700">Proposed New Date & Time</label>
-                <input
-                  type="datetime-local"
-                  value={rescheduleDate}
-                  onChange={(e) => setRescheduleDate(e.target.value)}
-                  className="input-base text-xs mt-1"
-                />
+        <Portal>
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 my-auto max-h-[90vh] overflow-y-auto animate-scale-in">
+              <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+                <h3 className="text-sm font-bold text-gray-900">Request Inspection Reschedule</h3>
+                <button
+                  onClick={() => setRescheduleInspectionModal(null)}
+                  className="text-gray-400 hover:text-gray-600 text-lg"
+                >
+                  ×
+                </button>
               </div>
-              <div>
-                <label className="font-semibold text-gray-700">Reason for Request</label>
-                <textarea
-                  rows={3}
-                  value={rescheduleReason}
-                  onChange={(e) => setRescheduleReason(e.target.value)}
-                  placeholder="e.g. Civil construction team requires 3 additional days for safety barrier placement..."
-                  className="input-base text-xs mt-1"
-                />
+              <div className="space-y-3 text-xs">
+                <div>
+                  <label className="font-semibold text-gray-700">Proposed New Date & Time</label>
+                  <input
+                    type="datetime-local"
+                    value={rescheduleDate}
+                    onChange={(e) => setRescheduleDate(e.target.value)}
+                    className="input-base text-xs mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold text-gray-700">Reason for Request</label>
+                  <textarea
+                    rows={3}
+                    value={rescheduleReason}
+                    onChange={(e) => setRescheduleReason(e.target.value)}
+                    placeholder="e.g. Civil construction team requires 3 additional days for safety barrier placement..."
+                    className="input-base text-xs mt-1"
+                  />
+                </div>
               </div>
-            </div>
-            <div className="pt-3 border-t border-gray-100 flex justify-end gap-2">
-              <button onClick={() => setRescheduleInspectionModal(null)} className="btn-secondary text-xs py-1.5">
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  if (rescheduleInspectionModal) {
-                    updateInspection.mutate({
-                      inspId: rescheduleInspectionModal,
-                      action: 'reschedule',
-                      scheduledDate: rescheduleDate || undefined,
-                      notes: rescheduleReason || 'Applicant proposed alternative date',
-                    });
-                  }
-                }}
-                disabled={updateInspection.isPending}
-                className="btn-primary text-xs py-1.5"
-              >
-                {updateInspection.isPending ? 'Sending...' : 'Send Reschedule Request'}
-              </button>
+              <div className="pt-3 border-t border-gray-100 flex justify-end gap-2">
+                <button onClick={() => setRescheduleInspectionModal(null)} className="btn-secondary text-xs py-1.5">
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    if (rescheduleInspectionModal) {
+                      updateInspection.mutate({
+                        inspId: rescheduleInspectionModal,
+                        action: 'reschedule',
+                        scheduledDate: rescheduleDate || undefined,
+                        notes: rescheduleReason || 'Applicant proposed alternative date',
+                      });
+                    }
+                  }}
+                  disabled={updateInspection.isPending}
+                  className="btn-primary text-xs py-1.5"
+                >
+                  {updateInspection.isPending ? 'Sending...' : 'Send Reschedule Request'}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </Portal>
       )}
 
       {/* MODAL: Submit Application Confirmation */}
       {showSubmitConfirmModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 my-auto max-h-[90vh] overflow-y-auto animate-scale-in">
-            <div className="flex items-center gap-3 text-primary-600">
-              <Send className="w-6 h-6" />
-              <h3 className="text-base font-bold text-gray-900">Submit Application</h3>
-            </div>
-            <p className="text-xs text-gray-600 leading-relaxed">
-              You are about to officially submit application{' '}
-              <span className="font-mono font-bold text-gray-900">{app.application_number}</span> to{' '}
-              <span className="font-bold text-gray-900">{app.department?.name || approvalType.authority}</span>.
-            </p>
-            <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-[11px] text-amber-800">
-              Note: Upon submission, your application status transitions to <strong>SUBMITTED</strong>, the department
-              review clock begins under configured SLA policies, and an immutable audit event will be recorded.
-            </div>
-            <div>
-              <label className="text-xs font-semibold text-gray-700">Submission Notes (Optional)</label>
-              <input
-                type="text"
-                value={actionNotes}
-                onChange={(e) => setActionNotes(e.target.value)}
-                placeholder="e.g. All structural drawings and NOC requirements attached."
-                className="input-base text-xs mt-1"
-              />
-            </div>
-            <div className="pt-3 border-t border-gray-100 flex justify-end gap-2">
-              <button onClick={() => setShowSubmitConfirmModal(false)} className="btn-secondary text-xs py-1.5">
-                Cancel
-              </button>
-              <button
-                onClick={() =>
-                  updateStatus.mutate({
-                    status: 'SUBMITTED',
-                    notes: actionNotes || 'Application submitted by applicant.',
-                  })
-                }
-                disabled={updateStatus.isPending}
-                className="btn-primary text-xs py-1.5 bg-green-700 hover:bg-green-800"
-              >
-                {updateStatus.isPending ? 'Submitting...' : 'Confirm Submission'}
-              </button>
+        <Portal>
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 my-auto max-h-[90vh] overflow-y-auto animate-scale-in">
+              <div className="flex items-center gap-3 text-primary-600">
+                <Send className="w-6 h-6" />
+                <h3 className="text-base font-bold text-gray-900">Submit Application</h3>
+              </div>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                You are about to officially submit application{' '}
+                <span className="font-mono font-bold text-gray-900">{app.application_number}</span> to{' '}
+                <span className="font-bold text-gray-900">{app.department?.name || approvalType.authority}</span>.
+              </p>
+              <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-[11px] text-amber-800">
+                Note: Upon submission, your application status transitions to <strong>SUBMITTED</strong>, the department
+                review clock begins under configured SLA policies, and an immutable audit event will be recorded.
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-gray-700">Submission Notes (Optional)</label>
+                <input
+                  type="text"
+                  value={actionNotes}
+                  onChange={(e) => setActionNotes(e.target.value)}
+                  placeholder="e.g. All structural drawings and NOC requirements attached."
+                  className="input-base text-xs mt-1"
+                />
+              </div>
+              <div className="pt-3 border-t border-gray-100 flex justify-end gap-2">
+                <button onClick={() => setShowSubmitConfirmModal(false)} className="btn-secondary text-xs py-1.5">
+                  Cancel
+                </button>
+                <button
+                  onClick={() =>
+                    updateStatus.mutate({
+                      status: 'SUBMITTED',
+                      notes: actionNotes || 'Application submitted by applicant.',
+                    })
+                  }
+                  disabled={updateStatus.isPending}
+                  className="btn-primary text-xs py-1.5 bg-green-700 hover:bg-green-800"
+                >
+                  {updateStatus.isPending ? 'Submitting...' : 'Confirm Submission'}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </Portal>
       )}
     </div>
   );

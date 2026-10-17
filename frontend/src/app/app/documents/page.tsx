@@ -12,6 +12,7 @@ import { CrossDocumentConsistencyCard } from '@/components/documents/CrossDocume
 import { ClearanceDocumentGuidanceView } from '@/components/documents/ClearanceDocumentGuidanceView';
 import { DigiLockerVerificationCard } from '@/components/documents/DigiLockerVerificationCard';
 import { DocumentDetailCentreView } from '@/components/documents/DocumentDetailCentreView';
+import { Portal } from '@/components/ui/Portal';
 import {
   FileText,
   Upload,
@@ -560,255 +561,262 @@ export default function DocumentsPage() {
 
       {/* MODAL: Upload Document */}
       {showUploadModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 my-auto max-h-[90vh] overflow-y-auto animate-scale-in">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-              <div>
-                <h3 className="text-sm font-bold text-gray-900">Upload to Document Vault</h3>
-                <p className="text-xs text-gray-400">Statutory multi-tier pre-validation & field extraction will be executed.</p>
+        <Portal>
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 my-auto max-h-[90vh] overflow-y-auto animate-scale-in">
+              <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+                <div>
+                  <h3 className="text-sm font-bold text-gray-900">Upload to Document Vault</h3>
+                  <p className="text-xs text-gray-400">Statutory multi-tier pre-validation & field extraction will be executed.</p>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowUploadModal(false);
+                    setUploadValidation(null);
+                    setUploadFile(null);
+                  }}
+                  className="text-gray-400 hover:text-gray-600 text-lg"
+                >
+                  ×
+                </button>
               </div>
-              <button
-                onClick={() => {
-                  setShowUploadModal(false);
-                  setUploadValidation(null);
-                  setUploadFile(null);
-                }}
-                className="text-gray-400 hover:text-gray-600 text-lg"
-              >
-                ×
-              </button>
-            </div>
-            <div className="space-y-3 text-xs">
-              <div>
-                <label className="font-semibold text-gray-700">Document Type / Name</label>
-                <input
-                  type="text"
-                  value={uploadDocType}
-                  onChange={(e) => {
-                    setUploadDocType(e.target.value);
-                    if (uploadFile) {
-                      handleUploadFileSelected(uploadFile);
+              <div className="space-y-3 text-xs">
+                <div>
+                  <label className="font-semibold text-gray-700">Document Type / Name</label>
+                  <input
+                    type="text"
+                    value={uploadDocType}
+                    onChange={(e) => {
+                      setUploadDocType(e.target.value);
+                      if (uploadFile) {
+                        handleUploadFileSelected(uploadFile);
+                      }
+                    }}
+                    placeholder="e.g. Company PAN Card, Lease Agreement / Land Title"
+                    className="input-base text-xs mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold text-gray-700">Select File (PDF, PNG, JPG)</label>
+                  <input
+                    type="file"
+                    accept=".pdf,.png,.jpg,.jpeg"
+                    onChange={(e) => handleUploadFileSelected(e.target.files?.[0] || null)}
+                    className="mt-1 block w-full text-xs text-gray-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold text-gray-700">Expiry Date (optional)</label>
+                  <input
+                    type="date"
+                    value={uploadExpiryDate}
+                    onChange={(e) => setUploadExpiryDate(e.target.value)}
+                    className="input-base text-xs mt-1"
+                  />
+                </div>
+
+                {/* Pre-validation feedback card */}
+                <DocumentPreValidationCard
+                  result={uploadValidation}
+                  isValidating={isUploadValidating}
+                  onResetFile={() => {
+                    setUploadFile(null);
+                    setUploadValidation(null);
+                  }}
+                />
+              </div>
+              <div className="pt-3 border-t border-gray-100 flex justify-end gap-2">
+                <button
+                  onClick={() => {
+                    setShowUploadModal(false);
+                    setUploadValidation(null);
+                    setUploadFile(null);
+                  }}
+                  className="btn-secondary text-xs py-1.5"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    if (uploadFile && uploadDocType) {
+                      uploadDoc.mutate({
+                        docType: uploadDocType,
+                        file: uploadFile,
+                        expiry: uploadExpiryDate || undefined,
+                      });
                     }
                   }}
-                  placeholder="e.g. Company PAN Card, Lease Agreement / Land Title"
-                  className="input-base text-xs mt-1"
-                />
-              </div>
-              <div>
-                <label className="font-semibold text-gray-700">Select File (PDF, PNG, JPG)</label>
-                <input
-                  type="file"
-                  accept=".pdf,.png,.jpg,.jpeg"
-                  onChange={(e) => handleUploadFileSelected(e.target.files?.[0] || null)}
-                  className="mt-1 block w-full text-xs text-gray-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
-                />
-              </div>
-              <div>
-                <label className="font-semibold text-gray-700">Expiry Date (optional)</label>
-                <input
-                  type="date"
-                  value={uploadExpiryDate}
-                  onChange={(e) => setUploadExpiryDate(e.target.value)}
-                  className="input-base text-xs mt-1"
-                />
-              </div>
-
-              {/* Pre-validation feedback card */}
-              <DocumentPreValidationCard
-                result={uploadValidation}
-                isValidating={isUploadValidating}
-                onResetFile={() => {
-                  setUploadFile(null);
-                  setUploadValidation(null);
-                }}
-              />
-            </div>
-            <div className="pt-3 border-t border-gray-100 flex justify-end gap-2">
-              <button
-                onClick={() => {
-                  setShowUploadModal(false);
-                  setUploadValidation(null);
-                  setUploadFile(null);
-                }}
-                className="btn-secondary text-xs py-1.5"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  if (uploadFile && uploadDocType) {
-                    uploadDoc.mutate({
-                      docType: uploadDocType,
-                      file: uploadFile,
-                      expiry: uploadExpiryDate || undefined,
-                    });
+                  disabled={
+                    !uploadFile ||
+                    !uploadDocType ||
+                    uploadDoc.isPending ||
+                    isUploadValidating ||
+                    (uploadValidation !== null && !uploadValidation.accepted)
                   }
-                }}
-                disabled={
-                  !uploadFile ||
-                  !uploadDocType ||
-                  uploadDoc.isPending ||
-                  isUploadValidating ||
-                  (uploadValidation !== null && !uploadValidation.accepted)
-                }
-                className="btn-primary text-xs py-1.5"
-              >
-                {uploadDoc.isPending ? 'Uploading & Extracting...' : 'Upload & Extract'}
-              </button>
+                  className="btn-primary text-xs py-1.5"
+                >
+                  {uploadDoc.isPending ? 'Uploading & Extracting...' : 'Upload & Extract'}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </Portal>
       )}
 
       {/* MODAL: Replace Document */}
       {replaceDocId && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 my-auto max-h-[90vh] overflow-y-auto animate-scale-in">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-              <div>
-                <h3 className="text-sm font-bold text-gray-900">Upload Document Replacement</h3>
-                <p className="text-xs text-gray-400">Replaces the file and triggers automatic re-extraction</p>
-              </div>
-              <button
-                onClick={() => {
-                  setReplaceDocId(null);
-                  setReplaceValidation(null);
-                  setReplaceFile(null);
-                }}
-                className="text-gray-400 hover:text-gray-600 text-lg"
-              >
-                ×
-              </button>
-            </div>
-            <div className="space-y-3 text-xs">
-              <div>
-                <label className="font-semibold text-gray-700">Select New File (PDF, PNG, JPG)</label>
-                <input
-                  type="file"
-                  accept=".pdf,.png,.jpg,.jpeg"
-                  onChange={(e) => {
-                    const doc = documents.find((d) => d.id === replaceDocId);
-                    handleReplaceFileSelected(e.target.files?.[0] || null, doc?.document_type || 'Statutory Document');
+        <Portal>
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 my-auto max-h-[90vh] overflow-y-auto animate-scale-in">
+              <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+                <div>
+                  <h3 className="text-sm font-bold text-gray-900">Upload Document Replacement</h3>
+                  <p className="text-xs text-gray-400">Replaces the file and triggers automatic re-extraction</p>
+                </div>
+                <button
+                  onClick={() => {
+                    setReplaceDocId(null);
+                    setReplaceValidation(null);
+                    setReplaceFile(null);
                   }}
-                  className="mt-1 block w-full text-xs text-gray-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
-                />
+                  className="text-gray-400 hover:text-gray-600 text-lg"
+                >
+                  ×
+                </button>
               </div>
-              <div>
-                <label className="font-semibold text-gray-700">Updated Expiry Date (optional)</label>
-                <input
-                  type="date"
-                  value={replaceExpiryDate}
-                  onChange={(e) => setReplaceExpiryDate(e.target.value)}
-                  className="input-base text-xs mt-1"
-                />
-              </div>
+              <div className="space-y-3 text-xs">
+                <div>
+                  <label className="font-semibold text-gray-700">Select New File (PDF, PNG, JPG)</label>
+                  <input
+                    type="file"
+                    accept=".pdf,.png,.jpg,.jpeg"
+                    onChange={(e) => {
+                      const doc = documents.find((d) => d.id === replaceDocId);
+                      handleReplaceFileSelected(e.target.files?.[0] || null, doc?.document_type || 'Statutory Document');
+                    }}
+                    className="mt-1 block w-full text-xs text-gray-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold text-gray-700">Updated Expiry Date (optional)</label>
+                  <input
+                    type="date"
+                    value={replaceExpiryDate}
+                    onChange={(e) => setReplaceExpiryDate(e.target.value)}
+                    className="input-base text-xs mt-1"
+                  />
+                </div>
 
-              {/* Pre-validation feedback card */}
-              <DocumentPreValidationCard
-                result={replaceValidation}
-                isValidating={isReplaceValidating}
-                onResetFile={() => {
-                  setReplaceFile(null);
-                  setReplaceValidation(null);
-                }}
-              />
-            </div>
-            <div className="pt-3 border-t border-gray-100 flex justify-end gap-2">
-              <button
-                onClick={() => {
-                  setReplaceDocId(null);
-                  setReplaceValidation(null);
-                  setReplaceFile(null);
-                }}
-                className="btn-secondary text-xs py-1.5"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  if (replaceFile && replaceDocId) {
-                    replaceDoc.mutate({
-                      docId: replaceDocId,
-                      file: replaceFile,
-                      expiry: replaceExpiryDate || undefined,
-                    });
+                {/* Pre-validation feedback card */}
+                <DocumentPreValidationCard
+                  result={replaceValidation}
+                  isValidating={isReplaceValidating}
+                  onResetFile={() => {
+                    setReplaceFile(null);
+                    setReplaceValidation(null);
+                  }}
+                />
+              </div>
+              <div className="pt-3 border-t border-gray-100 flex justify-end gap-2">
+                <button
+                  onClick={() => {
+                    setReplaceDocId(null);
+                    setReplaceValidation(null);
+                    setReplaceFile(null);
+                  }}
+                  className="btn-secondary text-xs py-1.5"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    if (replaceFile && replaceDocId) {
+                      replaceDoc.mutate({
+                        docId: replaceDocId,
+                        file: replaceFile,
+                        expiry: replaceExpiryDate || undefined,
+                      });
+                    }
+                  }}
+                  disabled={
+                    !replaceFile ||
+                    replaceDoc.isPending ||
+                    isReplaceValidating ||
+                    (replaceValidation !== null && !replaceValidation.accepted)
                   }
-                }}
-                disabled={
-                  !replaceFile ||
-                  replaceDoc.isPending ||
-                  isReplaceValidating ||
-                  (replaceValidation !== null && !replaceValidation.accepted)
-                }
-                className="btn-primary text-xs py-1.5"
-              >
-                {replaceDoc.isPending ? 'Updating...' : 'Upload Replacement'}
-              </button>
+                  className="btn-primary text-xs py-1.5"
+                >
+                  {replaceDoc.isPending ? 'Updating...' : 'Upload Replacement'}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </Portal>
       )}
 
       {/* MODAL: Safe Deletion Confirmation (B0.4) */}
       {deleteDocModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 animate-scale-in">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0">
-                <Trash2 className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-gray-900">Delete Vault Document</h3>
-                <p className="text-xs text-gray-500">{deleteDocModal.docType}</p>
-              </div>
-            </div>
-
-            <div className="text-xs text-gray-600 space-y-2">
-              <p>
-                Are you sure you want to permanently delete <span className="font-semibold text-gray-900 font-mono">{deleteDocModal.fileName}</span>?
-              </p>
-              <p className="text-gray-500">
-                This action will delete the physical file from storage and erase any extracted fields.
-              </p>
-            </div>
-
-            {deleteError && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-800 space-y-1">
-                <div className="flex items-center gap-1.5 font-bold">
-                  <AlertTriangle className="w-4 h-4 text-red-600 flex-shrink-0" />
-                  <span>Statutory Protection Notice</span>
+        <Portal>
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 animate-scale-in">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0">
+                  <Trash2 className="w-5 h-5" />
                 </div>
-                <p className="text-[11px] leading-relaxed">{deleteError}</p>
+                <div>
+                  <h3 className="text-base font-bold text-gray-900">Delete Vault Document</h3>
+                  <p className="text-xs text-gray-500">{deleteDocModal.docType}</p>
+                </div>
               </div>
-            )}
 
-            <div className="pt-3 border-t border-gray-100 flex items-center justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setDeleteDocModal(null);
-                  setDeleteError('');
-                }}
-                className="btn-secondary text-xs py-2 px-3"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                disabled={deleteDoc.isPending}
-                onClick={() => deleteDoc.mutate(deleteDocModal.id)}
-                className="px-3.5 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold text-xs shadow-sm transition-colors"
-              >
-                {deleteDoc.isPending ? 'Deleting...' : 'Confirm Deletion'}
-              </button>
+              <div className="text-xs text-gray-600 space-y-2">
+                <p>
+                  Are you sure you want to permanently delete <span className="font-semibold text-gray-900 font-mono">{deleteDocModal.fileName}</span>?
+                </p>
+                <p className="text-gray-500">
+                  This action will delete the physical file from storage and erase any extracted fields.
+                </p>
+              </div>
+
+              {deleteError && (
+                <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-800 space-y-1">
+                  <div className="flex items-center gap-1.5 font-bold">
+                    <AlertTriangle className="w-4 h-4 text-red-600 flex-shrink-0" />
+                    <span>Statutory Protection Notice</span>
+                  </div>
+                  <p className="text-[11px] leading-relaxed">{deleteError}</p>
+                </div>
+              )}
+
+              <div className="pt-3 border-t border-gray-100 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDeleteDocModal(null);
+                    setDeleteError('');
+                  }}
+                  className="btn-secondary text-xs py-2 px-3"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={deleteDoc.isPending}
+                  onClick={() => deleteDoc.mutate(deleteDocModal.id)}
+                  className="px-3.5 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold text-xs shadow-sm transition-colors"
+                >
+                  {deleteDoc.isPending ? 'Deleting...' : 'Confirm Deletion'}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </Portal>
       )}
 
       {/* MODAL: Document Details & Reuse View */}
       {viewDocDetailId && docDetail && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
+        <Portal>
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
           <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-6 space-y-4 my-auto max-h-[92vh] overflow-y-auto animate-scale-in">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100">
@@ -1007,6 +1015,7 @@ export default function DocumentsPage() {
             </div>
           </div>
         </div>
+      </Portal>
       )}
 
       {/* Floating Action Trigger for Upload (stays visible at any scroll depth) */}
