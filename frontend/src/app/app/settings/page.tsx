@@ -91,7 +91,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6 animate-fade-in">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-6 animate-fade-in">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
@@ -108,44 +108,44 @@ export default function SettingsPage() {
       )}
 
       {/* Tabs */}
-      <div className="flex border-b border-gray-200 gap-6">
+      <div className="flex border-b border-gray-200 gap-2 sm:gap-6 overflow-x-auto no-scrollbar scrollbar-none pb-px -mx-4 px-4 sm:mx-0 sm:px-0">
         <button
           onClick={() => setActiveTab('profile')}
-          className={`pb-3 text-sm font-medium transition-colors relative flex items-center gap-2 ${
-            activeTab === 'profile' ? 'text-primary-800 border-b-2 border-primary-700' : 'text-gray-500 hover:text-gray-700'
+          className={`pb-3 text-xs sm:text-sm font-semibold transition-colors relative flex items-center gap-1.5 sm:gap-2 whitespace-nowrap flex-shrink-0 px-2 sm:px-1 ${
+            activeTab === 'profile' ? 'text-primary-800 border-b-2 border-primary-700 font-bold' : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          <User className="w-4 h-4" />
+          <User className="w-4 h-4 flex-shrink-0" />
           <span>Profile</span>
         </button>
 
         <button
           onClick={() => setActiveTab('organization')}
-          className={`pb-3 text-sm font-medium transition-colors relative flex items-center gap-2 ${
-            activeTab === 'organization' ? 'text-primary-800 border-b-2 border-primary-700' : 'text-gray-500 hover:text-gray-700'
+          className={`pb-3 text-xs sm:text-sm font-semibold transition-colors relative flex items-center gap-1.5 sm:gap-2 whitespace-nowrap flex-shrink-0 px-2 sm:px-1 ${
+            activeTab === 'organization' ? 'text-primary-800 border-b-2 border-primary-700 font-bold' : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          <Building2 className="w-4 h-4" />
+          <Building2 className="w-4 h-4 flex-shrink-0" />
           <span>Organization</span>
         </button>
 
         <button
           onClick={() => setActiveTab('notifications')}
-          className={`pb-3 text-sm font-medium transition-colors relative flex items-center gap-2 ${
-            activeTab === 'notifications' ? 'text-primary-800 border-b-2 border-primary-700' : 'text-gray-500 hover:text-gray-700'
+          className={`pb-3 text-xs sm:text-sm font-semibold transition-colors relative flex items-center gap-1.5 sm:gap-2 whitespace-nowrap flex-shrink-0 px-2 sm:px-1 ${
+            activeTab === 'notifications' ? 'text-primary-800 border-b-2 border-primary-700 font-bold' : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          <Bell className="w-4 h-4" />
+          <Bell className="w-4 h-4 flex-shrink-0" />
           <span>Notifications</span>
         </button>
 
         <button
           onClick={() => setActiveTab('security')}
-          className={`pb-3 text-sm font-medium transition-colors relative flex items-center gap-2 ${
-            activeTab === 'security' ? 'text-primary-800 border-b-2 border-primary-700' : 'text-gray-500 hover:text-gray-700'
+          className={`pb-3 text-xs sm:text-sm font-semibold transition-colors relative flex items-center gap-1.5 sm:gap-2 whitespace-nowrap flex-shrink-0 px-2 sm:px-1 ${
+            activeTab === 'security' ? 'text-primary-800 border-b-2 border-primary-700 font-bold' : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          <Shield className="w-4 h-4" />
+          <Shield className="w-4 h-4 flex-shrink-0" />
           <span>Security & System</span>
         </button>
       </div>

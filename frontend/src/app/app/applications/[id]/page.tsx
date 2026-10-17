@@ -422,7 +422,7 @@ export default function ApplicationWorkspacePage() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex items-center gap-1 mt-5 border-b border-gray-100 -mb-4">
+        <div className="flex items-center gap-1 mt-5 border-b border-gray-100 -mb-4 overflow-x-auto no-scrollbar scrollbar-none pb-px">
           {[
             { id: 'overview', label: 'Overview', icon: Building2 },
             { id: 'form', label: 'Application Form (CAF)', icon: FileCheck2 },
@@ -443,13 +443,13 @@ export default function ApplicationWorkspacePage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as Tab)}
-                className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-all ${
+                className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold border-b-2 transition-all whitespace-nowrap flex-shrink-0 ${
                   isActive
                     ? 'border-primary-600 text-primary-700 bg-primary-50/30'
                     : 'border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-200'
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-primary-600' : 'text-gray-400'}`} />
+                <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${isActive ? 'text-primary-600' : 'text-gray-400'}`} />
                 <span>{tab.label}</span>
                 {tab.badge && (
                   <span className="bg-red-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">
