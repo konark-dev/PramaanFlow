@@ -265,8 +265,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             );
           })}
 
-          {/* Settings link */}
-          <div className="pt-2 mt-2 border-t border-sidebar-border/30">
+          {/* Language & Settings links */}
+          <div className="pt-2 mt-2 border-t border-sidebar-border/30 space-y-0.5">
+            <BhashiniSeamButton variant="sidebar" collapsed={collapsed} />
             <Link
               href="/app/settings"
               className={cn(
@@ -352,7 +353,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </button>
 
             {user.role === 'MANAGER' ? (
-              <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 bg-amber-50 border border-amber-300 rounded-xl text-amber-950 shadow-xs max-w-[130px] sm:max-w-none truncate">
+              <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 bg-amber-50 border border-amber-300 rounded-xl text-amber-950 shadow-xs max-w-[80px] xs:max-w-[130px] sm:max-w-none truncate">
                 <Building2 className="w-4 h-4 text-amber-700 flex-shrink-0" />
                 <div className="text-xs truncate">
                   <span className="font-bold text-amber-900">Authorized Representative</span>
@@ -362,7 +363,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 bg-primary-50 border border-primary-200/80 rounded-xl text-primary-900 shadow-xs max-w-[130px] sm:max-w-none truncate">
+              <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 bg-primary-50 border border-primary-200/80 rounded-xl text-primary-900 shadow-xs max-w-[80px] xs:max-w-[130px] sm:max-w-none truncate">
                 <Building2 className="w-4 h-4 text-primary-700 flex-shrink-0" />
                 <div className="text-xs truncate">
                   <span className="font-semibold text-gray-700 hidden sm:inline">Enterprise: </span>
@@ -374,9 +375,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             )}
           </div>
 
-          <div className="flex items-center gap-2.5 flex-shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
             <QuickDemoDock />
-            <div className="hidden sm:block"><BhashiniSeamButton /></div>
+            <div><BhashiniSeamButton /></div>
             <button
               type="button"
               onClick={() => window.dispatchEvent(new CustomEvent('open-site-tour'))}

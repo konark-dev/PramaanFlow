@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useQueryClient } from "@tanstack/react-query";
+import { BhashiniSeamButton } from "@/components/ui/BhashiniSeam";
 import {
   Building2,
   CheckCircle2,
@@ -210,20 +211,23 @@ export default function LoginPage() {
 
         {/* Top Branding Bar */}
         <div className="relative z-10 space-y-4">
-          <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-primary-600 to-emerald-400 flex items-center justify-center shadow-lg shadow-primary-500/20 flex-shrink-0">
-              <Building2 className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-gray-900 font-extrabold text-lg tracking-tight">
-                  Pramaan Flow
-                </span>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3.5">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-primary-600 to-emerald-400 flex items-center justify-center shadow-lg shadow-primary-500/20 flex-shrink-0">
+                <Building2 className="w-6 h-6 text-white" />
               </div>
-              <p className="text-gray-500 text-xs mt-0.5">
-                Maharashtra Industrial Single Window Clearances System
-              </p>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-900 font-extrabold text-lg tracking-tight">
+                    Pramaan Flow
+                  </span>
+                </div>
+                <p className="text-gray-500 text-xs mt-0.5">
+                  Maharashtra Industrial Single Window Clearances System
+                </p>
+              </div>
             </div>
+            <BhashiniSeamButton />
           </div>
         </div>
 

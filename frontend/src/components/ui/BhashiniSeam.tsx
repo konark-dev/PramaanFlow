@@ -2,21 +2,57 @@
 
 import { useState } from 'react';
 import { Globe, X, CheckCircle2, Info } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-export function BhashiniSeamButton() {
+export interface BhashiniSeamButtonProps {
+  className?: string;
+  variant?: 'header' | 'sidebar';
+  collapsed?: boolean;
+}
+
+export function BhashiniSeamButton({ className, variant = 'header', collapsed = false }: BhashiniSeamButtonProps = {}) {
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      <button
-        onClick={() => setOpen(true)}
-        type="button"
-        aria-label="BHASHINI language technology integration seam information"
-        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 shadow-sm transition-colors"
-      >
-        <Globe className="w-3.5 h-3.5 text-blue-600" aria-hidden="true" />
-        <span>EN · BHASHINI Seam</span>
-      </button>
+      {variant === 'sidebar' ? (
+        <button
+          onClick={() => setOpen(true)}
+          type="button"
+          aria-label="BHASHINI language technology integration seam information"
+          className={cn(
+            "w-full flex items-center gap-3 rounded-lg px-2.5 py-2 text-xs font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer",
+            collapsed && "justify-center px-0",
+            className
+          )}
+          title="BHASHINI Language Seam"
+        >
+          <Globe className="w-4 h-4 text-blue-400 flex-shrink-0" />
+          {!collapsed && (
+            <>
+              <span className="flex-1 text-left truncate">BHASHINI Language</span>
+              <span className="text-[10px] bg-blue-500/20 text-blue-300 font-bold px-1.5 py-0.5 rounded border border-blue-500/30">
+                EN
+              </span>
+            </>
+          )}
+        </button>
+      ) : (
+        <button
+          onClick={() => setOpen(true)}
+          type="button"
+          aria-label="BHASHINI language technology integration seam information"
+          className={cn(
+            "inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 text-[11px] font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 shadow-xs transition-colors flex-shrink-0 cursor-pointer active:scale-95",
+            className
+          )}
+          title="BHASHINI National Language Translation Seam"
+        >
+          <Globe className="w-3.5 h-3.5 text-blue-600 flex-shrink-0" aria-hidden="true" />
+          <span className="hidden sm:inline">EN · BHASHINI Seam</span>
+          <span className="sm:hidden font-semibold">EN · BHASHINI</span>
+        </button>
+      )}
 
       {open && (
         <div

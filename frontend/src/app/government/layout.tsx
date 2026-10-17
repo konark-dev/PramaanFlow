@@ -260,6 +260,10 @@ export default function GovernmentLayout({ children }: { children: React.ReactNo
               </Link>
             );
           })}
+          {/* Language Seam in Sidebar */}
+          <div className="pt-2 mt-2 border-t border-sidebar-border/30 px-2.5">
+            <BhashiniSeamButton variant="sidebar" collapsed={collapsed} />
+          </div>
         </nav>
 
         {/* Logout */}
@@ -330,7 +334,7 @@ export default function GovernmentLayout({ children }: { children: React.ReactNo
               <span className="hidden sm:inline">Back</span>
             </button>
 
-            <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 bg-blue-50 border border-blue-200/80 rounded-xl text-blue-900 shadow-xs max-w-[130px] sm:max-w-none truncate">
+            <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 bg-blue-50 border border-blue-200/80 rounded-xl text-blue-900 shadow-xs max-w-[80px] xs:max-w-[130px] sm:max-w-none truncate">
               <ContextIcon className="w-4 h-4 text-blue-700 flex-shrink-0" />
               <div className="text-xs truncate">
                 <span className="font-semibold text-gray-900 hidden sm:inline">Concerned Department / Authority: </span>
@@ -341,9 +345,9 @@ export default function GovernmentLayout({ children }: { children: React.ReactNo
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5 flex-shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
             <QuickDemoDock />
-            <div className="hidden sm:block"><BhashiniSeamButton /></div>
+            <div><BhashiniSeamButton /></div>
             <button
               type="button"
               onClick={() => window.dispatchEvent(new CustomEvent('open-site-tour'))}
