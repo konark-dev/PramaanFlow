@@ -25,6 +25,7 @@ import {
   ExternalLink,
   ChevronRight,
   Filter,
+  ArrowLeft,
 } from 'lucide-react';
 import { CardSkeleton, EmptyState, ErrorState } from '@/components/ui/States';
 import Link from 'next/link';
@@ -248,7 +249,7 @@ export default function GovernmentFacilitationQueuePage() {
         {/* Left List */}
         <div
           className={`${
-            selectedId ? 'w-full md:w-5/12 lg:w-4/12' : 'w-full'
+            selectedId ? 'hidden md:block md:w-5/12 lg:w-4/12' : 'w-full'
           } border-r border-gray-200 overflow-y-auto p-4 space-y-3 transition-all`}
         >
           {isLoading && (
@@ -329,7 +330,17 @@ export default function GovernmentFacilitationQueuePage() {
 
         {/* Right Detail Pane */}
         {selectedId && selected ? (
-          <div ref={detailPaneRef} className="hidden md:flex flex-1 flex-col overflow-y-auto bg-white p-6 sticky top-2 max-h-[calc(100vh-8rem)] self-start rounded-xl border border-gray-200 shadow-md">
+          <div ref={detailPaneRef} className="flex-1 flex flex-col overflow-y-auto bg-white p-4 sm:p-6 md:sticky md:top-2 md:max-h-[calc(100vh-8rem)] self-start rounded-xl border border-gray-200 shadow-md w-full">
+            {/* Mobile Back Button */}
+            <div className="md:hidden pb-3 mb-3 border-b border-gray-100">
+              <button
+                onClick={() => setSelectedId(null)}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-700 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-lg border border-primary-200 transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Back to All Requests</span>
+              </button>
+            </div>
             {/* Header info */}
             <div className="pb-4 border-b border-gray-200 flex items-start justify-between gap-4">
               <div>

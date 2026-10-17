@@ -22,6 +22,7 @@ import {
   X,
   ExternalLink,
   ShieldAlert,
+  ArrowLeft,
 } from 'lucide-react';
 import type { ProjectApproval as BaseProjectApproval } from '@/types';
 import type { ProjectApprovalDetail, ParallelOrchestrationResult } from '@/types/api';
@@ -96,36 +97,44 @@ function ApprovalsContent() {
   };
 
   return (
-    <div className="flex h-full">
+    <div className="flex flex-col md:flex-row h-full min-h-[calc(100vh-8rem)] bg-white rounded-2xl border border-gray-100 shadow-xs overflow-hidden">
       {/* List panel */}
-      <div className={`flex flex-col ${selectedId ? 'w-[420px]' : 'flex-1'} border-r border-gray-100 h-full overflow-hidden`}>
+      <div
+        className={`flex flex-col ${
+          selectedId ? 'hidden md:flex md:w-[380px] lg:w-[420px] flex-shrink-0' : 'w-full flex-1'
+        } border-r border-gray-100 h-full overflow-hidden`}
+      >
         {/* Header */}
-        <div className="px-5 pt-5 pb-3 border-b border-gray-100">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-            <h1 className="text-lg font-bold text-gray-900">Permissions, Approvals & Registrations</h1>
-            <div className="flex items-center gap-2">
+        <div className="px-4 sm:px-5 pt-4 sm:pt-5 pb-3 border-b border-gray-100">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3">
+            <div>
+              <h1 className="text-base sm:text-lg font-bold text-gray-900">Permissions, Approvals & Registrations</h1>
+              <p className="text-xs text-gray-400 mt-0.5">Statutory single-window pipeline for ABC Foods Pune Expansion</p>
+            </div>
+            <div className="flex items-center gap-2 flex-wrap">
               <button
                 onClick={() => startEligible.mutate()}
                 disabled={startEligible.isPending}
-                className="btn-primary text-xs py-1.5 bg-emerald-600 hover:bg-emerald-700"
+                className="btn-primary text-xs py-1.5 px-2.5 sm:px-3 bg-emerald-600 hover:bg-emerald-700 whitespace-nowrap"
                 title="Start parallel application workspaces for all clearances with completed prerequisites"
               >
                 <Zap className={`w-3.5 h-3.5 ${startEligible.isPending ? 'animate-spin' : ''}`} />
-                {startEligible.isPending ? 'Starting…' : 'Start Eligible Applications'}
+                <span className="hidden sm:inline">{startEligible.isPending ? 'Starting…' : 'Start Eligible Applications'}</span>
+                <span className="sm:hidden">{startEligible.isPending ? 'Starting…' : 'Start Eligible'}</span>
               </button>
               <button
                 onClick={() => runAnalysis.mutate()}
                 disabled={runAnalysis.isPending}
-                className="btn-secondary text-xs py-1.5"
+                className="btn-secondary text-xs py-1.5 px-2.5 sm:px-3 whitespace-nowrap"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${runAnalysis.isPending ? 'animate-spin' : ''}`} />
-                {runAnalysis.isPending ? 'Analysing…' : 'Re-analyse'}
+                <span>{runAnalysis.isPending ? 'Analysing…' : 'Re-analyse'}</span>
               </button>
             </div>
           </div>
 
           {/* Status filter tabs */}
-          <div className="flex gap-1 overflow-x-auto pb-1">
+          <div className="flex gap-1 overflow-x-auto pb-1 no-scrollbar">
             {(['ALL', 'NOT_STARTED', 'IN_PROGRESS', 'BLOCKED', 'COMPLETED'] as StatusFilter[]).map((s) => (
               <button
                 key={s}
@@ -174,7 +183,25 @@ function ApprovalsContent() {
 
       {/* Detail panel */}
       {selectedId && (
-        <div className="flex-1 overflow-y-auto p-5 animate-fade-in">
+        <div className="flex-1 w-full min-w-0 overflow-y-auto p-4 sm:p-5 md:p-6 bg-gray-50/50 animate-fade-in">
+          {/* Mobile Back Button & Desktop Close */}
+          <div className="flex items-center justify-between pb-3 mb-4 border-b border-gray-200">
+            <button
+              onClick={() => setSelectedId(null)}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-700 bg-white hover:bg-primary-50 px-3 py-1.5 rounded-lg border border-primary-200 shadow-2xs transition-all active:scale-95"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Approvals List</span>
+            </button>
+            <button
+              onClick={() => setSelectedId(null)}
+              className="hidden md:flex p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-200/60 transition-colors"
+              title="Close detail panel"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
           {detailLoading ? (
             <div className="space-y-4">
               {[...Array(4)].map((_, i) => <CardSkeleton key={i} lines={3} />)}

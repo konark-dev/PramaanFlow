@@ -390,7 +390,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </header>
 
-        <div className="flex-1 p-6">{children}</div>
+        <div className="flex-1 p-3 sm:p-5 md:p-6 min-w-0">{children}</div>
       </main>
 
       {/* Contextual Application Guidance Assistant & Interactive Platform Tour */}
