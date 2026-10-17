@@ -43,30 +43,42 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
   const token = getToken();
   const baseUrl = getApiBaseUrl();
 
-  const res = await fetch(`${baseUrl}${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...options.headers,
-    },
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}));
-    let msg = body.error || body.message;
-    if (!msg) {
-      if (res.status === 500) {
-        msg = 'Backend service error (500). Please ensure the backend server is running on port 4000.';
-      } else {
-        msg = `Request failed: ${res.status}`;
+  try {
+    const res = await fetch(`${baseUrl}${path}`, {
+      ...options,
+      signal: options.signal || controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...options.headers,
+      },
+    });
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      let msg = body.error || body.message;
+      if (!msg) {
+        if (res.status === 500) {
+          msg = 'Backend service error (500). Please ensure the backend server is running on port 4000.';
+        } else {
+          msg = `Request failed: ${res.status}`;
+        }
       }
+      throw new Error(msg);
     }
-    throw new Error(msg);
-  }
 
-  if (res.status === 204) return undefined as T;
-  return res.json() as Promise<T>;
+    if (res.status === 204) return undefined as T;
+    return res.json() as Promise<T>;
+  } catch (err: any) {
+    if (err.name === 'AbortError') {
+      throw new Error('Request timed out. Please try again.');
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
 
 export const api = {

@@ -43,6 +43,7 @@ app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
 app.use('/api', apiRouter);
+app.use(apiRouter);
 
 // Keep the error handler mounted last.
 app.use(errorHandler);

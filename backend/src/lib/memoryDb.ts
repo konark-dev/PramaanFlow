@@ -444,10 +444,13 @@ function hydrateRelations(
 
 let seedPromise: Promise<void> | null = null;
 let isSeeded = false;
+let isSeeding = false;
 
 export async function ensureSeeded(): Promise<void> {
   if (isSeeded) return;
+  if (isSeeding) return seedPromise || undefined;
   if (!seedPromise) {
+    isSeeding = true;
     seedPromise = (async () => {
       try {
         const { seedDatabase } = await import('../seed');
@@ -457,6 +460,8 @@ export async function ensureSeeded(): Promise<void> {
         console.error('Failed to auto-seed memory database:', err);
         seedPromise = null;
         throw err;
+      } finally {
+        isSeeding = false;
       }
     })();
   }
@@ -474,7 +479,6 @@ export class MemoryModelClient<T = any> {
     skip?: number;
     select?: any;
   }): Promise<T[]> {
-    await ensureSeeded();
     const table = getTable(this.tableName);
     let list: AnyRecord[] = Array.from(table.values()).map((r) => ({ ...r }));
 
@@ -508,7 +512,6 @@ export class MemoryModelClient<T = any> {
     include?: Record<string, any>;
     select?: any;
   }): Promise<T | null> {
-    await ensureSeeded();
     if (!args.where || Object.keys(args.where).length === 0) return null;
     const hasValidKey = Object.values(args.where).some((v) => v !== undefined && v !== 'undefined');
     if (!hasValidKey) return null;
@@ -547,7 +550,6 @@ export class MemoryModelClient<T = any> {
   }
 
   async count(args?: { where?: Record<string, any> }): Promise<number> {
-    await ensureSeeded();
     const table = getTable(this.tableName);
     if (!args?.where) return table.size;
     const items = await this.findMany({ where: args.where });
@@ -555,7 +557,6 @@ export class MemoryModelClient<T = any> {
   }
 
   async create(args: { data: Record<string, any>; include?: Record<string, any> }): Promise<T> {
-    await ensureSeeded();
     const table = getTable(this.tableName);
     const row = { ...args.data };
     if (!row.id) {
