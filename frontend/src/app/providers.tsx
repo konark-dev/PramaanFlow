@@ -9,7 +9,17 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     defaultOptions: {
       queries: {
         staleTime: 30_000,
-        retry: 1,
+        retry: (failureCount, error: any) => {
+          if (
+            error?.message?.includes('401') ||
+            error?.message?.includes('token') ||
+            error?.message?.includes('Unauthorized') ||
+            error?.message?.includes('expired')
+          ) {
+            return false;
+          }
+          return failureCount < 1;
+        },
         refetchOnWindowFocus: false,
       },
     },

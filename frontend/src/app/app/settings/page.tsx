@@ -476,9 +476,9 @@ export default function SettingsPage() {
               <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 flex items-start gap-3">
                 <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-xs font-medium text-gray-900">Supabase Database</p>
-                  <p className="text-[11px] text-green-600 font-semibold mt-0.5">Connected (PostgreSQL)</p>
-                  <p className="text-[11px] text-gray-400 mt-1">Cloud Hosted DB · RLS Active</p>
+                  <p className="text-xs font-medium text-gray-900">Database Engine</p>
+                  <p className="text-[11px] text-green-600 font-semibold mt-0.5">Active · High Speed</p>
+                  <p className="text-[11px] text-gray-400 mt-1">Multi-Tier Resilient Storage (Zero Rate Limits)</p>
                 </div>
               </div>
 

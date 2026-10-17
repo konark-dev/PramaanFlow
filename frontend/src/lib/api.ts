@@ -44,7 +44,7 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
   const baseUrl = getApiBaseUrl();
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 8000);
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
 
   try {
     const res = await fetch(`${baseUrl}${path}`, {
@@ -57,11 +57,17 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
       },
     });
     if (!res.ok) {
+      if (res.status === 401 && typeof window !== 'undefined') {
+        window.sessionStorage.removeItem('token');
+        window.localStorage.removeItem('token');
+      }
       const body = await res.json().catch(() => ({}));
       let msg = body.error || body.message;
       if (!msg) {
         if (res.status === 500) {
           msg = 'Backend service error (500). Please ensure the backend server is running on port 4000.';
+        } else if (res.status === 401) {
+          msg = 'Session expired. Please switch or select your role in the demo dock.';
         } else {
           msg = `Request failed: ${res.status}`;
         }

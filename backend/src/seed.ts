@@ -251,8 +251,13 @@ async function seedOrgsAndDepts() {
 // ---------------------------------------------------------------------------
 // 2. Demo Users
 // ---------------------------------------------------------------------------
+let cachedDemoPasswordHash: string | null = null;
+
 async function seedUsers(orgId: string) {
-  const password_hash = await bcrypt.hash(DEMO_PASSWORD, 10);
+  if (!cachedDemoPasswordHash) {
+    cachedDemoPasswordHash = await bcrypt.hash(DEMO_PASSWORD, 10);
+  }
+  const password_hash = cachedDemoPasswordHash;
 
   const accounts: Array<{
     id: string;
